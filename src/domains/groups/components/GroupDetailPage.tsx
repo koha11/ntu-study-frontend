@@ -1,0 +1,245 @@
+import * as React from "react";
+import { Link, notFound, useParams, useSearch } from "@tanstack/react-router";
+import { ArrowLeft, Lock } from "lucide-react";
+import { AppShell } from "@/components/AppShell";
+import { useGroupDetails, useGroupMembers, useUpdateGroup } from "@/domains/groups";
+import { useGroupTasks, useCreateTaskMutation, GroupKanbanBoard, TaskForm } from "@/domains/tasks";
+import { useCurrentUser } from "@/domains/auth";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import { ContributionTab } from "./ContributionTab";
+import { DriveTab } from "./DriveTab";
+import { CanvaTab } from "./CanvaTab";
+import { CalendarTab } from "./CalendarTab";
+import { GroupOverviewTab } from "./GroupOverviewTab";
+import { MembersTab } from "./MembersTab";
+
+const GROUP_TABS = [
+  "overview",
+  "tasks",
+  "drive",
+  "canva",
+  "calendar",
+  "members",
+  "contribution",
+] as const;
+
+type GroupTab = (typeof GROUP_TABS)[number];
+
+function tabFromSearch(tab: string | undefined): GroupTab {
+  if (tab && (GROUP_TABS as readonly string[]).includes(tab)) {
+    return tab as GroupTab;
+  }
+  return "overview";
+}
+
+export function GroupDetailPage() {
+  const { groupId } = useParams({ from: "/groups/$groupId" });
+  const { tab: tabSearch } = useSearch({ from: "/groups/$groupId" });
+  const id = groupId as string;
+  const initialTab = tabFromSearch(tabSearch);
+
+  const { data: group, isLoading: groupLoading, isError: groupError } = useGroupDetails(id);
+  const { data: currentUser, isLoading: userLoading } = useCurrentUser();
+  const { data: members = [], isLoading: membersLoading } = useGroupMembers(id);
+  const { data: groupTasks = [], isLoading: tasksLoading } = useGroupTasks(id);
+  const { mutate: createTask, isPending: createTaskPending } = useCreateTaskMutation();
+  const { mutate: patchGroup, isPending: overviewSavePending } = useUpdateGroup();
+
+  const [createTaskOpen, setCreateTaskOpen] = React.useState(false);
+
+  if (groupLoading || tasksLoading || userLoading) {
+    return (
+      <AppShell>
+        <div className="flex items-center justify-center py-12">
+          <div className="text-muted-foreground">Loading group...</div>
+        </div>
+      </AppShell>
+    );
+  }
+
+  if (groupError || !group) throw notFound();
+
+  const currentUserId = currentUser?.id ?? "";
+  const isLeader = Boolean(currentUserId && group.leader_id === currentUserId);
+
+  return (
+    <AppShell>
+      <Link
+        to="/groups"
+        className="mb-4 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="h-3 w-3" /> All groups
+      </Link>
+
+      <div className="rounded-2xl border border-border bg-gradient-surface p-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={cn(
+                  "rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase",
+                  group.status === "active" && "border-success/30 bg-success/15 text-success",
+                  group.status === "locked" && "border-border bg-muted text-muted-foreground",
+                  group.status !== "active" &&
+                    group.status !== "locked" &&
+                    "border-warning/30 bg-warning/15 text-warning",
+                )}
+              >
+                {group.status === "locked" ? (
+                  <>
+                    <Lock className="mr-1 inline h-3 w-3" /> locked
+                  </>
+                ) : (
+                  group.status
+                )}
+              </span>
+              {group.tags?.map((t) => (
+                <span
+                  key={t}
+                  className="rounded-md border border-border bg-background/40 px-2 py-0.5 text-[10px] text-muted-foreground"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+            <h1 className="mt-3 text-3xl font-bold tracking-tight">{group.name}</h1>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              {group.description ?? ""}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <Tabs key={initialTab} defaultValue={initialTab} className="mt-6">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="tasks">Tasks</TabsTrigger>
+          <TabsTrigger value="drive">Drive</TabsTrigger>
+          <TabsTrigger value="canva">Canva</TabsTrigger>
+          <TabsTrigger value="calendar">Calendar</TabsTrigger>
+          <TabsTrigger value="members">
+            Members ({membersLoading ? "…" : members.length})
+          </TabsTrigger>
+          <TabsTrigger value="contribution">Contribution</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="mt-6">
+          <GroupOverviewTab
+            groupId={id}
+            driveFolderId={group.drive_folder_id}
+            canvaFileUrl={group.canva_file_url}
+            docFileUrl={group.doc_file_url}
+            meetLink={group.meet_link}
+            reportDate={group.report_date}
+            isLeader={isLeader}
+            groupLocked={group.status === "locked"}
+            isSaving={overviewSavePending}
+            onSave={(data) => {
+              patchGroup({ id, data });
+            }}
+          />
+        </TabsContent>
+
+        <TabsContent value="tasks" className="mt-6 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs text-muted-foreground">
+              Drag cards between columns to update status. Submit for review from{" "}
+              <span className="font-medium text-foreground">In progress</span> →{" "}
+              <span className="font-medium text-foreground">Review</span>. Leaders move Review →
+              Done or Failed.
+            </p>
+            <Dialog open={createTaskOpen} onOpenChange={setCreateTaskOpen}>
+              <DialogTrigger asChild>
+                <Button type="button" size="sm" className="bg-gradient-primary">
+                  + New task
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>New group task</DialogTitle>
+                </DialogHeader>
+                <TaskForm
+                  defaultGroupId={id}
+                  memberOptions={members.map((m) => ({
+                    userId: m.user_id,
+                    label: m.full_name?.trim() || m.user_id,
+                  }))}
+                  defaultAssigneeId={currentUserId || undefined}
+                  isLoading={createTaskPending}
+                  onCancel={() => setCreateTaskOpen(false)}
+                  onSubmit={(data) => {
+                    createTask(data, {
+                      onSuccess: () => setCreateTaskOpen(false),
+                    });
+                  }}
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
+          <GroupKanbanBoard
+            tasks={groupTasks}
+            isLeader={isLeader}
+            groupId={id}
+            groupName={group.name}
+            memberOptions={members.map((m) => ({
+              userId: m.user_id,
+              label: m.full_name?.trim() || m.user_id,
+            }))}
+            defaultAssigneeId={currentUserId || undefined}
+            currentUserId={currentUserId || undefined}
+          />
+          {groupTasks.length === 0 ? (
+            <p className="text-center text-xs text-muted-foreground">
+              No tasks yet — use &quot;New task&quot; to add one.
+            </p>
+          ) : null}
+        </TabsContent>
+
+        <TabsContent value="drive" className="mt-6">
+          <DriveTab groupId={id} driveFolderId={group.drive_folder_id} />
+        </TabsContent>
+
+        <TabsContent value="canva" className="mt-6">
+          <CanvaTab canvaFileUrl={group.canva_file_url} />
+        </TabsContent>
+
+        <TabsContent value="calendar" className="mt-6">
+          <CalendarTab
+            groupId={id}
+            groupName={group.name}
+            google_calendar_id={group.google_calendar_id}
+            meet_link={group.meet_link}
+            isLeader={isLeader}
+          />
+        </TabsContent>
+
+        <TabsContent value="members" className="mt-6" id="members-panel">
+          <MembersTab
+            groupId={id}
+            leaderId={group.leader_id}
+            isLeader={isLeader}
+            members={members}
+            membersLoading={membersLoading}
+          />
+        </TabsContent>
+
+        <TabsContent value="contribution" className="mt-6">
+          <ContributionTab
+            groupId={id}
+            isLeader={isLeader}
+            groupLocked={group.status === "locked"}
+          />
+        </TabsContent>
+      </Tabs>
+    </AppShell>
+  );
+}

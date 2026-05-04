@@ -1,0 +1,260 @@
+/**
+ * Google Calendar–inspired skin for react-big-calendar.
+ * Scoped under .gcal-skin so the rest of the app theme is unaffected.
+ */
+
+.gcal-skin {
+  --gcal-bg: #ffffff;
+  --gcal-surface: #ffffff;
+  --gcal-text: #3c4043;
+  --gcal-text-secondary: #70757a;
+  --gcal-border: #dadce0;
+  --gcal-border-subtle: #e8eaed;
+  --gcal-blue: #1a73e8;
+  --gcal-blue-hover: #1967d2;
+  --gcal-today-column: #e8f0fe;
+  --gcal-slot-hover: rgba(26, 115, 232, 0.05);
+  --gcal-selection: rgba(26, 115, 232, 0.18);
+
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  background: var(--gcal-bg);
+  color: var(--gcal-text);
+  border-radius: 12px;
+  border: 1px solid var(--gcal-border);
+  box-shadow:
+    0 1px 2px rgba(60, 64, 67, 0.08),
+    0 2px 6px rgba(60, 64, 67, 0.06);
+  font-family:
+    "Google Sans",
+    Roboto,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  /* Let the inner scroll area handle overflow; clipping hid grid + headers */
+  overflow: visible;
+}
+
+.gcal-skin *,
+.gcal-skin *::before,
+.gcal-skin *::after {
+  box-sizing: border-box;
+}
+
+.gcal-skin .rbc-calendar {
+  font-family: inherit;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Toolbar wrapper */
+.gcal-skin .rbc-toolbar {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: var(--gcal-surface);
+}
+
+/*
+ * Column headers: default RBC uses overflow:hidden + nowrap which clips
+ * our two-line header (weekday + date). Restore normal flow.
+ */
+.gcal-skin .rbc-header {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8px 4px 12px;
+  min-height: 84px;
+  flex: 1 1 0%;
+  min-width: 0;
+  border: none;
+  border-bottom: 1px solid var(--gcal-border);
+  border-right: 1px solid var(--gcal-border-subtle);
+  font-weight: 400;
+  font-size: 100%;
+}
+
+.gcal-skin .rbc-header:last-child {
+  border-right: none;
+}
+
+/* Time grid */
+.gcal-skin .rbc-time-view {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  border-top: 1px solid var(--gcal-border);
+}
+
+.gcal-skin .rbc-time-header {
+  border-color: var(--gcal-border);
+  overflow: visible;
+}
+
+/*
+ * All-day row: RBC reserves min 2 rows even when empty — hides the blank strip
+ * under day titles. All-day events are not shown in this strip (timed events only).
+ */
+.gcal-skin .rbc-time-header-content > .rbc-allday-cell {
+  display: none !important;
+}
+
+.gcal-skin .rbc-time-header-content > .rbc-row.rbc-time-header-cell {
+  overflow: visible;
+}
+
+.gcal-skin .rbc-time-header-content {
+  flex: 1 1 0%;
+  min-width: 0;
+  border-left: 1px solid var(--gcal-border);
+}
+
+.gcal-skin .rbc-time-header-gutter {
+  border-right: 1px solid var(--gcal-border);
+  background: var(--gcal-surface);
+  flex: none;
+}
+
+/* Equal-width day columns (library sets width:100% per slot — breaks layout) */
+.gcal-skin .rbc-time-content {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  align-items: stretch;
+  border-top: 1px solid var(--gcal-border);
+}
+
+.gcal-skin .rbc-time-content > .rbc-day-slot {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: auto !important;
+  border-left: 1px solid var(--gcal-border-subtle);
+}
+
+.gcal-skin .rbc-time-content > .rbc-time-gutter {
+  flex: none;
+}
+
+.gcal-skin .rbc-day-slot .rbc-time-slot {
+  border-top: 1px solid var(--gcal-border-subtle);
+}
+
+.gcal-skin .rbc-time-slot {
+  min-height: 48px;
+}
+
+.gcal-skin .rbc-timeslot-group {
+  flex: 1;
+  border-bottom: 1px solid var(--gcal-border-subtle);
+  min-height: 48px;
+}
+
+.gcal-skin .rbc-time-column {
+  width: 64px;
+  flex: none;
+}
+
+.gcal-skin .rbc-label {
+  padding: 0 8px;
+  font-size: 11px;
+  color: var(--gcal-text-secondary);
+  font-weight: 400;
+}
+
+.gcal-skin .rbc-time-gutter .rbc-timeslot-group {
+  border-bottom-color: var(--gcal-border-subtle);
+}
+
+.gcal-skin .rbc-today {
+  background-color: var(--gcal-today-column);
+}
+
+.gcal-skin .rbc-off-range-bg {
+  background: #f8f9fa;
+}
+
+.gcal-skin .rbc-current-time-indicator {
+  background-color: #ea4335;
+  height: 2px;
+}
+
+/* Selection / slot preview */
+.gcal-skin .rbc-slot-selection {
+  background: var(--gcal-selection);
+  border: 1px solid rgba(26, 115, 232, 0.35);
+  border-radius: 4px;
+}
+
+.gcal-skin .rbc-addons-dnd .rbc-addons-dnd-resize-ns-anchor,
+.gcal-skin .rbc-addons-dnd .rbc-addons-dnd-resize-ew-anchor {
+  display: none;
+}
+
+/* Events */
+.gcal-skin .rbc-event {
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: none !important;
+  background-color: var(--gcal-blue) !important;
+  color: #fff !important;
+  font-size: 12px;
+  line-height: 1.35;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.25);
+}
+
+.gcal-skin .rbc-event:focus {
+  outline: 2px solid rgba(26, 115, 232, 0.45);
+  outline-offset: 1px;
+}
+
+.gcal-skin .rbc-event-label {
+  font-size: 11px;
+  opacity: 0.95;
+}
+
+.gcal-skin .rbc-event-content {
+  font-weight: 400;
+}
+
+.gcal-skin .rbc-selected {
+  background-color: var(--gcal-blue-hover) !important;
+}
+
+/* All-day row */
+.gcal-skin .rbc-allday-cell {
+  border-left: 1px solid var(--gcal-border-subtle);
+}
+
+.gcal-skin .rbc-time-header.rbc-overflowing {
+  border-right: 1px solid var(--gcal-border);
+}
+
+.gcal-skin .rbc-allday-events {
+  padding: 4px 0;
+}
+
+.gcal-skin .rbc-row-bg {
+  border-color: var(--gcal-border-subtle);
+}
+
+.gcal-skin .rbc-day-bg {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.gcal-skin .rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid var(--gcal-border-subtle);
+}
+
+.gcal-skin .rbc-show-more {
+  color: var(--gcal-blue);
+  font-size: 11px;
+  font-weight: 500;
+}
