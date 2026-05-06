@@ -154,10 +154,12 @@ export function CalendarTab({
       <div className="rounded-xl border border-border bg-card/40 p-6">
         <h2 className="text-lg font-semibold">Connect a Google Calendar</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The group uses one shared Google Calendar. Create a secondary calendar in Google Calendar,
-          open <span className="font-medium text-foreground">Settings → Integrate calendar</span>,
-          and copy the <span className="font-medium text-foreground">Calendar ID</span> (it often
-          ends with <code className="text-xs">@group.calendar.google.com</code>).
+          When you create a group while signed in with Google, we usually add a shared calendar
+          automatically. If this group does not have one yet, create a secondary calendar in Google
+          Calendar, open{" "}
+          <span className="font-medium text-foreground">Settings → Integrate calendar</span>, and
+          copy the <span className="font-medium text-foreground">Calendar ID</span> (it often ends with{" "}
+          <code className="text-xs">@group.calendar.google.com</code>).
         </p>
         {isLeader ? (
           <div className="mt-4 flex max-w-xl flex-col gap-3 sm:flex-row sm:items-end">

@@ -88,6 +88,15 @@ describe("buildGoogleAuthorizeUrl", () => {
     expect(scope).toContain("https://www.googleapis.com/auth/calendar.events");
   });
 
+  it("includes Google calendar.calendars scope for creating secondary calendars", () => {
+    const url = buildGoogleAuthorizeUrl({
+      codeChallenge: "c",
+      state: "s",
+    });
+    const scope = new URL(url).searchParams.get("scope") ?? "";
+    expect(scope).toContain("https://www.googleapis.com/auth/calendar.calendars");
+  });
+
   it("includes drive.activity.readonly for Drive Activity API (group folder log)", () => {
     const url = buildGoogleAuthorizeUrl({
       codeChallenge: "c",

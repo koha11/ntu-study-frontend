@@ -34,8 +34,7 @@ export function DashboardPage() {
   );
   const dueCards = flashcards.reduce((n, s) => {
     const needsReview =
-      s.cardCount > 0 &&
-      (!s.nextReviewAt || new Date(s.nextReviewAt) <= new Date());
+      s.cardCount > 0 && (!s.nextReviewAt || new Date(s.nextReviewAt) <= new Date());
     return n + (needsReview ? s.cardCount : 0);
   }, 0);
 
@@ -94,13 +93,13 @@ export function DashboardPage() {
           delta="+12"
           accent="warning"
         />
-        <StatCard
+        {/* <StatCard
           icon={TrendingUp}
           label="Contribution score"
           value="8.4"
           delta="+0.3"
           accent="success"
-        />
+        /> */}
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
@@ -199,12 +198,12 @@ export function DashboardPage() {
                 <span className="rounded-md bg-primary/15 px-2 py-0.5 text-[10px] font-bold uppercase text-primary-glow">
                   Active
                 </span>
-                <span className="text-[10px] text-muted-foreground">
-                  {g.member_count} members
-                </span>
+                <span className="text-[10px] text-muted-foreground">{g.member_count} members</span>
               </div>
               <div className="mt-3 font-semibold group-hover:text-primary-glow">{g.name}</div>
-              <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{g.description ?? ""}</p>
+              <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                {g.description ?? ""}
+              </p>
             </Link>
           ))}
         </div>
