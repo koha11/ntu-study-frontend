@@ -111,11 +111,11 @@ export function CalendarTab({
     [],
   );
 
-  /** Time-of-day only; week/day grid shows [min, max] (1:00 – 11:59 PM). */
+  /** Time-of-day only; week/day grid shows [min, max] (12:00 AM – 11:59 PM). */
   const { calendarMin, calendarMax, scrollToTime } = React.useMemo(() => {
-    const min = new Date(2018, 0, 1, 1, 0, 0);
+    const min = new Date(2018, 0, 1, 0, 0, 0);
     const max = new Date(2018, 0, 1, 23, 59, 0);
-    const scroll = new Date(2018, 0, 1, 1, 0, 0);
+    const scroll = new Date(2018, 0, 1, 0, 0, 0);
     return { calendarMin: min, calendarMax: max, scrollToTime: scroll };
   }, []);
 
