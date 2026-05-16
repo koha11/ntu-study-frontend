@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Bell, Globe, Loader2, LogOut, User as UserIcon } from "lucide-react";
+import { Bell, Eye, Globe, Loader2, LogOut, User as UserIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { useLogout, useCurrentUser } from "@/domains/auth";
 import { getAccessToken } from "@/domains/auth/token-storage";
 import {
+  useMarkAllNotificationsAsReadMutation,
   useMarkNotificationAsReadMutation,
   useNotificationsList,
 } from "@/domains/notifications";
@@ -39,6 +40,8 @@ export function TopBar() {
     useNotificationsList();
   const { mutate: markRead, isPending: markingRead } =
     useMarkNotificationAsReadMutation();
+  const { mutate: markAllRead, isPending: markingAllRead } =
+    useMarkAllNotificationsAsReadMutation();
   const [openingId, setOpeningId] = useState<string | null>(null);
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
@@ -106,9 +109,30 @@ export function TopBar() {
         <DropdownMenuContent align="end" className="w-96">
           <DropdownMenuLabel className="flex items-center justify-between font-semibold">
             <span>{t("topBar.notifications")}</span>
-            {notificationsLoading && (
-              <span className="text-[11px] font-normal text-muted-foreground">{t("topBar.loading")}</span>
-            )}
+            <div className="flex items-center gap-2">
+              {notificationsLoading && (
+                <span className="text-[11px] font-normal text-muted-foreground">{t("topBar.loading")}</span>
+              )}
+              {unreadCount > 0 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 px-2 text-[11px] font-normal"
+                  disabled={markingAllRead}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    markAllRead();
+                  }}
+                >
+                  {markingAllRead ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    t("topBar.readAll")
+                  )}
+                </Button>
+              )}
+            </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <div className="max-h-80 overflow-y-auto">
@@ -151,15 +175,16 @@ export function TopBar() {
                     <Button
                       type="button"
                       variant="ghost"
-                      size="sm"
-                      className="h-7 shrink-0 px-2 text-[11px]"
+                      size="icon"
+                      className="h-7 w-7 shrink-0"
                       disabled={markingRead || openingId === n.id}
+                      aria-label={t("topBar.read")}
                       onClick={(e) => {
                         e.stopPropagation();
                         markRead(n.id);
                       }}
                     >
-                      {t("topBar.read")}
+                      <Eye className="h-3.5 w-3.5" />
                     </Button>
                   )}
                 </div>

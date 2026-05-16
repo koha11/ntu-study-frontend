@@ -7,6 +7,7 @@ import { notificationKeys } from "@/shared/adapters/query-keys";
 import { getAccessToken } from "@/domains/auth/token-storage";
 import {
   fetchNotifications,
+  patchAllNotificationsRead,
   patchNotificationRead,
   type NotificationListItem,
 } from "./notifications-api";
@@ -44,6 +45,23 @@ export const useMarkNotificationAsReadMutation = () => {
     mutationFn: async (notificationId: string) => {
       const token = requireAccessToken();
       return patchNotificationRead(token, notificationId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: notificationKeys.lists() });
+    },
+  });
+};
+
+/**
+ * Mutation: PATCH /notifications/read-all
+ */
+export const useMarkAllNotificationsAsReadMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const token = requireAccessToken();
+      return patchAllNotificationsRead(token);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notificationKeys.lists() });

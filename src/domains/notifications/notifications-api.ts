@@ -57,6 +57,23 @@ export async function fetchNotifications(
   return Array.isArray(rows) ? rows.map(mapNotification) : [];
 }
 
+export async function patchAllNotificationsRead(
+  accessToken: string,
+): Promise<void> {
+  const { apiBase } = getRequiredEnv();
+  const res = await fetch(`${apiBase}/notifications/read-all`, {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new HttpError(
+      res.status,
+      `Mark all read failed: ${res.status} ${res.statusText} ${text}`.trim(),
+    );
+  }
+}
+
 export async function patchNotificationRead(
   accessToken: string,
   notificationId: string,
