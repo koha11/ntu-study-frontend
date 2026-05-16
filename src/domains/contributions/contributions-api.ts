@@ -1,9 +1,5 @@
 import { HttpError, normalizeApiBase } from "@/domains/auth/auth-api";
-import type {
-  AggregatedRatingResult,
-  EvaluationRound,
-  MyRatingEntry,
-} from "./types";
+import type { AggregatedRatingResult, EvaluationRound, MyRatingEntry } from "./types";
 
 function getApiBase(): string {
   const apiBase = import.meta.env.VITE_API_BASE_URL;
@@ -46,12 +42,12 @@ function mapRoundRow(raw: Record<string, unknown>): EvaluationRound {
   };
 }
 
-function pickRateeFullName(raw: Record<string, unknown>): string {
-  const flat = raw.ratee_full_name ?? raw.rateeFullName;
+function pickAssigneeFullName(raw: Record<string, unknown>): string {
+  const flat = raw.assignee_full_name ?? raw.assigneeFullName;
   if (typeof flat === "string" && flat.trim()) {
     return flat.trim();
   }
-  const nested = raw.ratee ?? raw.rateeUser;
+  const nested = raw.assignee ?? raw.assigneeUser;
   if (nested && typeof nested === "object") {
     const o = nested as Record<string, unknown>;
     const fromNested =
@@ -65,16 +61,17 @@ function pickRateeFullName(raw: Record<string, unknown>): string {
 
 function mapMyRatingRow(raw: Record<string, unknown>): MyRatingEntry {
   return {
-    rateeId: String(raw.ratee_id ?? raw.rateeId ?? ""),
-    rateeFullName: pickRateeFullName(raw),
+    taskId: String(raw.task_id ?? raw.taskId ?? ""),
+    taskTitle: String(raw.task_title ?? raw.taskTitle ?? ""),
+    assigneeFullName: pickAssigneeFullName(raw),
     score: raw.score === null || raw.score === undefined ? null : Number(raw.score),
   };
 }
 
 function mapAggregatedRow(raw: Record<string, unknown>): AggregatedRatingResult {
   return {
-    rateeId: String(raw.ratee_id ?? ""),
-    rateeFullName: String(raw.ratee_full_name ?? ""),
+    assigneeId: String(raw.assignee_id ?? ""),
+    assigneeFullName: String(raw.assignee_full_name ?? ""),
     averageScore:
       raw.average_score === null || raw.average_score === undefined
         ? null
@@ -143,12 +140,12 @@ export async function fetchMyRoundRatings(
 export async function submitRoundRating(
   groupId: string,
   roundStartedAt: string,
-  rateeId: string,
+  taskId: string,
   score: number,
   token: string,
 ): Promise<void> {
   const res = await fetch(
-    `${getApiBase()}/contributions/groups/${encodeURIComponent(groupId)}/rounds/${encodeURIComponent(roundStartedAt)}/ratings/${encodeURIComponent(rateeId)}`,
+    `${getApiBase()}/contributions/groups/${encodeURIComponent(groupId)}/rounds/${encodeURIComponent(roundStartedAt)}/ratings/${encodeURIComponent(taskId)}`,
     {
       method: "PUT",
       headers: bearerHeaders(token, { "Content-Type": "application/json" }),

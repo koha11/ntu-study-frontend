@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Bell, Loader2, LogOut, User as UserIcon } from "lucide-react";
+import { Bell, Globe, Loader2, LogOut, User as UserIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { useLogout, useCurrentUser } from "@/domains/auth";
 import { getAccessToken } from "@/domains/auth/token-storage";
 import {
@@ -30,6 +31,7 @@ function initials(name: string): string {
 const BELL_PREVIEW_LIMIT = 8;
 
 export function TopBar() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const { data: user } = useCurrentUser();
@@ -45,37 +47,53 @@ export function TopBar() {
   async function handleOpenNotification(n: (typeof notifications)[number]) {
     const token = getAccessToken();
     if (!token) {
-      toast.error("Please sign in again.");
+      toast.error(t("topBar.pleaseSignIn"));
       return;
     }
     setOpeningId(n.id);
     try {
       const ok = await navigateFromNotification(n, token, navigate as never);
       if (!ok) {
-        toast.message("This notification has no link.");
+        toast.message(t("topBar.notificationNoLink"));
         return;
       }
       if (!n.isRead) {
         markRead(n.id);
       }
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Could not open link.";
+      const msg = e instanceof Error ? e.message : t("topBar.couldNotOpenLink");
       toast.error(msg);
     } finally {
       setOpeningId(null);
     }
   }
 
+  const toggleLanguage = () => {
+    const next = i18n.language === "vi" ? "en" : "vi";
+    void i18n.changeLanguage(next);
+  };
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-end gap-2 border-b border-border bg-background/70 px-4 backdrop-blur-xl md:px-6">
       <ThemeToggle />
+
+      {/* Language switcher */}
+      <button
+        type="button"
+        onClick={toggleLanguage}
+        className="flex h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        aria-label={t("lang.toggle")}
+      >
+        <Globe className="h-3.5 w-3.5" />
+        {i18n.language === "vi" ? "VI" : "EN"}
+      </button>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
             type="button"
             className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card transition-colors hover:bg-accent"
-            aria-label="Notifications"
+            aria-label={t("topBar.notifications")}
           >
             <Bell className="h-4 w-4" />
             {unreadCount > 0 && (
@@ -87,16 +105,16 @@ export function TopBar() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-96">
           <DropdownMenuLabel className="flex items-center justify-between font-semibold">
-            <span>Notifications</span>
+            <span>{t("topBar.notifications")}</span>
             {notificationsLoading && (
-              <span className="text-[11px] font-normal text-muted-foreground">Loading…</span>
+              <span className="text-[11px] font-normal text-muted-foreground">{t("topBar.loading")}</span>
             )}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <div className="max-h-80 overflow-y-auto">
             {preview.length === 0 && !notificationsLoading && (
               <div className="px-2 py-6 text-center text-sm text-muted-foreground">
-                No notifications yet.
+                {t("topBar.noNotifications")}
               </div>
             )}
             {preview.map((n) => (
@@ -116,7 +134,7 @@ export function TopBar() {
                         <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground" />
                       ) : null}
                       <span className="text-xs font-medium">
-                        {notificationTypeLabel(n.type)}
+                        {notificationTypeLabel(n.type, t)}
                       </span>
                       {!n.isRead && (
                         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
@@ -141,7 +159,7 @@ export function TopBar() {
                         markRead(n.id);
                       }}
                     >
-                      Read
+                      {t("topBar.read")}
                     </Button>
                   )}
                 </div>
@@ -153,7 +171,7 @@ export function TopBar() {
             onClick={() => navigate({ to: "/notifications" })}
             className="cursor-pointer justify-center font-medium"
           >
-            View all
+            {t("topBar.viewAll")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -175,15 +193,15 @@ export function TopBar() {
           <DropdownMenuSeparator />
           {user?.role === UserRole.ADMIN && (
             <DropdownMenuItem onClick={() => navigate({ to: "/admin" })}>
-              Admin console
+              {t("topBar.adminConsole")}
             </DropdownMenuItem>
           )}
           <DropdownMenuItem onClick={() => navigate({ to: "/dashboard" })}>
-            Dashboard
+            {t("topBar.dashboard")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => navigate({ to: "/settings" })}>
             <UserIcon className="mr-2 h-4 w-4" />
-            Profile & Settings
+            {t("topBar.profileSettings")}
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={isLoggingOut}
@@ -194,7 +212,7 @@ export function TopBar() {
             }
           >
             <LogOut className="mr-2 h-4 w-4" />
-            {isLoggingOut ? "Signing out…" : "Sign out"}
+            {isLoggingOut ? t("topBar.signingOut") : t("topBar.signOut")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -1,4 +1,5 @@
 import { type LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -17,6 +18,7 @@ const accentMap = {
 } as const;
 
 export function StatCard({ icon: Icon, label, value, delta, accent = "primary" }: Props) {
+  const { t } = useTranslation();
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/40 hover:shadow-elegant">
       <div
@@ -42,7 +44,7 @@ export function StatCard({ icon: Icon, label, value, delta, accent = "primary" }
         <div className="mt-3 text-3xl font-bold tracking-tight">{value}</div>
         {delta && (
           <div className="mt-1 text-xs text-muted-foreground">
-            <span className="text-success">{delta}</span> vs last week
+            <span className="text-success">{delta}</span> {t("common.vsLastWeek")}
           </div>
         )}
       </div>

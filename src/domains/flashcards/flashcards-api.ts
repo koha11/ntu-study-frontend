@@ -2,6 +2,7 @@ import { HttpError, normalizeApiBase } from "@/domains/auth/auth-api";
 import type {
   Flashcard,
   FlashcardSet,
+  SharedFlashcardSetEntry,
   CreateFlashcardSetInput,
   CreateFlashcardInput,
   UpdateFlashcardSetInput,
@@ -252,4 +253,66 @@ export async function completeFlashcardStudy(
   );
   const row = await handleJson<Record<string, unknown>>(res);
   return mapCompleteStudyFromApi(row);
+}
+
+export function mapSharedFlashcardSetFromApi(
+  row: Record<string, unknown>,
+): SharedFlashcardSetEntry {
+  return {
+    shareId: String(row.share_id ?? ""),
+    sharedAt: iso(row.shared_at),
+    setId: String(row.set_id ?? ""),
+    groupId: String(row.group_id ?? ""),
+    ownerId: String(row.owner_id ?? ""),
+    name: String(row.name ?? ""),
+    subject: row.subject != null ? String(row.subject) : undefined,
+    description: row.description != null ? String(row.description) : undefined,
+    cardCount: Number(row.card_count ?? 0),
+  };
+}
+
+export async function fetchGroupSharedFlashcardSets(
+  groupId: string,
+  token: string,
+): Promise<SharedFlashcardSetEntry[]> {
+  const res = await fetch(
+    `${getApiBase()}/flashcard-sets/groups/${encodeURIComponent(groupId)}/shared`,
+    { method: "GET", headers: bearerHeaders(token) },
+  );
+  const data = await handleJson<Record<string, unknown>[]>(res);
+  return data.map(mapSharedFlashcardSetFromApi);
+}
+
+export async function shareFlashcardSetWithGroup(
+  setId: string,
+  groupId: string,
+  token: string,
+): Promise<{ shareId: string; setId: string; groupId: string; sharedAt: string }> {
+  const res = await fetch(
+    `${getApiBase()}/flashcard-sets/${encodeURIComponent(setId)}/share`,
+    {
+      method: "POST",
+      headers: bearerHeaders(token, { "Content-Type": "application/json" }),
+      body: JSON.stringify({ group_id: groupId }),
+    },
+  );
+  const row = await handleJson<Record<string, unknown>>(res);
+  return {
+    shareId: String(row.share_id ?? ""),
+    setId: String(row.set_id ?? ""),
+    groupId: String(row.group_id ?? ""),
+    sharedAt: iso(row.shared_at),
+  };
+}
+
+export async function unshareFlashcardSetFromGroup(
+  setId: string,
+  groupId: string,
+  token: string,
+): Promise<void> {
+  const res = await fetch(
+    `${getApiBase()}/flashcard-sets/${encodeURIComponent(setId)}/share/${encodeURIComponent(groupId)}`,
+    { method: "DELETE", headers: bearerHeaders(token) },
+  );
+  await handleVoid(res);
 }

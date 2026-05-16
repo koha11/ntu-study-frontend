@@ -11,6 +11,7 @@ import {
   Github,
   Mail,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -33,47 +34,67 @@ export const Route = createFileRoute("/")({
   component: LandingPage,
 });
 
-const features = [
-  {
-    icon: Users,
-    title: "Study groups, organised",
-    body: "Spin up a course or project group, invite classmates with one link, and keep everything in a shared workspace.",
-  },
-  {
-    icon: CheckSquare,
-    title: "Tasks that move",
-    body: "Plan, assign and track work on a Kanban board with sub-tasks, deadlines and automatic reminders.",
-  },
-  {
-    icon: Sparkles,
-    title: "Flashcards that stick",
-    body: "Build decks together and revise with spaced repetition before assessments — no more scattered notes.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Fair contribution scoring",
-    body: "Leaders rate teammates at the end of a project so effort is recognised and free-riding is visible.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Locked, audit-ready records",
-    body: "Once a project closes, deliverables and ratings are locked and exportable for academic review.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Made for NTU",
-    body: "Sign in with your NTU Google account. Your groups, files and progress follow you across every module.",
-  },
-];
-
-const stats = [
-  { label: "Active study groups", value: "320+" },
-  { label: "Tasks tracked", value: "12.4k" },
-  { label: "Flashcards reviewed", value: "98k" },
-  { label: "Avg. contribution score", value: "8.6" },
-];
-
 function LandingPage() {
+  const { t } = useTranslation();
+
+  const features = [
+    {
+      icon: Users,
+      title: t("landing.features.groups.title"),
+      body: t("landing.features.groups.body"),
+    },
+    {
+      icon: CheckSquare,
+      title: t("landing.features.tasks.title"),
+      body: t("landing.features.tasks.body"),
+    },
+    {
+      icon: Sparkles,
+      title: t("landing.features.flashcards.title"),
+      body: t("landing.features.flashcards.body"),
+    },
+    {
+      icon: TrendingUp,
+      title: t("landing.features.contribution.title"),
+      body: t("landing.features.contribution.body"),
+    },
+    {
+      icon: ShieldCheck,
+      title: t("landing.features.records.title"),
+      body: t("landing.features.records.body"),
+    },
+    {
+      icon: GraduationCap,
+      title: t("landing.features.ntu.title"),
+      body: t("landing.features.ntu.body"),
+    },
+  ];
+
+  const stats = [
+    { label: t("landing.stats.activeGroups"), value: "320+" },
+    { label: t("landing.stats.tasksTracked"), value: "12.4k" },
+    { label: t("landing.stats.flashcardsReviewed"), value: "98k" },
+    { label: t("landing.stats.avgContribution"), value: "8.6" },
+  ];
+
+  const steps = [
+    {
+      step: t("landing.howItWorks.steps.step1.number"),
+      title: t("landing.howItWorks.steps.step1.title"),
+      body: t("landing.howItWorks.steps.step1.body"),
+    },
+    {
+      step: t("landing.howItWorks.steps.step2.number"),
+      title: t("landing.howItWorks.steps.step2.title"),
+      body: t("landing.howItWorks.steps.step2.body"),
+    },
+    {
+      step: t("landing.howItWorks.steps.step3.number"),
+      title: t("landing.howItWorks.steps.step3.title"),
+      body: t("landing.howItWorks.steps.step3.body"),
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -85,14 +106,14 @@ function LandingPage() {
             </div>
             <div className="leading-tight">
               <div className="text-sm font-semibold tracking-tight">NTU Study</div>
-              <div className="text-[10px] text-muted-foreground">Group collaboration</div>
+              <div className="text-[10px] text-muted-foreground">{t("landing.tagline")}</div>
             </div>
           </Link>
 
           <nav className="ml-8 hidden items-center gap-6 text-sm text-muted-foreground md:flex">
-            <a href="#features" className="hover:text-foreground">Features</a>
-            <a href="#how" className="hover:text-foreground">How it works</a>
-            <a href="#faq" className="hover:text-foreground">FAQ</a>
+            <a href="#features" className="hover:text-foreground">{t("landing.nav.features")}</a>
+            <a href="#how" className="hover:text-foreground">{t("landing.nav.howItWorks")}</a>
+            <a href="#faq" className="hover:text-foreground">{t("landing.nav.faq")}</a>
           </nav>
 
           <div className="ml-auto flex items-center gap-2">
@@ -101,11 +122,11 @@ function LandingPage() {
               to="/login"
               className="hidden h-10 items-center rounded-lg border border-border bg-card px-3 text-sm font-medium transition-colors hover:bg-accent sm:inline-flex"
             >
-              Sign in
+              {t("landing.nav.signIn")}
             </Link>
             <Link to="/login">
               <Button className="h-10 bg-gradient-primary shadow-glow">
-                Get started <ArrowRight className="h-4 w-4" />
+                {t("landing.nav.getStarted")} <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
           </div>
@@ -122,30 +143,28 @@ function LandingPage() {
         <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 md:px-6 md:pb-28 md:pt-24">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-primary-glow">
-              <Sparkles className="h-3 w-3" /> Built for NTU students
+              <Sparkles className="h-3 w-3" /> {t("landing.badge")}
             </span>
             <h1 className="mt-6 text-4xl font-bold tracking-tight md:text-6xl">
-              Study together.{" "}
+              {t("landing.hero.title1")}{" "}
               <span className="bg-gradient-primary bg-clip-text text-transparent">
-                Ship projects faster.
+                {t("landing.hero.title2")}
               </span>
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground md:text-lg">
-              NTU Study brings groups, tasks, files and flashcards into one
-              calm workspace — so your team can focus on the work that
-              matters, and leaders can grade contribution fairly.
+              {t("landing.hero.subtitle")}
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Link to="/login">
                 <Button className="h-12 bg-gradient-primary px-6 text-sm shadow-glow">
-                  Continue with Google <ArrowRight className="h-4 w-4" />
+                  {t("landing.hero.continueWithGoogle")} <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
               <a
                 href="#features"
                 className="inline-flex h-12 items-center rounded-lg border border-border bg-card px-5 text-sm font-medium transition-colors hover:bg-accent"
               >
-                See how it works
+                {t("landing.hero.seeHowItWorks")}
               </a>
             </div>
           </div>
@@ -174,14 +193,13 @@ function LandingPage() {
         <div className="mx-auto max-w-6xl px-4 py-20 md:px-6 md:py-28">
           <div className="mx-auto max-w-2xl text-center">
             <div className="text-xs uppercase tracking-widest text-primary-glow">
-              Everything in one place
+              {t("landing.features.sectionLabel")}
             </div>
             <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-              The study workspace your group actually opens
+              {t("landing.features.sectionTitle")}
             </h2>
             <p className="mt-3 text-sm text-muted-foreground md:text-base">
-              Stop juggling chat groups, spreadsheets and shared docs. NTU
-              Study replaces the busywork so your team can ship.
+              {t("landing.features.sectionSubtitle")}
             </p>
           </div>
 
@@ -212,31 +230,15 @@ function LandingPage() {
         <div className="mx-auto max-w-6xl px-4 py-20 md:px-6 md:py-28">
           <div className="mx-auto max-w-2xl text-center">
             <div className="text-xs uppercase tracking-widest text-primary-glow">
-              Three steps
+              {t("landing.howItWorks.sectionLabel")}
             </div>
             <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-              From kickoff to submission, without the chaos
+              {t("landing.howItWorks.sectionTitle")}
             </h2>
           </div>
 
           <ol className="mt-12 grid gap-5 md:grid-cols-3">
-            {[
-              {
-                step: "01",
-                title: "Create or join a group",
-                body: "Use your NTU Google sign-in and either start a new group or accept an invite link from your leader.",
-              },
-              {
-                step: "02",
-                title: "Plan and execute",
-                body: "Break the project into tasks, attach files, and review flashcards together as the deadline approaches.",
-              },
-              {
-                step: "03",
-                title: "Lock and rate",
-                body: "When the project ends, the leader closes the project. Contribution scores are recorded and exported.",
-              },
-            ].map((s) => (
+            {steps.map((s) => (
               <li
                 key={s.step}
                 className="rounded-2xl border border-border bg-card p-6"
@@ -264,16 +266,15 @@ function LandingPage() {
               aria-hidden
             />
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Ready to study smarter together?
+              {t("landing.cta.title")}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground md:text-base">
-              Sign in with your NTU Google account and bring your first group
-              on board in under a minute.
+              {t("landing.cta.subtitle")}
             </p>
             <div className="mt-7 flex justify-center">
               <Link to="/login">
                 <Button className="h-12 bg-gradient-primary px-6 text-sm shadow-glow">
-                  Get started — it's free for students
+                  {t("landing.cta.button")}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -293,17 +294,17 @@ function LandingPage() {
               <div>
                 <div className="text-sm font-semibold">NTU Study</div>
                 <div className="text-[11px] text-muted-foreground">
-                  © {new Date().getFullYear()} NTU Study. A student project.
+                  {t("landing.footer.copyright", { year: new Date().getFullYear() })}
                 </div>
               </div>
             </div>
 
             <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-              <a href="#features" className="hover:text-foreground">Features</a>
-              <a href="#how" className="hover:text-foreground">How it works</a>
-              <Link to="/login" className="hover:text-foreground">Sign in</Link>
-              <a href="#" className="hover:text-foreground">Privacy</a>
-              <a href="#" className="hover:text-foreground">Terms</a>
+              <a href="#features" className="hover:text-foreground">{t("landing.footer.features")}</a>
+              <a href="#how" className="hover:text-foreground">{t("landing.footer.howItWorks")}</a>
+              <Link to="/login" className="hover:text-foreground">{t("landing.footer.signIn")}</Link>
+              <a href="#" className="hover:text-foreground">{t("landing.footer.privacy")}</a>
+              <a href="#" className="hover:text-foreground">{t("landing.footer.terms")}</a>
             </nav>
 
             <div className="flex items-center gap-2">

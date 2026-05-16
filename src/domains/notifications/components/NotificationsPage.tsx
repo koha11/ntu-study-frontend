@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Bell, Loader2 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
 import {
   useMarkNotificationAsReadMutation,
@@ -13,6 +14,7 @@ import { notificationTypeLabel } from "@/domains/notifications/notification-labe
 import { cn } from "@/lib/utils";
 
 export function NotificationsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: notifications = [], isLoading } = useNotificationsList();
   const { mutate: markRead } = useMarkNotificationAsReadMutation();
@@ -23,21 +25,21 @@ export function NotificationsPage() {
     if (!n) return;
     const token = getAccessToken();
     if (!token) {
-      toast.error("Please sign in again.");
+      toast.error(t("notifications.pleaseSignIn"));
       return;
     }
     setOpeningId(notificationId);
     try {
       const ok = await navigateFromNotification(n, token, navigate as never);
       if (!ok) {
-        toast.message("This notification has no link.");
+        toast.message(t("notifications.noLink"));
         return;
       }
       if (!n.isRead) {
         markRead(notificationId);
       }
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Could not open link.";
+      const msg = e instanceof Error ? e.message : t("notifications.couldNotOpen");
       toast.error(msg);
     } finally {
       setOpeningId(null);
@@ -48,7 +50,7 @@ export function NotificationsPage() {
     return (
       <AppShell>
         <div className="flex items-center justify-center py-12">
-          <div className="text-muted-foreground">Loading notifications...</div>
+          <div className="text-muted-foreground">{t("notifications.loading")}</div>
         </div>
       </AppShell>
     );
@@ -57,9 +59,9 @@ export function NotificationsPage() {
   return (
     <AppShell>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Notifications</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t("notifications.pageTitle")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Stay on top of tasks, evaluations and group activity. Click a row to open the relevant page.
+          {t("notifications.pageSubtitle")}
         </p>
       </div>
 
@@ -85,21 +87,21 @@ export function NotificationsPage() {
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <div className="font-medium">{notificationTypeLabel(n.type)}</div>
+                <div className="font-medium">{notificationTypeLabel(n.type, t)}</div>
                 {!n.isRead && (
                   <span className="h-1.5 w-1.5 rounded-full bg-primary-glow shadow-glow" />
                 )}
               </div>
               <div className="mt-0.5 text-sm text-muted-foreground">{n.message}</div>
               <div className="mt-1 text-[11px] text-muted-foreground">
-                {n.createdAt ? new Date(n.createdAt).toLocaleString() : "Recently"}
+                {n.createdAt ? new Date(n.createdAt).toLocaleString() : t("notifications.recently")}
               </div>
             </div>
           </button>
         ))}
         {notifications.length === 0 && (
           <div className="rounded-2xl border border-dashed border-border bg-card/40 p-12 text-center text-sm text-muted-foreground">
-            No notifications yet.
+            {t("notifications.noNotifications")}
           </div>
         )}
       </div>

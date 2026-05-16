@@ -1,0 +1,554 @@
+{
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "create": "Tạo",
+    "close": "Đóng",
+    "back": "Quay lại",
+    "search": "Tìm kiếm",
+    "add": "Thêm",
+    "remove": "Xóa",
+    "confirm": "Xác nhận",
+    "yes": "Có",
+    "no": "Không",
+    "vsLastWeek": "so với tuần trước"
+  },
+  "lang": {
+    "toggle": "Ngôn ngữ",
+    "vi": "Tiếng Việt",
+    "en": "English"
+  },
+  "sidebar": {
+    "dashboard": "Bảng điều khiển",
+    "groups": "Nhóm học",
+    "tasks": "Nhiệm vụ",
+    "flashcards": "Thẻ học",
+    "notifications": "Thông báo",
+    "settings": "Cài đặt",
+    "tagline": "Cộng tác nhóm học"
+  },
+  "adminSidebar": {
+    "title": "Bảng quản trị",
+    "tagline": "Quyền truy cập nâng cao",
+    "overview": "Tổng quan",
+    "users": "Người dùng",
+    "groups": "Nhóm",
+    "notice": "Bạn đang xem bảng quản trị. Chuyển vai từ thanh trên để quay lại trải nghiệm người dùng."
+  },
+  "topBar": {
+    "notifications": "Thông báo",
+    "loading": "Đang tải…",
+    "noNotifications": "Chưa có thông báo.",
+    "read": "Đã đọc",
+    "viewAll": "Xem tất cả",
+    "adminConsole": "Bảng quản trị",
+    "dashboard": "Bảng điều khiển",
+    "profileSettings": "Hồ sơ & Cài đặt",
+    "signOut": "Đăng xuất",
+    "signingOut": "Đang đăng xuất…",
+    "pleaseSignIn": "Vui lòng đăng nhập lại.",
+    "notificationNoLink": "Thông báo này không có liên kết.",
+    "couldNotOpenLink": "Không thể mở liên kết."
+  },
+  "driveQuota": {
+    "title": "Dung lượng Drive",
+    "signInToView": "Đăng nhập để xem dung lượng Drive.",
+    "refresh": "Làm mới dung lượng",
+    "couldNotLoad": "Không thể tải dung lượng.",
+    "syncHint": "Làm mới để đồng bộ dung lượng từ Google. Đặt giới hạn lưu trữ trong Cài đặt.",
+    "refreshAriaLabel": "Làm mới dung lượng"
+  },
+  "landing": {
+    "metaTitle": "NTU Study — Cộng tác nhóm cho sinh viên",
+    "metaDesc": "Cộng tác khóa học, dự án và câu lạc bộ đọc sách với nhiệm vụ chung, thẻ học và đánh giá đóng góp — xây dựng cho sinh viên NTU.",
+    "nav": {
+      "features": "Tính năng",
+      "howItWorks": "Cách hoạt động",
+      "faq": "FAQ",
+      "signIn": "Đăng nhập",
+      "getStarted": "Bắt đầu"
+    },
+    "tagline": "Cộng tác nhóm học",
+    "badge": "Được xây dựng cho sinh viên NTU",
+    "hero": {
+      "title1": "Học cùng nhau.",
+      "title2": "Hoàn thành dự án nhanh hơn.",
+      "subtitle": "NTU Study tập hợp nhóm học, nhiệm vụ, tệp và thẻ học vào một không gian làm việc — để nhóm tập trung vào công việc quan trọng và trưởng nhóm đánh giá đóng góp công bằng.",
+      "continueWithGoogle": "Tiếp tục với Google",
+      "seeHowItWorks": "Xem cách hoạt động"
+    },
+    "stats": {
+      "activeGroups": "Nhóm học đang hoạt động",
+      "tasksTracked": "Nhiệm vụ đã theo dõi",
+      "flashcardsReviewed": "Thẻ học đã ôn",
+      "avgContribution": "Điểm đóng góp TB"
+    },
+    "features": {
+      "sectionLabel": "Tất cả trong một nơi",
+      "sectionTitle": "Không gian học mà nhóm thực sự mở",
+      "sectionSubtitle": "Ngừng xoay sở giữa nhóm chat, bảng tính và tài liệu chung. NTU Study thay thế công việc lặt vặt để nhóm tập trung vào kết quả.",
+      "groups": {
+        "title": "Nhóm học, có tổ chức",
+        "body": "Tạo nhóm khóa học hoặc dự án, mời bạn cùng lớp bằng một liên kết và giữ mọi thứ trong không gian làm việc chung."
+      },
+      "tasks": {
+        "title": "Nhiệm vụ linh hoạt",
+        "body": "Lập kế hoạch, phân công và theo dõi công việc trên bảng Kanban với nhiệm vụ con, hạn chót và nhắc nhở tự động."
+      },
+      "flashcards": {
+        "title": "Thẻ học hiệu quả",
+        "body": "Xây dựng bộ thẻ cùng nhau và ôn tập với phương pháp lặp ngắt quãng trước khi kiểm tra — không còn ghi chú rải rác."
+      },
+      "contribution": {
+        "title": "Đánh giá đóng góp công bằng",
+        "body": "Trưởng nhóm đánh giá thành viên sau dự án để ghi nhận nỗ lực và nhận ra ai ỷ lại."
+      },
+      "records": {
+        "title": "Hồ sơ khóa, sẵn sàng kiểm tra",
+        "body": "Khi dự án kết thúc, kết quả và đánh giá được khóa và xuất để xem xét học thuật."
+      },
+      "ntu": {
+        "title": "Dành riêng cho NTU",
+        "body": "Đăng nhập bằng tài khoản Google NTU. Nhóm, tệp và tiến độ của bạn theo bạn qua mọi môn học."
+      }
+    },
+    "howItWorks": {
+      "sectionLabel": "Ba bước",
+      "sectionTitle": "Từ khởi động đến nộp bài, không hỗn loạn",
+      "steps": {
+        "step1": {
+          "number": "01",
+          "title": "Tạo hoặc tham gia nhóm",
+          "body": "Dùng đăng nhập Google NTU và tạo nhóm mới hoặc chấp nhận liên kết mời từ trưởng nhóm."
+        },
+        "step2": {
+          "number": "02",
+          "title": "Lên kế hoạch và thực hiện",
+          "body": "Chia dự án thành nhiệm vụ, đính kèm tệp và ôn thẻ học cùng nhau khi hạn chót đến gần."
+        },
+        "step3": {
+          "number": "03",
+          "title": "Khóa và đánh giá",
+          "body": "Khi dự án kết thúc, trưởng nhóm đóng dự án. Điểm đóng góp được ghi lại và xuất."
+        }
+      }
+    },
+    "cta": {
+      "title": "Sẵn sàng học thông minh hơn cùng nhau?",
+      "subtitle": "Đăng nhập bằng tài khoản Google NTU và đưa nhóm đầu tiên của bạn vào trong chưa đầy một phút.",
+      "button": "Bắt đầu — miễn phí cho sinh viên"
+    },
+    "footer": {
+      "copyright": "© {{year}} NTU Study. Dự án sinh viên.",
+      "features": "Tính năng",
+      "howItWorks": "Cách hoạt động",
+      "signIn": "Đăng nhập",
+      "privacy": "Bảo mật",
+      "terms": "Điều khoản"
+    }
+  },
+  "login": {
+    "metaTitle": "Đăng nhập — NTU Study",
+    "metaDesc": "Đăng nhập vào NTU Study bằng tài khoản Google NTU để truy cập nhóm, nhiệm vụ và thẻ học.",
+    "tagline": "Cộng tác nhóm học",
+    "backToHome": "Về trang chủ",
+    "welcomeBack": "Chào mừng trở lại",
+    "signInToContinue": "Đăng nhập để tiếp tục với NTU Study",
+    "continueWithGoogle": "Tiếp tục với Google",
+    "eduHint": "Dùng tài khoản .edu để tối ưu đầy đủ tính năng",
+    "terms": "Điều khoản",
+    "privacy": "Chính sách bảo mật",
+    "byContiuing": "Bằng cách tiếp tục, bạn đồng ý với",
+    "and": "và",
+    "footer": {
+      "copyright": "© {{year}} NTU Study. Dự án sinh viên.",
+      "home": "Trang chủ",
+      "privacy": "Bảo mật",
+      "terms": "Điều khoản",
+      "support": "Hỗ trợ"
+    },
+    "couldNotStartLogin": "Không thể bắt đầu đăng nhập Google"
+  },
+  "dashboard": {
+    "adminView": "Chế độ quản trị",
+    "studentView": "Chế độ sinh viên",
+    "greeting": "Chào buổi tối, {{name}}",
+    "subtitle": "Đây là những gì đang diễn ra trong nhóm của bạn hôm nay.",
+    "quickAction": "Hành động nhanh",
+    "stats": {
+      "activeGroups": "Nhóm đang hoạt động",
+      "openTasks": "Nhiệm vụ đang mở",
+      "cardsToReview": "Thẻ cần ôn"
+    },
+    "recentActivity": "Hoạt động gần đây",
+    "viewAll": "Xem tất cả",
+    "upcoming": "Sắp tới",
+    "allTasks": "Tất cả nhiệm vụ",
+    "yourGroups": "Nhóm của bạn",
+    "seeAll": "Xem tất cả",
+    "active": "Đang hoạt động",
+    "members": "thành viên",
+    "loading": "Đang tải bảng điều khiển..."
+  },
+  "tasks": {
+    "pageTitle": "Nhiệm vụ của tôi",
+    "pageSubtitle": "Tất cả nhiệm vụ được giao cho bạn trong các nhóm.",
+    "loading": "Đang tải nhiệm vụ...",
+    "personalTasks": "Nhiệm vụ cá nhân",
+    "personalTasksDesc": "Lưu vào tài khoản của bạn · {{count}} đang mở",
+    "addPersonalTask": "Thêm nhiệm vụ cá nhân và nhấn Enter",
+    "deadline": "Hạn chót",
+    "add": "Thêm",
+    "addSubtask": "Thêm nhiệm vụ con…",
+    "clearDate": "Xóa ngày",
+    "setDate": "Đặt ngày",
+    "noPersonalTasks": "Chưa có nhiệm vụ cá nhân. Thêm một nhiệm vụ ở trên.",
+    "groupTasks": "Nhiệm vụ nhóm",
+    "noTasksFilter": "Không có nhiệm vụ nào khớp bộ lọc này.",
+    "due": "Hạn",
+    "startWorking": "Bắt đầu làm",
+    "submitForReview": "Gửi để xem xét",
+    "deleteTask": "Xóa nhiệm vụ",
+    "deleteSubtask": "Xóa nhiệm vụ con",
+    "filters": {
+      "all": "Tất cả",
+      "todo": "Cần làm",
+      "in_progress": "Đang làm",
+      "pending_review": "Chờ xem xét",
+      "done": "Hoàn thành"
+    }
+  },
+  "groups": {
+    "pageTitle": "Nhóm học",
+    "pageSubtitle": "Cộng tác với bạn học trong các khóa học, dự án và câu lạc bộ đọc sách.",
+    "loading": "Đang tải nhóm...",
+    "newGroup": "Nhóm mới",
+    "createGroup": "Tạo nhóm mới",
+    "createGroupDesc": "Thiết lập nhóm để cộng tác. Bạn sẽ là trưởng nhóm.",
+    "groupName": "Tên nhóm",
+    "groupNamePlaceholder": "Ví dụ: Nhóm học CS101",
+    "description": "Mô tả",
+    "descriptionPlaceholder": "Nhóm này về gì?",
+    "reportDate": "Ngày báo cáo / hạn chót",
+    "reportDateHint": "Ngày mục tiêu tùy chọn cho sản phẩm bàn giao hoặc báo cáo.",
+    "tags": "Thẻ",
+    "tagsPlaceholder": "Ví dụ: CS, thuật toán, học tập",
+    "creating": "Đang tạo...",
+    "created": "Đã tạo",
+    "membersCount": "thành viên",
+    "groupNotFound": "Không tìm thấy nhóm",
+    "backToGroups": "← Quay lại nhóm",
+    "allGroups": "← Tất cả nhóm",
+    "loadingGroup": "Đang tải nhóm...",
+    "locked": "đã khóa",
+    "tabs": {
+      "overview": "Tổng quan",
+      "tasks": "Nhiệm vụ",
+      "drive": "Drive",
+      "canva": "Canva",
+      "calendar": "Lịch",
+      "members": "Thành viên",
+      "contribution": "Đóng góp",
+      "flashcards": "Thẻ học"
+    },
+    "tasksTab": {
+      "hint": "Kéo thẻ giữa các cột để cập nhật trạng thái. Gửi xem xét từ {{inProgress}} → {{review}}. Trưởng nhóm chuyển Xem xét → Hoàn thành hoặc Thất bại.",
+      "inProgress": "Đang làm",
+      "review": "Xem xét",
+      "newTask": "+ Nhiệm vụ mới",
+      "newGroupTask": "Nhiệm vụ nhóm mới",
+      "noTasks": "Chưa có nhiệm vụ — dùng \"Nhiệm vụ mới\" để thêm."
+    },
+    "overview": {
+      "quickLinks": "Liên kết nhanh",
+      "quickLinksDesc": "Drive, Canva, Meet và tài liệu chung của nhóm.",
+      "googleDrive": "Google Drive",
+      "googleDriveDesc": "Thư mục chung cho tệp và tài nguyên.",
+      "openInDrive": "Mở trong Drive",
+      "noDriveFolder": "Chưa liên kết thư mục Drive.",
+      "canva": "Canva",
+      "canvaDesc": "Mở bản trình bày trong Canva (xem trước đầy đủ ở tab Canva).",
+      "openInCanva": "Mở trong Canva",
+      "noCanva": "Chưa liên kết bản trình bày Canva.",
+      "googleMeet": "Google Meet",
+      "googleMeetDesc": "Liên kết cuộc họp định kỳ hoặc một lần cho nhóm.",
+      "openMeet": "Mở Google Meet",
+      "noMeet": "Chưa có liên kết cuộc họp.",
+      "projectDoc": "Tài liệu dự án",
+      "projectDocDesc": "Google Doc được liên kết cho ghi chú hoặc bài viết.",
+      "openDoc": "Mở tài liệu dự án",
+      "noDoc": "Chưa liên kết Google Doc.",
+      "projectDue": "Hạn dự án",
+      "projectDueDesc": "Ngày mục tiêu cho sản phẩm bàn giao hoặc báo cáo nhóm.",
+      "noDueDate": "Chưa đặt ngày hạn dự án."
+    },
+    "members": {
+      "title": "Thành viên",
+      "subtitle": "Xem thành viên và mời người qua email (chỉ trưởng nhóm).",
+      "invitationActivity": "Hoạt động lời mời",
+      "email": "Email",
+      "invite": "Mời",
+      "sending": "Đang gửi…",
+      "enterEmail": "Nhập địa chỉ email",
+      "invitationActivityTitle": "Hoạt động lời mời",
+      "invitationActivityDesc": "Lời mời đang chờ và đã qua cho nhóm này (chỉ trưởng nhóm).",
+      "loadingInvitations": "Đang tải lời mời…",
+      "noInvitations": "Chưa có lời mời nào.",
+      "expires": "Hết hạn",
+      "resend": "Gửi lại",
+      "resending": "Đang gửi lại…",
+      "loadingMembers": "Đang tải thành viên…",
+      "noMembers": "Không có thành viên nào.",
+      "inactive": "không hoạt động",
+      "deactivate": "Vô hiệu hóa",
+      "activate": "Kích hoạt",
+      "remove": "Xóa",
+      "cannotLockAdmin": "Không thể khóa quản trị viên"
+    },
+    "contribution": {
+      "title": "Đánh giá đóng góp nhiệm vụ",
+      "subtitle": "Đánh giá từng nhiệm vụ đã hoàn thành từ 0 (không có) đến 10 (xuất sắc). Đánh giá ẩn danh và tổng hợp theo người được giao sau khi trưởng nhóm đóng vòng.",
+      "openEvaluation": "Mở đánh giá",
+      "loading": "Đang tải…",
+      "couldNotLoad": "Không thể tải vòng đánh giá.",
+      "noRoundsYet": "Trưởng nhóm chưa mở đánh giá."
+    },
+    "sharedFlashcards": {
+      "title": "Bộ thẻ học chung",
+      "subtitle": "Bộ thẻ học được chia sẻ bởi thành viên nhóm. Chia sẻ bộ thẻ của bạn để người khác học.",
+      "shareASet": "Chia sẻ bộ thẻ",
+      "loading": "Đang tải…",
+      "noSetsShared": "Chưa có bộ thẻ nào được chia sẻ.",
+      "sharedByYou": "do bạn chia sẻ",
+      "cards_one": "thẻ",
+      "cards_other": "thẻ",
+      "study": "Học",
+      "shareDialogTitle": "Chia sẻ bộ thẻ học",
+      "shareDialogDesc": "Chọn một trong các bộ thẻ của bạn để chia sẻ với nhóm này.",
+      "loadingYourSets": "Đang tải bộ thẻ của bạn…",
+      "noSetsToShare": "Bạn chưa có bộ thẻ nào. Tạo một bộ trước.",
+      "allAlreadyShared": "Tất cả bộ thẻ của bạn đã được chia sẻ với nhóm này.",
+      "share": "Chia sẻ",
+      "sharedWithGroup": "Đã chia sẻ bộ thẻ với nhóm",
+      "failedToShare": "Chia sẻ thất bại",
+      "failedToRemove": "Xóa thất bại"
+    }
+  },
+  "flashcards": {
+    "pageTitle": "Thẻ học",
+    "pageSubtitle": "Bộ thẻ ôn tập theo phương pháp lặp ngắt quãng cho các khóa học.",
+    "loading": "Đang tải bộ thẻ...",
+    "newSet": "Bộ mới",
+    "cards": "thẻ",
+    "nextReview": "Lần ôn tiếp (bộ):",
+    "notScheduled": "Chưa lên lịch",
+    "study": "Học",
+    "edit": "Chỉnh sửa",
+    "deleteSet": "Xóa bộ thẻ {{name}}",
+    "deleteTitle": "Xóa bộ thẻ?",
+    "deleteDesc": "Thao tác này sẽ xóa vĩnh viễn \"{{name}}\" và tất cả thẻ trong đó. Không thể hoàn tác.",
+    "cancel": "Hủy",
+    "deleting": "Đang xóa…",
+    "delete": "Xóa",
+    "createPage": {
+      "backToFlashcards": "Quay lại thẻ học",
+      "saving": "Đang lưu…",
+      "saveChanges": "Lưu thay đổi",
+      "createSet": "Tạo bộ thẻ",
+      "saveAndPractice": "Lưu và luyện tập",
+      "createAndPractice": "Tạo và luyện tập",
+      "editTitle": "Chỉnh sửa bộ thẻ học",
+      "createTitle": "Tạo bộ thẻ học mới",
+      "titleLabel": "Tiêu đề",
+      "titlePlaceholder": "Tiêu đề",
+      "subjectLabel": "Môn học (tùy chọn)",
+      "subjectPlaceholder": "Ví dụ: CS2040",
+      "descLabel": "Mô tả (tùy chọn)",
+      "descPlaceholder": "Thêm mô tả…",
+      "import": "Nhập",
+      "term": "Thuật ngữ",
+      "definition": "Định nghĩa",
+      "enterTerm": "Nhập thuật ngữ",
+      "enterDefinition": "Nhập định nghĩa",
+      "removeCard": "Xóa thẻ",
+      "addCard": "Thêm thẻ",
+      "loadingSet": "Đang tải bộ thẻ…",
+      "couldNotLoad": "Không thể tải bộ thẻ này.",
+      "backToFlashcardsBtn": "Quay lại thẻ học",
+      "errorNoTitle": "Vui lòng nhập tiêu đề cho bộ thẻ.",
+      "errorNoCards": "Thêm ít nhất một thẻ với thuật ngữ và định nghĩa.",
+      "somethingWentWrong": "Có lỗi xảy ra."
+    },
+    "studyMode": {
+      "loadingCards": "Đang tải thẻ…",
+      "noCards": "Bộ thẻ này chưa có thẻ nào.",
+      "close": "Đóng",
+      "studying": "Đang học —",
+      "general": "Chung",
+      "cardProgress": "Thẻ {{current}} / {{total}} · Lần ôn tiếp được ghi lại khi bạn đóng",
+      "question": "Câu hỏi",
+      "answer": "Câu trả lời",
+      "flipHint": "Nhấp hoặc Cách để lật · ← → để điều hướng",
+      "previous": "Trước",
+      "next": "Tiếp",
+      "finish": "Hoàn thành"
+    }
+  },
+  "notifications": {
+    "pageTitle": "Thông báo",
+    "pageSubtitle": "Theo dõi nhiệm vụ, đánh giá và hoạt động nhóm. Nhấp vào hàng để mở trang liên quan.",
+    "loading": "Đang tải thông báo...",
+    "noNotifications": "Chưa có thông báo.",
+    "pleaseSignIn": "Vui lòng đăng nhập lại.",
+    "noLink": "Thông báo này không có liên kết.",
+    "couldNotOpen": "Không thể mở liên kết.",
+    "recently": "Gần đây",
+    "types": {
+      "group_invitation": "Lời mời nhóm",
+      "task_assigned": "Nhiệm vụ được giao",
+      "task_pending_review": "Yêu cầu xem xét",
+      "task_review_result": "Cập nhật nhiệm vụ",
+      "default": "Thông báo"
+    }
+  },
+  "settings": {
+    "pageTitle": "Cài đặt",
+    "pageSubtitle": "Thông tin tài khoản từ Google và tùy chọn ứng dụng.",
+    "loading": "Đang tải cài đặt…",
+    "couldNotLoad": "Không thể tải hồ sơ. Thử đăng nhập lại.",
+    "googleAccount": {
+      "title": "Tài khoản Google",
+      "desc": "Đã đăng nhập bằng Google (.edu)"
+    },
+    "displayName": "Tên hiển thị",
+    "displayNamePlaceholder": "Tên của bạn trong ứng dụng",
+    "saveName": "Lưu tên",
+    "syncFromGoogle": "Đồng bộ từ Google",
+    "syncing": "Đang đồng bộ…",
+    "nameHint": "Lưu tên cập nhật cách bạn hiển thị ở đây. Đồng bộ từ Google tải tên và ảnh đại diện từ Google (yêu cầu phiên Google đang hoạt động).",
+    "saveNameHint": "Lưu tên",
+    "syncFromGoogleHint": "Đồng bộ từ Google",
+    "notifications": {
+      "title": "Thông báo",
+      "desc": "Kiểm soát việc ứng dụng có thể gửi email thông báo (nhiệm vụ và nhắc nhở).",
+      "emailLabel": "Thông báo email",
+      "emailHint": "Khi tắt, email tự động không được gửi đến địa chỉ của bạn."
+    },
+    "driveStorage": {
+      "title": "Lưu trữ Drive",
+      "desc": "Tài khoản Google của tổ chức thường không báo cáo tổng lưu trữ chung. Đặt giới hạn của riêng bạn ở đây (ví dụ từ chính sách trường). Dung lượng thanh bên được làm mới từ Google và bao gồm tệp trong Drive và thùng rác.",
+      "quotaLabel": "Giới hạn dung lượng (GB)",
+      "quotaPlaceholder": "Ví dụ: 16",
+      "saveLimit": "Lưu giới hạn",
+      "clearLimit": "Xóa giới hạn"
+    },
+    "canva": {
+      "title": "Canva",
+      "desc": "Kết nối tài khoản Canva để tạo và liên kết thiết kế từ ứng dụng.",
+      "connected": "Canva đã kết nối — bạn có thể dùng bản trình bày trong nhóm.",
+      "notConnected": "Chưa kết nối. Bạn sẽ được chuyển hướng đến Canva để ủy quyền.",
+      "connect": "Kết nối với Canva",
+      "connecting": "Đang kết nối…"
+    },
+    "toast": {
+      "enterLimit": "Nhập giới hạn tính bằng GB.",
+      "invalidNumber": "Nhập số không âm hợp lệ.",
+      "limitSaved": "Đã lưu giới hạn dung lượng Drive.",
+      "limitError": "Không thể lưu giới hạn dung lượng.",
+      "limitCleared": "Đã xóa giới hạn dung lượng Drive.",
+      "clearError": "Không thể xóa giới hạn dung lượng.",
+      "enterName": "Nhập tên hiển thị.",
+      "nameSaved": "Đã cập nhật tên hiển thị.",
+      "nameError": "Không thể cập nhật tên.",
+      "googleSynced": "Đã cập nhật hồ sơ từ tài khoản Google.",
+      "googleSyncError": "Không thể đồng bộ với Google. Thử đăng nhập lại."
+    }
+  },
+  "admin": {
+    "overview": {
+      "breadcrumb": "Quản trị / Tổng quan",
+      "title": "Sức khỏe hệ thống",
+      "totalUsers": "Tổng người dùng",
+      "totalGroups": "Tổng nhóm",
+      "cronRuns": "Lần chạy cron (7 ngày)",
+      "failures": "Thất bại (7 ngày)",
+      "failedToLoad": "Không thể tải bảng điều khiển",
+      "manualRun": "Chạy thủ công:",
+      "overdueReminders": "Nhắc nhở quá hạn",
+      "notificationCleanup": "Dọn dẹp thông báo",
+      "cronJobsChart": "Cron jobs — 7 ngày qua",
+      "noCronRuns": "Chưa có lần chạy cron nào",
+      "recentCronRuns": "Lần chạy cron gần đây",
+      "noRunsYet": "Chưa có lần chạy nào",
+      "systemLog": "Nhật ký hệ thống",
+      "systemLogDesc": "Bản ghi thực thi cron đã lưu (v1). Xem các hàng bên dưới để biết lỗi và thời gian.",
+      "noLogEntries": "Không có mục nhật ký"
+    },
+    "users": {
+      "breadcrumb": "Quản trị / Người dùng",
+      "title": "Quản lý người dùng",
+      "failedToLoad": "Không thể tải người dùng",
+      "searchPlaceholder": "Tìm người dùng…",
+      "colUser": "Người dùng",
+      "colEmail": "Email",
+      "colRole": "Vai trò",
+      "colStatus": "Trạng thái",
+      "colActions": "Hành động",
+      "locked": "ĐÃ KHÓA",
+      "active": "ĐANG HOẠT ĐỘNG",
+      "cannotLockAdmin": "Không thể khóa quản trị viên",
+      "lock": "Khóa",
+      "unlock": "Mở khóa"
+    },
+    "groups": {
+      "breadcrumb": "Quản trị / Nhóm",
+      "title": "Quản lý nhóm",
+      "failedToLoad": "Không thể tải nhóm",
+      "colGroup": "Nhóm",
+      "colStatus": "Trạng thái",
+      "colMembers": "Thành viên",
+      "colCreated": "Ngày tạo",
+      "colActions": "Hành động",
+      "delete": "Xóa",
+      "confirmDelete": "Xóa nhóm \"{{name}}\"? Không thể hoàn tác."
+    }
+  },
+  "invitations": {
+    "missingLink": "Thiếu liên kết lời mời.",
+    "loading": "Đang tải lời mời…",
+    "reasons": {
+      "not_found": "Liên kết lời mời này không hợp lệ.",
+      "expired": "Lời mời này đã hết hạn.",
+      "already_accepted": "Lời mời này đã được chấp nhận.",
+      "invalid_status": "Lời mời này không còn hợp lệ.",
+      "default": "Lời mời này không thể sử dụng."
+    },
+    "home": "← Trang chủ",
+    "title": "Lời mời nhóm",
+    "joinGroup": "Tham gia {{groupName}}",
+    "invitedEmail": "Email được mời:",
+    "expires": "Hết hạn",
+    "emailMismatch": "Bạn đang đăng nhập với <1>{{email}}</1>. Lời mời dành cho <2>{{inviteEmail}}</2>. Chấp nhận vẫn cấp thành viên cho địa chỉ được mời — để đăng nhập Google sau, hãy dùng tài khoản khớp với <3>{{inviteEmail}}</3>.",
+    "signInDifferent": "Đăng nhập bằng tài khoản khác",
+    "displayName": "Tên hiển thị (tùy chọn — dùng nếu ứng dụng tạo hồ sơ từ lời mời này)",
+    "displayNamePlaceholder": "Tên của bạn",
+    "signInTip": "Mẹo: <1>Đăng nhập bằng Google</1> trước nếu bạn dùng Google NTU — cùng email như trên.",
+    "signedInAs": "Đã đăng nhập với {{email}}. Bạn có thể chấp nhận bên dưới.",
+    "joining": "Đang tham gia…",
+    "accept": "Chấp nhận lời mời",
+    "unavailable": "Lời mời không khả dụng",
+    "goToGroups": "Đến nhóm của bạn"
+  },
+  "canva": {
+    "title": "Kết nối Canva",
+    "connected": "Canva đã kết nối. Bạn có thể tạo nhóm để tự động tạo bản trình bày.",
+    "error": "Không thể kết nối Canva:",
+    "done": "Hoàn tất.",
+    "backToSettings": "Quay lại cài đặt",
+    "backToGroups": "Quay lại nhóm"
+  }
+}

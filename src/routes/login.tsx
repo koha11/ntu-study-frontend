@@ -1,6 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useRouterState } from "@tanstack/react-router";
 import { z } from "zod";
 import { GraduationCap, ArrowLeft, ShieldCheck } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { normalizeSafeAppPath } from "@/domains/auth/post-login-redirect";
@@ -33,10 +34,10 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
+  const { t } = useTranslation();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { redirect: redirectPath } = Route.useSearch();
 
-  /** Nested `/login/callback` — parent must render an outlet or the callback component never mounts (OAuth hangs). */
   if (pathname === "/login/callback") {
     return <Outlet />;
   }
@@ -54,7 +55,7 @@ function LoginPage() {
             </div>
             <div className="leading-tight">
               <div className="text-sm font-semibold tracking-tight">NTU Study</div>
-              <div className="text-[10px] text-muted-foreground">Group collaboration</div>
+              <div className="text-[10px] text-muted-foreground">{t("login.tagline")}</div>
             </div>
           </Link>
 
@@ -65,7 +66,7 @@ function LoginPage() {
               className="inline-flex h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
-              Back to home
+              {t("login.backToHome")}
             </Link>
           </div>
         </div>
@@ -84,8 +85,8 @@ function LoginPage() {
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
               <GraduationCap className="h-6 w-6 text-primary-foreground" />
             </div>
-            <h1 className="mt-5 text-2xl font-semibold tracking-tight">Welcome back</h1>
-            <p className="mt-2 text-sm text-muted-foreground">Sign in to continue to NTU Study</p>
+            <h1 className="mt-5 text-2xl font-semibold tracking-tight">{t("login.welcomeBack")}</h1>
+            <p className="mt-2 text-sm text-muted-foreground">{t("login.signInToContinue")}</p>
           </div>
 
           <Button
@@ -96,7 +97,7 @@ function LoginPage() {
               startGoogleLogin({
                 redirectAfterLogin: safeRedirect ?? undefined,
               }).catch((err) => {
-                const msg = err instanceof Error ? err.message : "Could not start Google sign-in";
+                const msg = err instanceof Error ? err.message : t("login.couldNotStartLogin");
                 toast.error(msg);
               });
             }}
@@ -119,23 +120,22 @@ function LoginPage() {
                 d="M21.2 12.2c0-.6-.1-1.1-.2-1.6H12v3.9h5.5c-.3 1.3-1.1 2.4-2.2 3.1l3 2.5c1.8-1.6 2.9-4.1 2.9-7.9z"
               />
             </svg>
-            Continue with Google
+            {t("login.continueWithGoogle")}
           </Button>
 
           <div className="mt-5 flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
             <ShieldCheck className="h-3.5 w-3.5 text-success" />
-            Use your <span className="font-medium text-foreground">.edu</span> account for
-            optimizing all our features
+            {t("login.eduHint")}
           </div>
 
           <p className="mt-6 text-center text-xs text-muted-foreground">
-            By continuing, you agree to our{" "}
+            {t("login.byContiuing")}{" "}
             <a href="#" className="underline hover:text-foreground">
-              Terms
+              {t("login.terms")}
             </a>{" "}
-            &{" "}
+            {t("login.and")}{" "}
             <a href="#" className="underline hover:text-foreground">
-              Privacy Policy
+              {t("login.privacy")}
             </a>
             .
           </p>
@@ -145,19 +145,19 @@ function LoginPage() {
       {/* Branded footer */}
       <footer className="border-t border-border/60 bg-card/30">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground md:flex-row md:px-6">
-          <div>© {new Date().getFullYear()} NTU Study. A student project.</div>
+          <div>{t("login.footer.copyright", { year: new Date().getFullYear() })}</div>
           <nav className="flex items-center gap-5">
             <Link to="/" className="hover:text-foreground">
-              Home
+              {t("login.footer.home")}
             </Link>
             <a href="#" className="hover:text-foreground">
-              Privacy
+              {t("login.footer.privacy")}
             </a>
             <a href="#" className="hover:text-foreground">
-              Terms
+              {t("login.footer.terms")}
             </a>
             <a href="#" className="hover:text-foreground">
-              Support
+              {t("login.footer.support")}
             </a>
           </nav>
         </div>

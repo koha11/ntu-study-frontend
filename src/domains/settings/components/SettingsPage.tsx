@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useCurrentUser, usePatchProfile, useSyncGoogleProfile } from "@/domains/auth";
 import { startCanvaOAuth } from "@/domains/auth/auth-api";
 import { getAccessToken } from "@/domains/auth/token-storage";
@@ -31,6 +32,7 @@ function gbDraftFromBytes(bytes: string | null | undefined): string {
 }
 
 export function SettingsPage() {
+  const { t } = useTranslation();
   const { data: user, isLoading, isError } = useCurrentUser();
   const { mutate: patchProfile, isPending: isPatching } = usePatchProfile();
   const { mutate: syncFromGoogle, isPending: isSyncingGoogle } = useSyncGoogleProfile();
@@ -47,20 +49,20 @@ export function SettingsPage() {
   const handleSaveDriveLimit = () => {
     const raw = driveLimitGb.trim();
     if (raw === "") {
-      toast.error("Enter a limit in GB, or clear the limit instead.");
+      toast.error(t("settings.toast.enterLimit"));
       return;
     }
     const gb = Number(raw);
     if (!Number.isFinite(gb) || gb < 0) {
-      toast.error("Enter a valid non-negative number.");
+      toast.error(t("settings.toast.invalidNumber"));
       return;
     }
     const bytes = Math.round(gb * 1024 ** 3);
     patchProfile(
       { drive_total_quota: String(bytes) },
       {
-        onSuccess: () => toast.success("Drive quota limit saved."),
-        onError: () => toast.error("Could not save quota limit."),
+        onSuccess: () => toast.success(t("settings.toast.limitSaved")),
+        onError: () => toast.error(t("settings.toast.limitError")),
       },
     );
   };
@@ -70,10 +72,10 @@ export function SettingsPage() {
       { drive_total_quota: null },
       {
         onSuccess: () => {
-          toast.success("Drive quota limit cleared.");
+          toast.success(t("settings.toast.limitCleared"));
           setDriveLimitGb("");
         },
-        onError: () => toast.error("Could not clear quota limit."),
+        onError: () => toast.error(t("settings.toast.clearError")),
       },
     );
   };
@@ -81,22 +83,22 @@ export function SettingsPage() {
   const handleSaveDisplayName = () => {
     const next = nameDraft.trim();
     if (!next) {
-      toast.error("Enter a display name.");
+      toast.error(t("settings.toast.enterName"));
       return;
     }
     patchProfile(
       { full_name: next },
       {
-        onSuccess: () => toast.success("Display name updated."),
-        onError: () => toast.error("Could not update your name."),
+        onSuccess: () => toast.success(t("settings.toast.nameSaved")),
+        onError: () => toast.error(t("settings.toast.nameError")),
       },
     );
   };
 
   const handleSyncGoogleName = () => {
     syncFromGoogle(undefined, {
-      onSuccess: () => toast.success("Profile updated from your Google account."),
-      onError: () => toast.error("Could not sync with Google. Try signing in again."),
+      onSuccess: () => toast.success(t("settings.toast.googleSynced")),
+      onError: () => toast.error(t("settings.toast.googleSyncError")),
     });
   };
 
@@ -116,7 +118,7 @@ export function SettingsPage() {
     return (
       <div className="flex items-center justify-center gap-2 py-12 text-muted-foreground">
         <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
-        Loading settings…
+        {t("settings.loading")}
       </div>
     );
   }
@@ -124,7 +126,7 @@ export function SettingsPage() {
   if (isError || !user) {
     return (
       <div className="py-12 text-destructive">
-        Could not load your profile. Try signing in again.
+        {t("settings.couldNotLoad")}
       </div>
     );
   }
@@ -137,16 +139,16 @@ export function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t("settings.pageTitle")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Account details from your Google sign-in and app preferences.
+          {t("settings.pageSubtitle")}
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Google account</CardTitle>
-          <CardDescription>Signed in with Google (.edu)</CardDescription>
+          <CardTitle>{t("settings.googleAccount.title")}</CardTitle>
+          <CardDescription>{t("settings.googleAccount.desc")}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
@@ -161,14 +163,14 @@ export function SettingsPage() {
                 <p className="truncate text-sm text-muted-foreground">{user.email}</p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="settings-display-name">Display name</Label>
+                <Label htmlFor="settings-display-name">{t("settings.displayName")}</Label>
                 <Input
                   id="settings-display-name"
                   value={nameDraft}
                   onChange={(e) => setNameDraft(e.target.value)}
                   disabled={profileBusy}
                   autoComplete="name"
-                  placeholder="Your name in the app"
+                  placeholder={t("settings.displayNamePlaceholder")}
                 />
                 <div className="flex flex-wrap gap-2">
                   <Button
@@ -176,7 +178,7 @@ export function SettingsPage() {
                     disabled={!canSaveName}
                     onClick={() => handleSaveDisplayName()}
                   >
-                    Save name
+                    {t("settings.saveName")}
                   </Button>
                   <Button
                     type="button"
@@ -187,18 +189,17 @@ export function SettingsPage() {
                     {isSyncingGoogle ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
-                        Syncing…
+                        {t("settings.syncing")}
                       </>
                     ) : (
-                      "Sync from Google"
+                      t("settings.syncFromGoogle")
                     )}
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  <strong className="font-medium text-foreground">Save name</strong> updates how you
-                  appear here only.{" "}
-                  <strong className="font-medium text-foreground">Sync from Google</strong> loads
-                  your name and profile photo from Google (requires an active Google session).
+                  <strong className="font-medium text-foreground">{t("settings.saveNameHint")}</strong>{" "}
+                  <strong className="font-medium text-foreground">{t("settings.syncFromGoogleHint")}</strong>{" "}
+                  {t("settings.nameHint")}
                 </p>
               </div>
             </div>
@@ -208,17 +209,17 @@ export function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Notifications</CardTitle>
+          <CardTitle>{t("settings.notifications.title")}</CardTitle>
           <CardDescription>
-            Control whether the app may send notification emails (e.g. tasks and reminders).
+            {t("settings.notifications.desc")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between gap-4 rounded-lg border border-border p-4">
             <div className="space-y-0.5">
-              <Label htmlFor="notify-email">Email notifications</Label>
+              <Label htmlFor="notify-email">{t("settings.notifications.emailLabel")}</Label>
               <p className="text-xs text-muted-foreground">
-                When off, automated emails are not sent to your address.
+                {t("settings.notifications.emailHint")}
               </p>
             </div>
             <Switch
@@ -228,7 +229,7 @@ export function SettingsPage() {
               onCheckedChange={(checked) =>
                 patchProfile({ notification_enabled: checked })
               }
-              aria-label="Email notifications"
+              aria-label={t("settings.notifications.emailLabel")}
             />
           </div>
         </CardContent>
@@ -236,22 +237,20 @@ export function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Drive storage</CardTitle>
+          <CardTitle>{t("settings.driveStorage.title")}</CardTitle>
           <CardDescription>
-            Organization Google accounts often do not report a shared storage total. Set your own cap
-            here (for example from your school policy). Sidebar usage is refreshed from Google and
-            includes files in Drive plus trash.
+            {t("settings.driveStorage.desc")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="space-y-2">
-            <Label htmlFor="drive-quota-limit-gb">Quota limit (GB)</Label>
+            <Label htmlFor="drive-quota-limit-gb">{t("settings.driveStorage.quotaLabel")}</Label>
             <Input
               id="drive-quota-limit-gb"
               type="number"
               min={0}
               step={0.1}
-              placeholder="e.g. 16"
+              placeholder={t("settings.driveStorage.quotaPlaceholder")}
               value={driveLimitGb}
               onChange={(e) => setDriveLimitGb(e.target.value)}
               disabled={profileBusy}
@@ -263,7 +262,7 @@ export function SettingsPage() {
               disabled={profileBusy}
               onClick={() => handleSaveDriveLimit()}
             >
-              Save limit
+              {t("settings.driveStorage.saveLimit")}
             </Button>
             <Button
               type="button"
@@ -271,7 +270,7 @@ export function SettingsPage() {
               disabled={isPatching || user.driveTotalQuotaBytes == null}
               onClick={() => handleClearDriveLimit()}
             >
-              Clear limit
+              {t("settings.driveStorage.clearLimit")}
             </Button>
           </div>
         </CardContent>
@@ -279,20 +278,20 @@ export function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Canva</CardTitle>
+          <CardTitle>{t("settings.canva.title")}</CardTitle>
           <CardDescription>
-            Connect your Canva account to create and link designs from the app.
+            {t("settings.canva.desc")}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           {user.canvaConnected ? (
             <p className="text-sm font-medium text-muted-foreground">
-              Canva connected — you can use presentations in your groups.
+              {t("settings.canva.connected")}
             </p>
           ) : (
             <>
               <p className="text-sm text-muted-foreground">
-                Not connected yet. You will be redirected to Canva to authorize.
+                {t("settings.canva.notConnected")}
               </p>
               <Button
                 type="button"
@@ -303,10 +302,10 @@ export function SettingsPage() {
                 {canvaBusy ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Connecting…
+                    {t("settings.canva.connecting")}
                   </>
                 ) : (
-                  "Connect to Canva"
+                  t("settings.canva.connect")
                 )}
               </Button>
             </>

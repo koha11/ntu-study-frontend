@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createFileRoute, useLocation } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import {
   Search,
   Lock,
@@ -59,6 +60,7 @@ function AdminPage() {
 }
 
 function Overview() {
+  const { t } = useTranslation();
   const token = getAccessToken();
   const queryClient = useQueryClient();
 
@@ -89,30 +91,30 @@ function Overview() {
   return (
     <>
       <div className="mb-6">
-        <div className="text-xs uppercase tracking-widest text-warning">Admin / Overview</div>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight">System health</h1>
+        <div className="text-xs uppercase tracking-widest text-warning">{t("admin.overview.breadcrumb")}</div>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight">{t("admin.overview.title")}</h1>
       </div>
 
       {dashQuery.isError && (
         <div className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-          {(dashQuery.error as Error)?.message ?? "Failed to load dashboard"}
+          {(dashQuery.error as Error)?.message ?? t("admin.overview.failedToLoad")}
         </div>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <AdminStat icon={UsersIcon} label="Total users" value={data?.totals.users ?? "—"} />
-        <AdminStat icon={Activity} label="Total groups" value={data?.totals.groups ?? "—"} />
-        <AdminStat icon={CheckCircle2} label="Cron runs (7d)" value={totalRuns} />
+        <AdminStat icon={UsersIcon} label={t("admin.overview.totalUsers")} value={data?.totals.users ?? "—"} />
+        <AdminStat icon={Activity} label={t("admin.overview.totalGroups")} value={data?.totals.groups ?? "—"} />
+        <AdminStat icon={CheckCircle2} label={t("admin.overview.cronRuns")} value={totalRuns} />
         <AdminStat
           icon={AlertTriangle}
-          label="Failures (7d)"
+          label={t("admin.overview.failures")}
           value={failures}
           tone={failures > 0 ? "warning" : "success"}
         />
       </div>
 
       <div className="mt-6 flex flex-wrap gap-2">
-        <span className="text-xs text-muted-foreground">Manual run:</span>
+        <span className="text-xs text-muted-foreground">{t("admin.overview.manualRun")}</span>
         <Button
           size="sm"
           variant="outline"
@@ -120,7 +122,7 @@ function Overview() {
           onClick={() => runCron.mutate(ADMIN_CRON_JOB_SLUGS.OVERDUE_TASK_REMINDERS)}
         >
           <Play className="mr-1 h-3 w-3" />
-          Overdue reminders
+          {t("admin.overview.overdueReminders")}
         </Button>
         <Button
           size="sm"
@@ -129,17 +131,17 @@ function Overview() {
           onClick={() => runCron.mutate(ADMIN_CRON_JOB_SLUGS.CLEANUP_OLD_NOTIFICATIONS)}
         >
           <Play className="mr-1 h-3 w-3" />
-          Notification cleanup
+          {t("admin.overview.notificationCleanup")}
         </Button>
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className="rounded-2xl border border-border bg-card p-6 lg:col-span-2">
-          <h3 className="font-semibold">Cron jobs — last 7 days</h3>
+          <h3 className="font-semibold">{t("admin.overview.cronJobsChart")}</h3>
           <div className="mt-4 h-72">
             {chartData.length === 0 && !dashQuery.isLoading ? (
               <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-                No cron runs recorded yet
+                {t("admin.overview.noCronRuns")}
               </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
@@ -164,7 +166,7 @@ function Overview() {
         </div>
 
         <div className="rounded-2xl border border-border bg-card p-6">
-          <h3 className="font-semibold">Recent cron runs</h3>
+          <h3 className="font-semibold">{t("admin.overview.recentCronRuns")}</h3>
           <div className="mt-4 space-y-2">
             {(data?.recent_cron_runs ?? []).slice(0, 5).map((r) => (
               <div
@@ -182,16 +184,16 @@ function Overview() {
               </div>
             ))}
             {(data?.recent_cron_runs?.length ?? 0) === 0 && !dashQuery.isLoading && (
-              <div className="text-xs text-muted-foreground">No runs yet</div>
+              <div className="text-xs text-muted-foreground">{t("admin.overview.noRunsYet")}</div>
             )}
           </div>
         </div>
       </div>
 
       <div className="mt-6 rounded-2xl border border-border bg-card p-6">
-        <h3 className="font-semibold">System log</h3>
+        <h3 className="font-semibold">{t("admin.overview.systemLog")}</h3>
         <p className="mt-1 text-xs text-muted-foreground">
-          Persisted cron execution records (v1). See rows below for errors and timing.
+          {t("admin.overview.systemLogDesc")}
         </p>
         <div className="mt-3 space-y-2 font-mono text-[11px]">
           {(data?.recent_cron_runs ?? []).slice(0, 12).map((r) => (
@@ -207,7 +209,7 @@ function Overview() {
             />
           ))}
           {(data?.recent_cron_runs?.length ?? 0) === 0 && !dashQuery.isLoading && (
-            <div className="text-muted-foreground">No log entries</div>
+            <div className="text-muted-foreground">{t("admin.overview.noLogEntries")}</div>
           )}
         </div>
       </div>
@@ -277,6 +279,7 @@ function initials(name: string): string {
 }
 
 function UsersAdmin() {
+  const { t } = useTranslation();
   const token = getAccessToken();
   const queryClient = useQueryClient();
   const [q, setQ] = React.useState("");
@@ -307,13 +310,13 @@ function UsersAdmin() {
   return (
     <>
       <div className="mb-6">
-        <div className="text-xs uppercase tracking-widest text-warning">Admin / Users</div>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight">User management</h1>
+        <div className="text-xs uppercase tracking-widest text-warning">{t("admin.users.breadcrumb")}</div>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight">{t("admin.users.title")}</h1>
       </div>
 
       {usersQuery.isError && (
         <div className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-          {(usersQuery.error as Error)?.message ?? "Failed to load users"}
+          {(usersQuery.error as Error)?.message ?? t("admin.users.failedToLoad")}
         </div>
       )}
 
@@ -321,7 +324,7 @@ function UsersAdmin() {
         <div className="relative max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search users…"
+            placeholder={t("admin.users.searchPlaceholder")}
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="pl-9"
@@ -332,11 +335,11 @@ function UsersAdmin() {
           <table className="w-full text-sm">
             <thead className="bg-background/40 text-[11px] uppercase tracking-wider text-muted-foreground">
               <tr>
-                <th className="px-4 py-2.5 text-left font-medium">User</th>
-                <th className="px-4 py-2.5 text-left font-medium">Email</th>
-                <th className="px-4 py-2.5 text-left font-medium">Role</th>
-                <th className="px-4 py-2.5 text-left font-medium">Status</th>
-                <th className="px-4 py-2.5 text-right font-medium">Actions</th>
+                <th className="px-4 py-2.5 text-left font-medium">{t("admin.users.colUser")}</th>
+                <th className="px-4 py-2.5 text-left font-medium">{t("admin.users.colEmail")}</th>
+                <th className="px-4 py-2.5 text-left font-medium">{t("admin.users.colRole")}</th>
+                <th className="px-4 py-2.5 text-left font-medium">{t("admin.users.colStatus")}</th>
+                <th className="px-4 py-2.5 text-right font-medium">{t("admin.users.colActions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -365,17 +368,17 @@ function UsersAdmin() {
                   <td className="px-4 py-3">
                     {u.locked ? (
                       <span className="inline-flex items-center gap-1 rounded-md bg-destructive/15 px-2 py-0.5 text-[10px] font-bold text-destructive">
-                        <Lock className="h-2.5 w-2.5" /> LOCKED
+                        <Lock className="h-2.5 w-2.5" /> {t("admin.users.locked")}
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 rounded-md bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success">
-                        <CheckCircle2 className="h-2.5 w-2.5" /> ACTIVE
+                        <CheckCircle2 className="h-2.5 w-2.5" /> {t("admin.users.active")}
                       </span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-right">
                     {u.role === UserRole.ADMIN ? (
-                      <span className="text-[11px] text-muted-foreground">Cannot lock admin</span>
+                      <span className="text-[11px] text-muted-foreground">{t("admin.users.cannotLockAdmin")}</span>
                     ) : (
                       <Button
                         size="sm"
@@ -389,11 +392,11 @@ function UsersAdmin() {
                       >
                         {u.locked ? (
                           <>
-                            <Unlock className="h-3 w-3" /> Unlock
+                            <Unlock className="h-3 w-3" /> {t("admin.users.unlock")}
                           </>
                         ) : (
                           <>
-                            <Lock className="h-3 w-3" /> Lock
+                            <Lock className="h-3 w-3" /> {t("admin.users.lock")}
                           </>
                         )}
                       </Button>
@@ -410,6 +413,7 @@ function UsersAdmin() {
 }
 
 function GroupsAdmin() {
+  const { t } = useTranslation();
   const token = getAccessToken();
   const queryClient = useQueryClient();
 
@@ -432,13 +436,13 @@ function GroupsAdmin() {
   return (
     <>
       <div className="mb-6">
-        <div className="text-xs uppercase tracking-widest text-warning">Admin / Groups</div>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight">Group management</h1>
+        <div className="text-xs uppercase tracking-widest text-warning">{t("admin.groups.breadcrumb")}</div>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight">{t("admin.groups.title")}</h1>
       </div>
 
       {groupsQuery.isError && (
         <div className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-          {(groupsQuery.error as Error)?.message ?? "Failed to load groups"}
+          {(groupsQuery.error as Error)?.message ?? t("admin.groups.failedToLoad")}
         </div>
       )}
 
@@ -446,11 +450,11 @@ function GroupsAdmin() {
         <table className="w-full text-sm">
           <thead className="bg-background/40 text-[11px] uppercase tracking-wider text-muted-foreground">
             <tr>
-              <th className="px-4 py-2.5 text-left font-medium">Group</th>
-              <th className="px-4 py-2.5 text-left font-medium">Status</th>
-              <th className="px-4 py-2.5 text-left font-medium">Members</th>
-              <th className="px-4 py-2.5 text-left font-medium">Created</th>
-              <th className="px-4 py-2.5 text-right font-medium">Actions</th>
+              <th className="px-4 py-2.5 text-left font-medium">{t("admin.groups.colGroup")}</th>
+              <th className="px-4 py-2.5 text-left font-medium">{t("admin.groups.colStatus")}</th>
+              <th className="px-4 py-2.5 text-left font-medium">{t("admin.groups.colMembers")}</th>
+              <th className="px-4 py-2.5 text-left font-medium">{t("admin.groups.colCreated")}</th>
+              <th className="px-4 py-2.5 text-right font-medium">{t("admin.groups.colActions")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
@@ -473,12 +477,12 @@ function GroupsAdmin() {
                     className="border-destructive/40 text-destructive hover:bg-destructive/10"
                     disabled={deleteMut.isPending}
                     onClick={() => {
-                      if (confirm(`Delete group "${g.name}"? This cannot be undone.`)) {
+                      if (confirm(t("admin.groups.confirmDelete", { name: g.name }))) {
                         deleteMut.mutate(g.id);
                       }
                     }}
                   >
-                    <Trash2 className="h-3 w-3" /> Delete
+                    <Trash2 className="h-3 w-3" /> {t("admin.groups.delete")}
                   </Button>
                 </td>
               </tr>

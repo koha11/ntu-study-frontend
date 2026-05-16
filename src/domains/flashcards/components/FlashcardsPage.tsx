@@ -1,21 +1,13 @@
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
-import {
-  Plus,
-  RotateCw,
-  Sparkles,
-  ChevronLeft,
-  ChevronRight,
-  X,
-  Trash2,
-} from "lucide-react";
+import { Plus, Sparkles, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
 import {
   useFlashcardsList,
-  useFlashcardDetails,
-  useCompleteFlashcardStudy,
   useDeleteFlashcardSet,
 } from "@/domains/flashcards";
+import { StudyMode } from "./StudyMode";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -26,10 +18,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
-function formatNextReview(iso: string | null | undefined): string {
-  if (!iso) return "Not scheduled";
+function formatNextReview(iso: string | null | undefined, t: (key: string) => string): string {
+  if (!iso) return t("flashcards.notScheduled");
   try {
     return new Date(iso).toLocaleString(undefined, {
       dateStyle: "medium",
@@ -41,12 +32,12 @@ function formatNextReview(iso: string | null | undefined): string {
 }
 
 export type FlashcardsPageProps = {
-  /** When navigating from create flow with `?studySet=` */
   studySetParam?: string;
   clearStudyParam?: () => void;
 };
 
 export function FlashcardsPage({ studySetParam, clearStudyParam }: FlashcardsPageProps = {}) {
+  const { t } = useTranslation();
   const { data: flashcardSets = [], isLoading } = useFlashcardsList();
   const { mutate: deleteFlashcardSet, isPending: isDeletingSet } = useDeleteFlashcardSet();
   const [studyingSetId, setStudyingSetId] = React.useState<string | null>(null);
@@ -64,7 +55,7 @@ export function FlashcardsPage({ studySetParam, clearStudyParam }: FlashcardsPag
     return (
       <AppShell>
         <div className="flex items-center justify-center py-12">
-          <div className="text-muted-foreground">Loading flashcard sets...</div>
+          <div className="text-muted-foreground">{t("flashcards.loading")}</div>
         </div>
       </AppShell>
     );
@@ -74,14 +65,14 @@ export function FlashcardsPage({ studySetParam, clearStudyParam }: FlashcardsPag
     <AppShell>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Flashcards</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t("flashcards.pageTitle")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Spaced-repetition study sets across your courses.
+            {t("flashcards.pageSubtitle")}
           </p>
         </div>
         <Button className="bg-gradient-primary shadow-glow" asChild>
           <Link to="/flashcards/new">
-            <Plus className="h-4 w-4" /> New set
+            <Plus className="h-4 w-4" /> {t("flashcards.newSet")}
           </Link>
         </Button>
       </div>
@@ -98,14 +89,14 @@ export function FlashcardsPage({ studySetParam, clearStudyParam }: FlashcardsPag
               </div>
               <div className="flex items-center gap-1">
                 <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
-                  {s.cardCount} cards
+                  {s.cardCount} {t("flashcards.cards")}
                 </span>
                 <Button
                   type="button"
                   size="icon"
                   variant="ghost"
                   className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
-                  aria-label={`Delete flashcard set ${s.name}`}
+                  aria-label={t("flashcards.deleteSet", { name: s.name })}
                   onClick={() => setDeleteTarget({ id: s.id, name: s.name })}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -115,7 +106,7 @@ export function FlashcardsPage({ studySetParam, clearStudyParam }: FlashcardsPag
             <h3 className="mt-3 font-semibold">{s.name}</h3>
             <div className="text-xs text-muted-foreground">{s.subject || "—"}</div>
             <div className="mt-1 text-[11px] text-muted-foreground">
-              Next review (set): {formatNextReview(s.nextReviewAt)}
+              {t("flashcards.nextReview")} {formatNextReview(s.nextReviewAt, t)}
             </div>
 
             <div className="mt-4 flex gap-2">
@@ -125,11 +116,11 @@ export function FlashcardsPage({ studySetParam, clearStudyParam }: FlashcardsPag
                 disabled={s.cardCount === 0}
                 className="flex-1 bg-gradient-primary"
               >
-                Study
+                {t("flashcards.study")}
               </Button>
               <Button size="sm" variant="outline" asChild>
                 <Link to="/flashcards/$setId/edit" params={{ setId: s.id }}>
-                  Edit
+                  {t("flashcards.edit")}
                 </Link>
               </Button>
             </div>
@@ -147,14 +138,13 @@ export function FlashcardsPage({ studySetParam, clearStudyParam }: FlashcardsPag
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete flashcard set?</AlertDialogTitle>
+            <AlertDialogTitle>{t("flashcards.deleteTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete “{deleteTarget?.name}” and all of its cards. This cannot be
-              undone.
+              {t("flashcards.deleteDesc", { name: deleteTarget?.name })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeletingSet}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeletingSet}>{t("flashcards.cancel")}</AlertDialogCancel>
             <Button
               type="button"
               variant="destructive"
@@ -170,169 +160,11 @@ export function FlashcardsPage({ studySetParam, clearStudyParam }: FlashcardsPag
                 });
               }}
             >
-              {isDeletingSet ? "Deleting…" : "Delete"}
+              {isDeletingSet ? t("flashcards.deleting") : t("flashcards.delete")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </AppShell>
-  );
-}
-
-function StudyMode({ setId, onClose }: { setId: string; onClose: () => void }) {
-  const { data: set, isLoading } = useFlashcardDetails(setId);
-  const { mutate: completeStudy } = useCompleteFlashcardStudy();
-  const sessionScoresRef = React.useRef<number[]>([]);
-
-  const cards = set?.cards ?? [];
-  const [idx, setIdx] = React.useState(0);
-  const [flipped, setFlipped] = React.useState(false);
-
-  React.useEffect(() => {
-    sessionScoresRef.current = [];
-    setIdx(0);
-    setFlipped(false);
-  }, [setId]);
-
-  const card = cards[idx];
-
-  const flushSession = React.useCallback(() => {
-    const scores = sessionScoresRef.current;
-    const score =
-      scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 50;
-    completeStudy({ setId, score });
-  }, [completeStudy, setId]);
-
-  const handleClose = React.useCallback(() => {
-    flushSession();
-    onClose();
-  }, [flushSession, onClose]);
-
-  const isFirst = idx === 0;
-  const isLast = cards.length > 0 && idx === cards.length - 1;
-
-  const goNext = React.useCallback(() => {
-    setFlipped(false);
-    if (cards.length === 0) return;
-    if (isLast) {
-      handleClose();
-      return;
-    }
-    setIdx((i) => i + 1);
-  }, [cards.length, isLast, handleClose]);
-
-  const goPrev = React.useCallback(() => {
-    setFlipped(false);
-    if (cards.length === 0 || isFirst) return;
-    setIdx((i) => i - 1);
-  }, [cards.length, isFirst]);
-
-  const goNextRef = React.useRef(goNext);
-  const goPrevRef = React.useRef(goPrev);
-  goNextRef.current = goNext;
-  goPrevRef.current = goPrev;
-
-  React.useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === " " || e.code === "Space") {
-        e.preventDefault();
-        setFlipped((f) => !f);
-        return;
-      }
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        goNextRef.current();
-        return;
-      }
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        goPrevRef.current();
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
-
-  if (isLoading || !set) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm p-6">
-        <div className="text-muted-foreground">Loading cards…</div>
-      </div>
-    );
-  }
-
-  if (cards.length === 0) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm p-6">
-        <div className="max-w-md text-center">
-          <p className="text-muted-foreground">This set has no cards yet.</p>
-          <Button className="mt-4" onClick={onClose}>
-            Close
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm p-6">
-      <div className="w-full max-w-2xl">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <div className="text-xs uppercase tracking-wider text-muted-foreground">
-              Studying — {set.subject || "General"}
-            </div>
-            <div className="text-xl font-bold">{set.name}</div>
-          </div>
-          <button
-            type="button"
-            onClick={handleClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card hover:bg-accent"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="rounded-2xl border border-border bg-gradient-surface p-3 text-center text-[11px] text-muted-foreground">
-          Card {idx + 1} / {cards.length} · Set next review after session: logged when you close
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setFlipped((f) => !f)}
-          className={cn(
-            "mt-4 flex min-h-[300px] w-full flex-col items-center justify-center rounded-3xl border-2 p-10 text-center transition-all",
-            flipped
-              ? "border-primary-glow bg-linear-to-br from-primary/20 to-primary-glow/10 shadow-glow"
-              : "border-border bg-card hover:border-primary/40",
-          )}
-        >
-          <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-            {flipped ? "Answer" : "Question"}
-          </div>
-          <div className="mt-4 text-2xl font-semibold leading-snug">
-            {flipped ? card.back : card.front}
-          </div>
-          <div className="mt-6 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-            <RotateCw className="h-3 w-3" /> Click or Space to flip · ← → to navigate
-          </div>
-        </button>
-
-        <div className="mt-4 flex items-center justify-between gap-3">
-          <Button variant="outline" onClick={goPrev} disabled={isFirst}>
-            <ChevronLeft className="h-4 w-4" /> Previous
-          </Button>
-          <Button variant="outline" onClick={goNext}>
-            {isLast ? (
-              <>Finish</>
-            ) : (
-              <>
-                Next <ChevronRight className="h-4 w-4" />
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
-    </div>
   );
 }

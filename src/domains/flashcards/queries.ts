@@ -15,6 +15,9 @@ import {
   updateFlashcard,
   deleteFlashcard,
   completeFlashcardStudy,
+  fetchGroupSharedFlashcardSets,
+  shareFlashcardSetWithGroup,
+  unshareFlashcardSetFromGroup,
 } from "./flashcards-api";
 import type {
   CreateFlashcardSetInput,
@@ -159,6 +162,46 @@ export const useCompleteFlashcardStudyMutation = () => {
     onSuccess: (_, { setId }) => {
       queryClient.invalidateQueries({ queryKey: flashcardKeys.detail(setId) });
       queryClient.invalidateQueries({ queryKey: flashcardKeys.lists() });
+    },
+  });
+};
+
+export const groupSharedFlashcardsQueryOptions = (groupId: string) =>
+  queryOptions({
+    queryKey: flashcardKeys.groupShared(groupId),
+    queryFn: async () => {
+      const token = requireAccessToken();
+      return fetchGroupSharedFlashcardSets(groupId, token);
+    },
+    staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 15,
+    enabled: Boolean(groupId),
+  });
+
+export const useShareFlashcardSetMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { setId: string; groupId: string }) => {
+      const token = requireAccessToken();
+      return shareFlashcardSetWithGroup(params.setId, params.groupId, token);
+    },
+    onSuccess: (_, { groupId }) => {
+      queryClient.invalidateQueries({ queryKey: flashcardKeys.groupShared(groupId) });
+    },
+  });
+};
+
+export const useUnshareFlashcardSetMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { setId: string; groupId: string }) => {
+      const token = requireAccessToken();
+      return unshareFlashcardSetFromGroup(params.setId, params.groupId, token);
+    },
+    onSuccess: (_, { groupId }) => {
+      queryClient.invalidateQueries({ queryKey: flashcardKeys.groupShared(groupId) });
     },
   });
 };

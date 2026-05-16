@@ -8,19 +8,21 @@ import {
   Settings,
   GraduationCap,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { DriveQuotaCard } from "@/components/DriveQuotaCard";
 
-const navItems: { label: string; to: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
-  { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard, exact: true },
-  { label: "Groups", to: "/groups", icon: Users },
-  { label: "Tasks", to: "/tasks", icon: CheckSquare },
-  { label: "Flashcards", to: "/flashcards", icon: Sparkles },
-  { label: "Notifications", to: "/notifications", icon: Bell },
-  { label: "Settings", to: "/settings", icon: Settings },
+const NAV_ITEMS: { key: string; to: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
+  { key: "sidebar.dashboard", to: "/dashboard", icon: LayoutDashboard, exact: true },
+  { key: "sidebar.groups", to: "/groups", icon: Users },
+  { key: "sidebar.tasks", to: "/tasks", icon: CheckSquare },
+  { key: "sidebar.flashcards", to: "/flashcards", icon: Sparkles },
+  { key: "sidebar.notifications", to: "/notifications", icon: Bell },
+  { key: "sidebar.settings", to: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const path = location.pathname;
 
@@ -34,12 +36,12 @@ export function AppSidebar() {
           <div className="text-sm font-semibold tracking-tight text-sidebar-foreground">
             NTU Study
           </div>
-          <div className="text-[10px] text-muted-foreground">Group collaboration</div>
+          <div className="text-[10px] text-muted-foreground">{t("sidebar.tagline")}</div>
         </div>
       </div>
 
       <nav className="flex-1 space-y-1 p-3">
-        {navItems.map((item) => {
+        {NAV_ITEMS.map((item) => {
           const active = item.exact ? path === item.to : path.startsWith(item.to);
           const Icon = item.icon;
           return (
@@ -59,7 +61,7 @@ export function AppSidebar() {
                   active ? "text-primary-glow" : "text-sidebar-foreground/50",
                 )}
               />
-              {item.label}
+              {t(item.key)}
             </Link>
           );
         })}

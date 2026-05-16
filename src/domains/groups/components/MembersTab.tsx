@@ -10,13 +10,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { InviteEmailCombobox } from "@/domains/contacts/components/InviteEmailCombobox";
 import { useInviteMember, useRemoveMember, useToggleMemberStatus } from "@/domains/groups";
 import type { MemberRow } from "@/domains/groups";
 import { useGroupInvitations, useResendGroupInvitation } from "@/domains/invitations";
 
-/** At most one invitation id per email may show Resend (prefer pending over expired, then newest). */
 function invitationIdsEligibleForResend(
   rows: { id: string; email?: string | null; status?: string; created_at: string }[],
   memberEmails: Set<string>,
@@ -82,6 +82,7 @@ export function MembersTab({
   members,
   membersLoading,
 }: MembersTabProps) {
+  const { t } = useTranslation();
   const [inviteEmail, setInviteEmail] = React.useState("");
   const [inviteError, setInviteError] = React.useState<string | null>(null);
   const [resendError, setResendError] = React.useState<string | null>(null);
@@ -120,7 +121,7 @@ export function MembersTab({
     setInviteError(null);
     const email = inviteEmail.trim();
     if (!email) {
-      setInviteError("Enter an email address");
+      setInviteError(t("groups.members.enterEmail"));
       return;
     }
     inviteMember(
@@ -140,9 +141,9 @@ export function MembersTab({
     <div className="rounded-2xl border border-border bg-card p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h3 className="font-semibold">Members</h3>
+          <h3 className="font-semibold">{t("groups.members.title")}</h3>
           <p className="mt-1 text-xs text-muted-foreground">
-            View members and invite people by email (leader only).
+            {t("groups.members.subtitle")}
           </p>
         </div>
         {isLeader && (
@@ -153,7 +154,7 @@ export function MembersTab({
             className="shrink-0"
             onClick={() => setInvitationsDialogOpen(true)}
           >
-            Invitation activity
+            {t("groups.members.invitationActivity")}
           </Button>
         )}
       </div>
@@ -161,7 +162,7 @@ export function MembersTab({
       {isLeader && (
         <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-end">
           <div className="flex-1">
-            <label className="text-xs font-medium text-muted-foreground">Email</label>
+            <label className="text-xs font-medium text-muted-foreground">{t("groups.members.email")}</label>
             <InviteEmailCombobox
               value={inviteEmail}
               onChange={setInviteEmail}
@@ -175,7 +176,7 @@ export function MembersTab({
             disabled={invitePending}
             onClick={handleInvite}
           >
-            {invitePending ? "Sending…" : "Invite"}
+            {invitePending ? t("groups.members.sending") : t("groups.members.invite")}
           </Button>
         </div>
       )}
@@ -191,16 +192,16 @@ export function MembersTab({
         >
           <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle>Invitation activity</DialogTitle>
+              <DialogTitle>{t("groups.members.invitationActivityTitle")}</DialogTitle>
               <DialogDescription>
-                Pending and past invites for this group (leader only).
+                {t("groups.members.invitationActivityDesc")}
               </DialogDescription>
             </DialogHeader>
             <div className="mt-2">
               {invitationsLoading ? (
-                <p className="text-xs text-muted-foreground">Loading invitations…</p>
+                <p className="text-xs text-muted-foreground">{t("groups.members.loadingInvitations")}</p>
               ) : invitationRows.length === 0 ? (
-                <p className="text-xs text-muted-foreground">No invitations yet.</p>
+                <p className="text-xs text-muted-foreground">{t("groups.members.noInvitations")}</p>
               ) : (
                 <>
                   {resendError && (
@@ -225,7 +226,7 @@ export function MembersTab({
                           <div className="min-w-0 flex-1 space-y-1">
                             <span className="font-mono text-xs">{inv.email ?? "—"}</span>
                             <span className="block w-full text-[11px] text-muted-foreground">
-                              Expires {new Date(inv.expires_at).toLocaleString()}
+                              {t("groups.members.expires")} {new Date(inv.expires_at).toLocaleString()}
                             </span>
                           </div>
                           <div className="flex shrink-0 flex-wrap items-center gap-2">
@@ -256,7 +257,7 @@ export function MembersTab({
                                   );
                                 }}
                               >
-                                {isResending ? "Resending…" : "Resend"}
+                                {isResending ? t("groups.members.resending") : t("groups.members.resend")}
                               </Button>
                             )}
                           </div>
@@ -273,9 +274,9 @@ export function MembersTab({
 
       <ul className="mt-6 divide-y divide-border">
         {membersLoading ? (
-          <li className="py-3 text-sm text-muted-foreground">Loading members…</li>
+          <li className="py-3 text-sm text-muted-foreground">{t("groups.members.loadingMembers")}</li>
         ) : members.length === 0 ? (
-          <li className="py-3 text-sm text-muted-foreground">No members loaded.</li>
+          <li className="py-3 text-sm text-muted-foreground">{t("groups.members.noMembers")}</li>
         ) : (
           members.map((m) => {
             const isTargetLeader = m.user_id === leaderId;
@@ -290,7 +291,7 @@ export function MembersTab({
                   <div className="font-medium">{m.full_name || m.user_id}</div>
                   <div className="text-[11px] text-muted-foreground">
                     {m.role}
-                    {!m.is_active && " · inactive"}
+                    {!m.is_active && ` · ${t("groups.members.inactive")}`}
                   </div>
                 </div>
                 {canManage && (
@@ -301,7 +302,7 @@ export function MembersTab({
                       variant="outline"
                       onClick={() => toggleMemberStatus({ groupId, userId: m.user_id })}
                     >
-                      {m.is_active ? "Deactivate" : "Activate"}
+                      {m.is_active ? t("groups.members.deactivate") : t("groups.members.activate")}
                     </Button>
                     <Button
                       type="button"
@@ -309,7 +310,7 @@ export function MembersTab({
                       variant="destructive"
                       onClick={() => removeMember({ groupId, userId: m.user_id })}
                     >
-                      Remove
+                      {t("groups.members.remove")}
                     </Button>
                   </div>
                 )}

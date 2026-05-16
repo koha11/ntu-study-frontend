@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { RefreshCw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { getAccessToken } from "@/domains/auth/token-storage";
 import {
   fetchDriveQuota,
@@ -16,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 export function DriveQuotaCard() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const token = getAccessToken();
 
@@ -53,12 +55,12 @@ export function DriveQuotaCard() {
   if (!token) {
     return (
       <div className="m-3 rounded-xl border border-sidebar-border bg-gradient-surface p-4">
-        <div className="text-xs font-medium text-sidebar-foreground">Drive quota</div>
+        <div className="text-xs font-medium text-sidebar-foreground">{t("driveQuota.title")}</div>
         <p
           className="mt-2 text-[10px] text-muted-foreground"
           data-testid="drive-quota-unavailable"
         >
-          Sign in to view Drive storage.
+          {t("driveQuota.signInToView")}
         </p>
       </div>
     );
@@ -67,13 +69,13 @@ export function DriveQuotaCard() {
   return (
     <div className="m-3 rounded-xl border border-sidebar-border bg-gradient-surface p-4">
       <div className="flex items-start justify-between gap-2">
-        <div className="text-xs font-medium text-sidebar-foreground">Drive quota</div>
+        <div className="text-xs font-medium text-sidebar-foreground">{t("driveQuota.title")}</div>
         <Button
           type="button"
           variant="ghost"
           size="icon"
           className="h-7 w-7 shrink-0 text-muted-foreground hover:text-sidebar-foreground"
-          aria-label="Refresh quota"
+          aria-label={t("driveQuota.refreshAriaLabel")}
           disabled={busy}
           onClick={() => refreshMutation.mutate()}
         >
@@ -90,7 +92,7 @@ export function DriveQuotaCard() {
 
       {!quotaQuery.isPending && quotaQuery.isError ? (
         <p className="mt-2 text-[10px] text-destructive" data-testid="drive-quota-error">
-          Could not load quota.
+          {t("driveQuota.couldNotLoad")}
         </p>
       ) : null}
 
@@ -102,7 +104,7 @@ export function DriveQuotaCard() {
           className="mt-2 text-[10px] text-muted-foreground"
           data-testid="drive-quota-unavailable"
         >
-          Refresh to sync Drive usage from Google. Set your storage limit in Settings.
+          {t("driveQuota.syncHint")}
         </p>
       ) : null}
 

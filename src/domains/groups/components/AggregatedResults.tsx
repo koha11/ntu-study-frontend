@@ -6,9 +6,7 @@ interface AggregatedResultsProps {
 
 export function AggregatedResults({ results }: AggregatedResultsProps) {
   if (results.length === 0) {
-    return (
-      <p className="text-sm text-muted-foreground">No submitted scores in this round yet.</p>
-    );
+    return <p className="text-sm text-muted-foreground">No submitted scores in this round yet.</p>;
   }
 
   return (
@@ -22,8 +20,8 @@ export function AggregatedResults({ results }: AggregatedResultsProps) {
         </thead>
         <tbody>
           {results.map((r) => (
-            <tr key={r.rateeId} className="border-b border-border/50 last:border-0">
-              <td className="px-3 py-2 text-foreground">{r.rateeFullName || r.rateeId}</td>
+            <tr key={r.assigneeId} className="border-b border-border/50 last:border-0">
+              <td className="px-3 py-2 text-foreground">{r.assigneeFullName || r.assigneeId}</td>
               <td className="px-3 py-2 text-muted-foreground">
                 {r.averageScore != null ? r.averageScore.toFixed(2) : "—"}
               </td>

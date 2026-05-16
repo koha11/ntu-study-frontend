@@ -44,3 +44,15 @@ export interface UpdateFlashcardInput {
   front?: string;
   back?: string;
 }
+
+export interface SharedFlashcardSetEntry {
+  shareId: string;
+  sharedAt: string;
+  setId: string;
+  groupId: string;
+  ownerId: string;
+  name: string;
+  subject?: string;
+  description?: string;
+  cardCount: number;
+}

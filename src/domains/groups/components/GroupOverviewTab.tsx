@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ExternalLink, Calendar, FileText, Folder, Presentation, Video } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { GroupQuickLinksEditDialog } from "./GroupQuickLinksEditDialog";
 import { GroupScheduleMeetDialog } from "./GroupScheduleMeetDialog";
 import type { UpdateGroupInput } from "../types";
@@ -102,6 +103,7 @@ export function GroupOverviewTab({
   onSave,
   isSaving,
 }: GroupOverviewTabProps) {
+  const { t } = useTranslation();
   const driveHref = buildDriveFolderUrl(driveFolderId);
   const [canvaDraft, setCanvaDraft] = React.useState(() => canvaFileUrl?.trim() ?? "");
   const [docDraft, setDocDraft] = React.useState(() => docFileUrl?.trim() ?? "");
@@ -169,9 +171,9 @@ export function GroupOverviewTab({
       <div className="rounded-2xl border border-border bg-card p-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <h3 className="text-lg font-bold text-foreground">Quick links</h3>
+            <h3 className="text-lg font-bold text-foreground">{t("groups.overview.quickLinks")}</h3>
             <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-              Drive, Canva, Meet, and shared docs for this group.
+              {t("groups.overview.quickLinksDesc")}
             </p>
           </div>
           {canEdit ? (
@@ -198,35 +200,35 @@ export function GroupOverviewTab({
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <LinkRow
             icon={<Folder className="h-5 w-5" />}
-            title="Google Drive"
-            description="Shared folder for files and assets."
+            title={t("groups.overview.googleDrive")}
+            description={t("groups.overview.googleDriveDesc")}
             href={driveHref}
-            linkLabel="Open in Drive"
-            emptyText="No Drive folder linked yet."
+            linkLabel={t("groups.overview.openInDrive")}
+            emptyText={t("groups.overview.noDriveFolder")}
           />
           <LinkRow
             icon={<Presentation className="h-5 w-5" />}
-            title="Canva"
-            description="Open the presentation in Canva (full preview stays on the Canva tab)."
+            title={t("groups.overview.canva")}
+            description={t("groups.overview.canvaDesc")}
             href={canvaFileUrl?.trim() || null}
-            linkLabel="Open in Canva"
-            emptyText="No Canva presentation linked yet."
+            linkLabel={t("groups.overview.openInCanva")}
+            emptyText={t("groups.overview.noCanva")}
           />
           <LinkRow
             icon={<Video className="h-5 w-5" />}
-            title="Google Meet"
-            description="Recurring or one-off meeting link for the team."
+            title={t("groups.overview.googleMeet")}
+            description={t("groups.overview.googleMeetDesc")}
             href={meetLink?.trim() || null}
-            linkLabel="Open Google Meet"
-            emptyText="No meeting link yet."
+            linkLabel={t("groups.overview.openMeet")}
+            emptyText={t("groups.overview.noMeet")}
           />
           <LinkRow
             icon={<FileText className="h-5 w-5" />}
-            title="Project doc"
-            description="Linked Google Doc for notes or write-ups."
+            title={t("groups.overview.projectDoc")}
+            description={t("groups.overview.projectDocDesc")}
             href={docFileUrl?.trim() || null}
-            linkLabel="Open project doc"
-            emptyText="No Google Doc linked yet."
+            linkLabel={t("groups.overview.openDoc")}
+            emptyText={t("groups.overview.noDoc")}
           />
         </div>
       </div>
@@ -235,16 +237,16 @@ export function GroupOverviewTab({
         <div className="flex items-start gap-3">
           <Calendar className="mt-0.5 h-5 w-5 text-muted-foreground" />
           <div>
-            <h3 className="text-lg font-bold text-foreground">Project due</h3>
+            <h3 className="text-lg font-bold text-foreground">{t("groups.overview.projectDue")}</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              Target date for the group deliverable or report.
+              {t("groups.overview.projectDueDesc")}
             </p>
             {dueDisplay ? (
               <p className="mt-3 text-sm font-medium text-foreground" data-testid="report-date-display">
                 {dueDisplay}
               </p>
             ) : (
-              <p className="mt-3 text-sm text-muted-foreground">No project due date set.</p>
+              <p className="mt-3 text-sm text-muted-foreground">{t("groups.overview.noDueDate")}</p>
             )}
           </div>
         </div>

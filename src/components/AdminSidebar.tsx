@@ -1,19 +1,20 @@
 import { Shield, Users, FolderKanban, Activity } from "lucide-react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 export function AdminSidebar() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const onAdmin = location.pathname.startsWith("/admin");
 
-  // Use TanStack's reactive hash (SSR-safe), not window.location
   const hash = location.hash ? `#${location.hash.replace(/^#/, "")}` : "";
 
-  const sections: { label: string; hash: string; icon: typeof Activity }[] = [
-    { label: "Overview", hash: "", icon: Activity },
-    { label: "Users", hash: "#users", icon: Users },
-    { label: "Groups", hash: "#groups", icon: FolderKanban },
+  const sections: { labelKey: string; hash: string; icon: typeof Activity }[] = [
+    { labelKey: "adminSidebar.overview", hash: "", icon: Activity },
+    { labelKey: "adminSidebar.users", hash: "#users", icon: Users },
+    { labelKey: "adminSidebar.groups", hash: "#groups", icon: FolderKanban },
   ];
 
   return (
@@ -24,9 +25,9 @@ export function AdminSidebar() {
         </div>
         <div>
           <div className="text-sm font-semibold tracking-tight text-sidebar-foreground">
-            Admin Console
+            {t("adminSidebar.title")}
           </div>
-          <div className="text-[10px] text-warning">Elevated access</div>
+          <div className="text-[10px] text-warning">{t("adminSidebar.tagline")}</div>
         </div>
       </div>
 
@@ -36,7 +37,7 @@ export function AdminSidebar() {
           const Icon = s.icon;
           return (
             <button
-              key={s.label}
+              key={s.labelKey}
               onClick={() => {
                 navigate({ to: "/admin", hash: s.hash.replace("#", "") });
               }}
@@ -48,15 +49,14 @@ export function AdminSidebar() {
               )}
             >
               <Icon className="h-4 w-4" />
-              {s.label}
+              {t(s.labelKey)}
             </button>
           );
         })}
       </nav>
 
       <div className="m-3 rounded-xl border border-warning/20 bg-warning/5 p-3 text-[11px] text-muted-foreground">
-        You're viewing the admin console. Switch role from the top bar to return to the user
-        experience.
+        {t("adminSidebar.notice")}
       </div>
     </aside>
   );

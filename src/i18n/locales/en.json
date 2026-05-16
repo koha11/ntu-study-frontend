@@ -1,0 +1,554 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "close": "Close",
+    "back": "Back",
+    "search": "Search",
+    "add": "Add",
+    "remove": "Remove",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "vsLastWeek": "vs last week"
+  },
+  "lang": {
+    "toggle": "Language",
+    "vi": "Tiếng Việt",
+    "en": "English"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "groups": "Groups",
+    "tasks": "Tasks",
+    "flashcards": "Flashcards",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "tagline": "Group collaboration"
+  },
+  "adminSidebar": {
+    "title": "Admin Console",
+    "tagline": "Elevated access",
+    "overview": "Overview",
+    "users": "Users",
+    "groups": "Groups",
+    "notice": "You're viewing the admin console. Switch role from the top bar to return to the user experience."
+  },
+  "topBar": {
+    "notifications": "Notifications",
+    "loading": "Loading…",
+    "noNotifications": "No notifications yet.",
+    "read": "Read",
+    "viewAll": "View all",
+    "adminConsole": "Admin console",
+    "dashboard": "Dashboard",
+    "profileSettings": "Profile & Settings",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…",
+    "pleaseSignIn": "Please sign in again.",
+    "notificationNoLink": "This notification has no link.",
+    "couldNotOpenLink": "Could not open link."
+  },
+  "driveQuota": {
+    "title": "Drive quota",
+    "signInToView": "Sign in to view Drive storage.",
+    "refresh": "Refresh quota",
+    "couldNotLoad": "Could not load quota.",
+    "syncHint": "Refresh to sync Drive usage from Google. Set your storage limit in Settings.",
+    "refreshAriaLabel": "Refresh quota"
+  },
+  "landing": {
+    "metaTitle": "NTU Study — Group collaboration for students",
+    "metaDesc": "Collaborate on courses, projects and reading clubs with shared tasks, flashcards and contribution ratings — built for NTU students.",
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How it works",
+      "faq": "FAQ",
+      "signIn": "Sign in",
+      "getStarted": "Get started"
+    },
+    "tagline": "Group collaboration",
+    "badge": "Built for NTU students",
+    "hero": {
+      "title1": "Study together.",
+      "title2": "Ship projects faster.",
+      "subtitle": "NTU Study brings groups, tasks, files and flashcards into one calm workspace — so your team can focus on the work that matters, and leaders can grade contribution fairly.",
+      "continueWithGoogle": "Continue with Google",
+      "seeHowItWorks": "See how it works"
+    },
+    "stats": {
+      "activeGroups": "Active study groups",
+      "tasksTracked": "Tasks tracked",
+      "flashcardsReviewed": "Flashcards reviewed",
+      "avgContribution": "Avg. contribution score"
+    },
+    "features": {
+      "sectionLabel": "Everything in one place",
+      "sectionTitle": "The study workspace your group actually opens",
+      "sectionSubtitle": "Stop juggling chat groups, spreadsheets and shared docs. NTU Study replaces the busywork so your team can ship.",
+      "groups": {
+        "title": "Study groups, organised",
+        "body": "Spin up a course or project group, invite classmates with one link, and keep everything in a shared workspace."
+      },
+      "tasks": {
+        "title": "Tasks that move",
+        "body": "Plan, assign and track work on a Kanban board with sub-tasks, deadlines and automatic reminders."
+      },
+      "flashcards": {
+        "title": "Flashcards that stick",
+        "body": "Build decks together and revise with spaced repetition before assessments — no more scattered notes."
+      },
+      "contribution": {
+        "title": "Fair contribution scoring",
+        "body": "Leaders rate teammates at the end of a project so effort is recognised and free-riding is visible."
+      },
+      "records": {
+        "title": "Locked, audit-ready records",
+        "body": "Once a project closes, deliverables and ratings are locked and exportable for academic review."
+      },
+      "ntu": {
+        "title": "Made for NTU",
+        "body": "Sign in with your NTU Google account. Your groups, files and progress follow you across every module."
+      }
+    },
+    "howItWorks": {
+      "sectionLabel": "Three steps",
+      "sectionTitle": "From kickoff to submission, without the chaos",
+      "steps": {
+        "step1": {
+          "number": "01",
+          "title": "Create or join a group",
+          "body": "Use your NTU Google sign-in and either start a new group or accept an invite link from your leader."
+        },
+        "step2": {
+          "number": "02",
+          "title": "Plan and execute",
+          "body": "Break the project into tasks, attach files, and review flashcards together as the deadline approaches."
+        },
+        "step3": {
+          "number": "03",
+          "title": "Lock and rate",
+          "body": "When the project ends, the leader closes the project. Contribution scores are recorded and exported."
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to study smarter together?",
+      "subtitle": "Sign in with your NTU Google account and bring your first group on board in under a minute.",
+      "button": "Get started — it's free for students"
+    },
+    "footer": {
+      "copyright": "© {{year}} NTU Study. A student project.",
+      "features": "Features",
+      "howItWorks": "How it works",
+      "signIn": "Sign in",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    }
+  },
+  "login": {
+    "metaTitle": "Sign in — NTU Study",
+    "metaDesc": "Sign in to NTU Study with your NTU Google account to access your groups, tasks and flashcards.",
+    "tagline": "Group collaboration",
+    "backToHome": "Back to home",
+    "welcomeBack": "Welcome back",
+    "signInToContinue": "Sign in to continue to NTU Study",
+    "continueWithGoogle": "Continue with Google",
+    "eduHint": "Use your .edu account for optimizing all our features",
+    "terms": "Terms",
+    "privacy": "Privacy Policy",
+    "byContiuing": "By continuing, you agree to our",
+    "and": "&",
+    "footer": {
+      "copyright": "© {{year}} NTU Study. A student project.",
+      "home": "Home",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "support": "Support"
+    },
+    "couldNotStartLogin": "Could not start Google sign-in"
+  },
+  "dashboard": {
+    "adminView": "Admin view",
+    "studentView": "Student view",
+    "greeting": "Good evening, {{name}}",
+    "subtitle": "Here's what's moving across your groups today.",
+    "quickAction": "Quick action",
+    "stats": {
+      "activeGroups": "Active groups",
+      "openTasks": "Open tasks",
+      "cardsToReview": "Cards to review"
+    },
+    "recentActivity": "Recent activity",
+    "viewAll": "View all",
+    "upcoming": "Upcoming",
+    "allTasks": "All tasks",
+    "yourGroups": "Your groups",
+    "seeAll": "See all",
+    "active": "Active",
+    "members": "members",
+    "loading": "Loading dashboard..."
+  },
+  "tasks": {
+    "pageTitle": "My tasks",
+    "pageSubtitle": "Everything assigned to you across your groups.",
+    "loading": "Loading tasks...",
+    "personalTasks": "Personal tasks",
+    "personalTasksDesc": "Saved to your account · {{count}} open",
+    "addPersonalTask": "Add a personal task and press Enter",
+    "deadline": "Deadline",
+    "add": "Add",
+    "addSubtask": "Add subtask…",
+    "clearDate": "Clear date",
+    "setDate": "Set date",
+    "noPersonalTasks": "No personal tasks yet. Add one above.",
+    "groupTasks": "Group tasks",
+    "noTasksFilter": "No tasks match this filter.",
+    "due": "Due",
+    "startWorking": "Start working",
+    "submitForReview": "Submit for review",
+    "deleteTask": "Delete",
+    "deleteSubtask": "Delete subtask",
+    "filters": {
+      "all": "All",
+      "todo": "To do",
+      "in_progress": "In progress",
+      "pending_review": "Review",
+      "done": "Done"
+    }
+  },
+  "groups": {
+    "pageTitle": "Groups",
+    "pageSubtitle": "Collaborate with classmates on courses, projects, and reading clubs.",
+    "loading": "Loading groups...",
+    "newGroup": "New group",
+    "createGroup": "Create a new group",
+    "createGroupDesc": "Set up a group for collaboration. You'll be the leader.",
+    "groupName": "Group name",
+    "groupNamePlaceholder": "e.g., CS101 Study Group",
+    "description": "Description",
+    "descriptionPlaceholder": "What's this group about?",
+    "reportDate": "Report / due date",
+    "reportDateHint": "Optional target date for the deliverable or report.",
+    "tags": "Tags",
+    "tagsPlaceholder": "e.g., CS, algorithms, study",
+    "creating": "Creating...",
+    "created": "Created",
+    "membersCount": "members",
+    "groupNotFound": "Group not found",
+    "backToGroups": "← Back to groups",
+    "allGroups": "← All groups",
+    "loadingGroup": "Loading group...",
+    "locked": "locked",
+    "tabs": {
+      "overview": "Overview",
+      "tasks": "Tasks",
+      "drive": "Drive",
+      "canva": "Canva",
+      "calendar": "Calendar",
+      "members": "Members",
+      "contribution": "Contribution",
+      "flashcards": "Flashcards"
+    },
+    "tasksTab": {
+      "hint": "Drag cards between columns to update status. Submit for review from {{inProgress}} → {{review}}. Leaders move Review → Done or Failed.",
+      "inProgress": "In progress",
+      "review": "Review",
+      "newTask": "+ New task",
+      "newGroupTask": "New group task",
+      "noTasks": "No tasks yet — use \"New task\" to add one."
+    },
+    "overview": {
+      "quickLinks": "Quick links",
+      "quickLinksDesc": "Drive, Canva, Meet, and shared docs for this group.",
+      "googleDrive": "Google Drive",
+      "googleDriveDesc": "Shared folder for files and assets.",
+      "openInDrive": "Open in Drive",
+      "noDriveFolder": "No Drive folder linked yet.",
+      "canva": "Canva",
+      "canvaDesc": "Open the presentation in Canva (full preview stays on the Canva tab).",
+      "openInCanva": "Open in Canva",
+      "noCanva": "No Canva presentation linked yet.",
+      "googleMeet": "Google Meet",
+      "googleMeetDesc": "Recurring or one-off meeting link for the team.",
+      "openMeet": "Open Google Meet",
+      "noMeet": "No meeting link yet.",
+      "projectDoc": "Project doc",
+      "projectDocDesc": "Linked Google Doc for notes or write-ups.",
+      "openDoc": "Open project doc",
+      "noDoc": "No Google Doc linked yet.",
+      "projectDue": "Project due",
+      "projectDueDesc": "Target date for the group deliverable or report.",
+      "noDueDate": "No project due date set."
+    },
+    "members": {
+      "title": "Members",
+      "subtitle": "View members and invite people by email (leader only).",
+      "invitationActivity": "Invitation activity",
+      "email": "Email",
+      "invite": "Invite",
+      "sending": "Sending…",
+      "enterEmail": "Enter an email address",
+      "invitationActivityTitle": "Invitation activity",
+      "invitationActivityDesc": "Pending and past invites for this group (leader only).",
+      "loadingInvitations": "Loading invitations…",
+      "noInvitations": "No invitations yet.",
+      "expires": "Expires",
+      "resend": "Resend",
+      "resending": "Resending…",
+      "loadingMembers": "Loading members…",
+      "noMembers": "No members loaded.",
+      "inactive": "inactive",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "remove": "Remove",
+      "cannotLockAdmin": "Cannot lock admin"
+    },
+    "contribution": {
+      "title": "Task contribution rating",
+      "subtitle": "Rate each completed task from 0 (none) to 10 (outstanding). Ratings are anonymous and aggregated by task assignee after the leader closes the round.",
+      "openEvaluation": "Open evaluation",
+      "loading": "Loading…",
+      "couldNotLoad": "Could not load evaluation rounds.",
+      "noRoundsYet": "The leader has not opened evaluation yet."
+    },
+    "sharedFlashcards": {
+      "title": "Shared flashcard sets",
+      "subtitle": "Flashcard sets shared by group members. Share your own sets for others to study.",
+      "shareASet": "Share a set",
+      "loading": "Loading…",
+      "noSetsShared": "No flashcard sets shared yet.",
+      "sharedByYou": "shared by you",
+      "cards_one": "card",
+      "cards_other": "cards",
+      "study": "Study",
+      "shareDialogTitle": "Share a flashcard set",
+      "shareDialogDesc": "Choose one of your sets to share with this group.",
+      "loadingYourSets": "Loading your sets…",
+      "noSetsToShare": "You have no flashcard sets. Create one first.",
+      "allAlreadyShared": "All your sets are already shared with this group.",
+      "share": "Share",
+      "sharedWithGroup": "Flashcard set shared with group",
+      "failedToShare": "Failed to share",
+      "failedToRemove": "Failed to remove"
+    }
+  },
+  "flashcards": {
+    "pageTitle": "Flashcards",
+    "pageSubtitle": "Spaced-repetition study sets across your courses.",
+    "loading": "Loading flashcard sets...",
+    "newSet": "New set",
+    "cards": "cards",
+    "nextReview": "Next review (set):",
+    "notScheduled": "Not scheduled",
+    "study": "Study",
+    "edit": "Edit",
+    "deleteSet": "Delete flashcard set {{name}}",
+    "deleteTitle": "Delete flashcard set?",
+    "deleteDesc": "This will permanently delete \"{{name}}\" and all of its cards. This cannot be undone.",
+    "cancel": "Cancel",
+    "deleting": "Deleting…",
+    "delete": "Delete",
+    "createPage": {
+      "backToFlashcards": "Back to flashcards",
+      "saving": "Saving…",
+      "saveChanges": "Save changes",
+      "createSet": "Create set",
+      "saveAndPractice": "Save and practice",
+      "createAndPractice": "Create and practice",
+      "editTitle": "Edit flashcard set",
+      "createTitle": "Create a new flashcard set",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Title",
+      "subjectLabel": "Subject (optional)",
+      "subjectPlaceholder": "e.g. CS2040",
+      "descLabel": "Description (optional)",
+      "descPlaceholder": "Add a description…",
+      "import": "Import",
+      "term": "Term",
+      "definition": "Definition",
+      "enterTerm": "Enter term",
+      "enterDefinition": "Enter definition",
+      "removeCard": "Remove card",
+      "addCard": "Add a card",
+      "loadingSet": "Loading set…",
+      "couldNotLoad": "Could not load this set.",
+      "backToFlashcardsBtn": "Back to flashcards",
+      "errorNoTitle": "Please enter a title for your set.",
+      "errorNoCards": "Add at least one card with a term and definition.",
+      "somethingWentWrong": "Something went wrong."
+    },
+    "studyMode": {
+      "loadingCards": "Loading cards…",
+      "noCards": "This set has no cards yet.",
+      "close": "Close",
+      "studying": "Studying —",
+      "general": "General",
+      "cardProgress": "Card {{current}} / {{total}} · Set next review after session: logged when you close",
+      "question": "Question",
+      "answer": "Answer",
+      "flipHint": "Click or Space to flip · ← → to navigate",
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish"
+    }
+  },
+  "notifications": {
+    "pageTitle": "Notifications",
+    "pageSubtitle": "Stay on top of tasks, evaluations and group activity. Click a row to open the relevant page.",
+    "loading": "Loading notifications...",
+    "noNotifications": "No notifications yet.",
+    "pleaseSignIn": "Please sign in again.",
+    "noLink": "This notification has no link.",
+    "couldNotOpen": "Could not open link.",
+    "recently": "Recently",
+    "types": {
+      "group_invitation": "Group invitation",
+      "task_assigned": "Task assigned",
+      "task_pending_review": "Review requested",
+      "task_review_result": "Task update",
+      "default": "Notification"
+    }
+  },
+  "settings": {
+    "pageTitle": "Settings",
+    "pageSubtitle": "Account details from your Google sign-in and app preferences.",
+    "loading": "Loading settings…",
+    "couldNotLoad": "Could not load your profile. Try signing in again.",
+    "googleAccount": {
+      "title": "Google account",
+      "desc": "Signed in with Google (.edu)"
+    },
+    "displayName": "Display name",
+    "displayNamePlaceholder": "Your name in the app",
+    "saveName": "Save name",
+    "syncFromGoogle": "Sync from Google",
+    "syncing": "Syncing…",
+    "nameHint": "Save name updates how you appear here only. Sync from Google loads your name and profile photo from Google (requires an active Google session).",
+    "saveNameHint": "Save name",
+    "syncFromGoogleHint": "Sync from Google",
+    "notifications": {
+      "title": "Notifications",
+      "desc": "Control whether the app may send notification emails (e.g. tasks and reminders).",
+      "emailLabel": "Email notifications",
+      "emailHint": "When off, automated emails are not sent to your address."
+    },
+    "driveStorage": {
+      "title": "Drive storage",
+      "desc": "Organization Google accounts often do not report a shared storage total. Set your own cap here (for example from your school policy). Sidebar usage is refreshed from Google and includes files in Drive plus trash.",
+      "quotaLabel": "Quota limit (GB)",
+      "quotaPlaceholder": "e.g. 16",
+      "saveLimit": "Save limit",
+      "clearLimit": "Clear limit"
+    },
+    "canva": {
+      "title": "Canva",
+      "desc": "Connect your Canva account to create and link designs from the app.",
+      "connected": "Canva connected — you can use presentations in your groups.",
+      "notConnected": "Not connected yet. You will be redirected to Canva to authorize.",
+      "connect": "Connect to Canva",
+      "connecting": "Connecting…"
+    },
+    "toast": {
+      "enterLimit": "Enter a limit in GB, or clear the limit instead.",
+      "invalidNumber": "Enter a valid non-negative number.",
+      "limitSaved": "Drive quota limit saved.",
+      "limitError": "Could not save quota limit.",
+      "limitCleared": "Drive quota limit cleared.",
+      "clearError": "Could not clear quota limit.",
+      "enterName": "Enter a display name.",
+      "nameSaved": "Display name updated.",
+      "nameError": "Could not update your name.",
+      "googleSynced": "Profile updated from your Google account.",
+      "googleSyncError": "Could not sync with Google. Try signing in again."
+    }
+  },
+  "admin": {
+    "overview": {
+      "breadcrumb": "Admin / Overview",
+      "title": "System health",
+      "totalUsers": "Total users",
+      "totalGroups": "Total groups",
+      "cronRuns": "Cron runs (7d)",
+      "failures": "Failures (7d)",
+      "failedToLoad": "Failed to load dashboard",
+      "manualRun": "Manual run:",
+      "overdueReminders": "Overdue reminders",
+      "notificationCleanup": "Notification cleanup",
+      "cronJobsChart": "Cron jobs — last 7 days",
+      "noCronRuns": "No cron runs recorded yet",
+      "recentCronRuns": "Recent cron runs",
+      "noRunsYet": "No runs yet",
+      "systemLog": "System log",
+      "systemLogDesc": "Persisted cron execution records (v1). See rows below for errors and timing.",
+      "noLogEntries": "No log entries"
+    },
+    "users": {
+      "breadcrumb": "Admin / Users",
+      "title": "User management",
+      "failedToLoad": "Failed to load users",
+      "searchPlaceholder": "Search users…",
+      "colUser": "User",
+      "colEmail": "Email",
+      "colRole": "Role",
+      "colStatus": "Status",
+      "colActions": "Actions",
+      "locked": "LOCKED",
+      "active": "ACTIVE",
+      "cannotLockAdmin": "Cannot lock admin",
+      "lock": "Lock",
+      "unlock": "Unlock"
+    },
+    "groups": {
+      "breadcrumb": "Admin / Groups",
+      "title": "Group management",
+      "failedToLoad": "Failed to load groups",
+      "colGroup": "Group",
+      "colStatus": "Status",
+      "colMembers": "Members",
+      "colCreated": "Created",
+      "colActions": "Actions",
+      "delete": "Delete",
+      "confirmDelete": "Delete group \"{{name}}\"? This cannot be undone."
+    }
+  },
+  "invitations": {
+    "missingLink": "Missing invitation link.",
+    "loading": "Loading invitation…",
+    "reasons": {
+      "not_found": "This invitation link is invalid.",
+      "expired": "This invitation has expired.",
+      "already_accepted": "This invitation was already accepted.",
+      "invalid_status": "This invitation is no longer valid.",
+      "default": "This invitation cannot be used."
+    },
+    "home": "← Home",
+    "title": "Group invitation",
+    "joinGroup": "Join {{groupName}}",
+    "invitedEmail": "Invited email:",
+    "expires": "Expires",
+    "emailMismatch": "You're signed in as <1>{{email}}</1>. The invite is for <2>{{inviteEmail}}</2>. Accepting still grants membership to the invited address on the server — for Google sign-in later, use an account matching <3>{{inviteEmail}}</3>.",
+    "signInDifferent": "Sign in with a different account",
+    "displayName": "Display name (optional—used if the app creates your profile from this invite)",
+    "displayNamePlaceholder": "Your name",
+    "signInTip": "Tip: <1>Sign in with Google</1> first if you use NTU Google — same email as above.",
+    "signedInAs": "Signed in as {{email}}. You can accept below.",
+    "joining": "Joining…",
+    "accept": "Accept invitation",
+    "unavailable": "Invitation unavailable",
+    "goToGroups": "Go to your groups"
+  },
+  "canva": {
+    "title": "Canva connection",
+    "connected": "Canva is connected. You can create a group to generate a presentation automatically.",
+    "error": "Could not connect Canva:",
+    "done": "Done.",
+    "backToSettings": "Back to settings",
+    "backToGroups": "Back to groups"
+  }
+}

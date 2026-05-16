@@ -173,16 +173,10 @@ export const useCloseEvaluationRoundMutation = () => {
         queryKey: contributionKeys.evaluationRounds(variables.groupId),
       });
       void queryClient.invalidateQueries({
-        queryKey: contributionKeys.myRoundRatings(
-          variables.groupId,
-          variables.roundStartedAt,
-        ),
+        queryKey: contributionKeys.myRoundRatings(variables.groupId, variables.roundStartedAt),
       });
       void queryClient.invalidateQueries({
-        queryKey: contributionKeys.roundResults(
-          variables.groupId,
-          variables.roundStartedAt,
-        ),
+        queryKey: contributionKeys.roundResults(variables.groupId, variables.roundStartedAt),
       });
     },
   });
@@ -194,24 +188,21 @@ export const useSubmitRoundRatingMutation = () => {
     mutationFn: async (input: {
       groupId: string;
       roundStartedAt: string;
-      rateeId: string;
+      taskId: string;
       score: number;
     }) => {
       const token = requireAccessToken();
       await submitRoundRating(
         input.groupId,
         input.roundStartedAt,
-        input.rateeId,
+        input.taskId,
         input.score,
         token,
       );
     },
     onSuccess: (_, variables) => {
       void queryClient.invalidateQueries({
-        queryKey: contributionKeys.myRoundRatings(
-          variables.groupId,
-          variables.roundStartedAt,
-        ),
+        queryKey: contributionKeys.myRoundRatings(variables.groupId, variables.roundStartedAt),
       });
       void queryClient.invalidateQueries({
         queryKey: contributionKeys.evaluationRounds(variables.groupId),

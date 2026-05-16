@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link, notFound, useParams, useSearch } from "@tanstack/react-router";
 import { ArrowLeft, Lock } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
 import { useGroupDetails, useGroupMembers, useUpdateGroup } from "@/domains/groups";
 import { useGroupTasks, useCreateTaskMutation, GroupKanbanBoard, TaskForm } from "@/domains/tasks";
@@ -21,6 +22,7 @@ import { CanvaTab } from "./CanvaTab";
 import { CalendarTab } from "./CalendarTab";
 import { GroupOverviewTab } from "./GroupOverviewTab";
 import { MembersTab } from "./MembersTab";
+import { SharedFlashcardsTab } from "./SharedFlashcardsTab";
 
 const GROUP_TABS = [
   "overview",
@@ -30,6 +32,7 @@ const GROUP_TABS = [
   "calendar",
   "members",
   "contribution",
+  "flashcards",
 ] as const;
 
 type GroupTab = (typeof GROUP_TABS)[number];
@@ -42,6 +45,7 @@ function tabFromSearch(tab: string | undefined): GroupTab {
 }
 
 export function GroupDetailPage() {
+  const { t } = useTranslation();
   const { groupId } = useParams({ from: "/groups/$groupId" });
   const { tab: tabSearch } = useSearch({ from: "/groups/$groupId" });
   const id = groupId as string;
@@ -60,7 +64,7 @@ export function GroupDetailPage() {
     return (
       <AppShell>
         <div className="flex items-center justify-center py-12">
-          <div className="text-muted-foreground">Loading group...</div>
+          <div className="text-muted-foreground">{t("groups.loadingGroup")}</div>
         </div>
       </AppShell>
     );
@@ -77,7 +81,7 @@ export function GroupDetailPage() {
         to="/groups"
         className="mb-4 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="h-3 w-3" /> All groups
+        <ArrowLeft className="h-3 w-3" /> {t("groups.allGroups")}
       </Link>
 
       <div className="rounded-2xl border border-border bg-gradient-surface p-6">
@@ -96,18 +100,18 @@ export function GroupDetailPage() {
               >
                 {group.status === "locked" ? (
                   <>
-                    <Lock className="mr-1 inline h-3 w-3" /> locked
+                    <Lock className="mr-1 inline h-3 w-3" /> {t("groups.locked")}
                   </>
                 ) : (
                   group.status
                 )}
               </span>
-              {group.tags?.map((t) => (
+              {group.tags?.map((tag) => (
                 <span
-                  key={t}
+                  key={tag}
                   className="rounded-md border border-border bg-background/40 px-2 py-0.5 text-[10px] text-muted-foreground"
                 >
-                  {t}
+                  {tag}
                 </span>
               ))}
             </div>
@@ -121,15 +125,16 @@ export function GroupDetailPage() {
 
       <Tabs key={initialTab} defaultValue={initialTab} className="mt-6">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="tasks">Tasks</TabsTrigger>
-          <TabsTrigger value="drive">Drive</TabsTrigger>
-          <TabsTrigger value="canva">Canva</TabsTrigger>
-          <TabsTrigger value="calendar">Calendar</TabsTrigger>
+          <TabsTrigger value="overview">{t("groups.tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="tasks">{t("groups.tabs.tasks")}</TabsTrigger>
+          <TabsTrigger value="drive">{t("groups.tabs.drive")}</TabsTrigger>
+          <TabsTrigger value="canva">{t("groups.tabs.canva")}</TabsTrigger>
+          <TabsTrigger value="calendar">{t("groups.tabs.calendar")}</TabsTrigger>
           <TabsTrigger value="members">
-            Members ({membersLoading ? "…" : members.length})
+            {t("groups.tabs.members")} ({membersLoading ? "…" : members.length})
           </TabsTrigger>
-          <TabsTrigger value="contribution">Contribution</TabsTrigger>
+          <TabsTrigger value="contribution">{t("groups.tabs.contribution")}</TabsTrigger>
+          <TabsTrigger value="flashcards">{t("groups.tabs.flashcards")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-6">
@@ -152,20 +157,20 @@ export function GroupDetailPage() {
         <TabsContent value="tasks" className="mt-6 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-xs text-muted-foreground">
-              Drag cards between columns to update status. Submit for review from{" "}
-              <span className="font-medium text-foreground">In progress</span> →{" "}
-              <span className="font-medium text-foreground">Review</span>. Leaders move Review →
-              Done or Failed.
+              {t("groups.tasksTab.hint", {
+                inProgress: t("groups.tasksTab.inProgress"),
+                review: t("groups.tasksTab.review"),
+              })}
             </p>
             <Dialog open={createTaskOpen} onOpenChange={setCreateTaskOpen}>
               <DialogTrigger asChild>
                 <Button type="button" size="sm" className="bg-gradient-primary">
-                  + New task
+                  {t("groups.tasksTab.newTask")}
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                  <DialogTitle>New group task</DialogTitle>
+                  <DialogTitle>{t("groups.tasksTab.newGroupTask")}</DialogTitle>
                 </DialogHeader>
                 <TaskForm
                   defaultGroupId={id}
@@ -199,7 +204,7 @@ export function GroupDetailPage() {
           />
           {groupTasks.length === 0 ? (
             <p className="text-center text-xs text-muted-foreground">
-              No tasks yet — use &quot;New task&quot; to add one.
+              {t("groups.tasksTab.noTasks")}
             </p>
           ) : null}
         </TabsContent>
@@ -238,6 +243,10 @@ export function GroupDetailPage() {
             isLeader={isLeader}
             groupLocked={group.status === "locked"}
           />
+        </TabsContent>
+
+        <TabsContent value="flashcards" className="mt-6">
+          <SharedFlashcardsTab groupId={id} currentUserId={currentUserId} />
         </TabsContent>
       </Tabs>
     </AppShell>

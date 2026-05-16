@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Mail, AlertCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,7 @@ import {
 import { useCurrentUser } from "@/domains/auth";
 
 export function AcceptInvitationPage() {
+  const { t } = useTranslation();
   const { token } = useParams({ from: "/invitations/$token/accept" });
   const navigate = useNavigate();
   const { data: profile } = useCurrentUser();
@@ -60,7 +62,7 @@ export function AcceptInvitationPage() {
   if (!token) {
     return (
       <AppShell>
-        <InvalidBlock message="Missing invitation link." />
+        <InvalidBlock message={t("invitations.missingLink")} />
       </AppShell>
     );
   }
@@ -69,7 +71,7 @@ export function AcceptInvitationPage() {
     return (
       <AppShell>
         <div className="flex min-h-[40vh] items-center justify-center text-muted-foreground">
-          Loading invitation…
+          {t("invitations.loading")}
         </div>
       </AppShell>
     );
@@ -78,21 +80,15 @@ export function AcceptInvitationPage() {
   if (isError) {
     return (
       <AppShell>
-        <InvalidBlock message={(error as Error)?.message ?? "Something went wrong."} />
+        <InvalidBlock message={(error as Error)?.message ?? t("invitations.reasons.default")} />
       </AppShell>
     );
   }
 
   if (!validation?.valid || !validation.invitation) {
-    const reasonLabel: Record<string, string> = {
-      not_found: "This invitation link is invalid.",
-      expired: "This invitation has expired.",
-      already_accepted: "This invitation was already accepted.",
-      invalid_status: "This invitation is no longer valid.",
-    };
+    const reasonKey = validation?.reason ?? "";
     const msg =
-      reasonLabel[validation?.reason ?? ""] ??
-      "This invitation cannot be used.";
+      t(`invitations.reasons.${reasonKey}`, { defaultValue: t("invitations.reasons.default") });
     return (
       <AppShell>
         <InvalidBlock message={msg} />
@@ -108,7 +104,7 @@ export function AcceptInvitationPage() {
         to="/"
         className="mb-6 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="h-3 w-3" /> Home
+        <ArrowLeft className="h-3 w-3" /> {t("invitations.home")}
       </Link>
 
       <div className="mx-auto max-w-lg rounded-2xl border border-border bg-card p-8 shadow-elegant">
@@ -117,24 +113,23 @@ export function AcceptInvitationPage() {
             <Mail className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold tracking-tight">Group invitation</h1>
+            <h1 className="text-xl font-semibold tracking-tight">{t("invitations.title")}</h1>
             <p className="text-sm text-muted-foreground">
-              Join{" "}
-              <span className="font-medium text-foreground">{groupName}</span>
+              {t("invitations.joinGroup", { groupName })}
             </p>
           </div>
         </div>
 
         {inviteEmail && (
           <p className="mt-6 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm">
-            Invited email:{" "}
+            {t("invitations.invitedEmail")}{" "}
             <span className="font-mono text-xs">{inviteEmail}</span>
           </p>
         )}
 
         {expiresAt && (
           <p className="mt-2 text-xs text-muted-foreground">
-            Expires {new Date(expiresAt).toLocaleString()}
+            {t("invitations.expires")} {new Date(expiresAt).toLocaleString()}
           </p>
         )}
 
@@ -142,17 +137,14 @@ export function AcceptInvitationPage() {
           <div className="mt-4 flex gap-2 rounded-lg border border-warning/40 bg-warning/10 p-3 text-sm text-warning">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <div>
-              You&apos;re signed in as <strong>{profile?.email}</strong>. The invite is for{" "}
-              <strong>{inviteEmail}</strong>. Accepting still grants membership to the invited address
-              on the server — for Google sign-in later, use an account matching{" "}
-              <strong>{inviteEmail}</strong>.
+              <strong>{profile?.email}</strong> — <strong>{inviteEmail}</strong>
               <div className="mt-2">
                 <Link
                   to="/login"
                   search={{ redirect: loginRedirectPath }}
                   className="font-medium underline"
                 >
-                  Sign in with a different account
+                  {t("invitations.signInDifferent")}
                 </Link>
               </div>
             </div>
@@ -161,33 +153,31 @@ export function AcceptInvitationPage() {
 
         <div className="mt-6">
           <label className="text-xs font-medium text-muted-foreground">
-            Display name (optional—used if the app creates your profile from this invite)
+            {t("invitations.displayName")}
           </label>
           <Input
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            placeholder={profile?.name || "Your name"}
+            placeholder={profile?.name || t("invitations.displayNamePlaceholder")}
             className="mt-1"
           />
         </div>
 
         {!profile && (
           <p className="mt-3 text-sm text-muted-foreground">
-            Tip:{" "}
             <Link
               to="/login"
               search={{ redirect: loginRedirectPath }}
               className="font-medium text-primary hover:underline"
             >
-              Sign in with Google
-            </Link>{" "}
-            first if you use NTU Google — same email as above.
+              {t("invitations.signInTip")}
+            </Link>
           </p>
         )}
 
         {profile && emailMatches && (
           <p className="mt-3 text-xs text-muted-foreground">
-            Signed in as {profile.email}. You can accept below.
+            {t("invitations.signedInAs", { email: profile.email })}
           </p>
         )}
 
@@ -197,7 +187,7 @@ export function AcceptInvitationPage() {
           disabled={accepting}
           onClick={handleAccept}
         >
-          {accepting ? "Joining…" : "Accept invitation"}
+          {accepting ? t("invitations.joining") : t("invitations.accept")}
         </Button>
       </div>
     </AppShell>
@@ -205,12 +195,13 @@ export function AcceptInvitationPage() {
 }
 
 function InvalidBlock({ message }: { message: string }) {
+  const { t } = useTranslation();
   return (
     <div className="mx-auto max-w-md rounded-2xl border border-border bg-card p-8 text-center">
-      <h1 className="text-lg font-semibold">Invitation unavailable</h1>
+      <h1 className="text-lg font-semibold">{t("invitations.unavailable")}</h1>
       <p className="mt-2 text-sm text-muted-foreground">{message}</p>
       <Link to="/groups" className="mt-6 inline-block text-sm text-primary hover:underline">
-        Go to your groups
+        {t("invitations.goToGroups")}
       </Link>
     </div>
   );

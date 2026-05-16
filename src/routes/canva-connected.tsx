@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
 
 export const Route = createFileRoute("/canva-connected")({
   component: CanvaConnectedPage,
 });
 
-/** Optional landing page after Canva OAuth (match URL in Canva Developer Portal return navigation). */
 function CanvaConnectedPage() {
+  const { t } = useTranslation();
   const params = new URLSearchParams(
     typeof window !== "undefined" ? window.location.search : "",
   );
@@ -16,32 +17,31 @@ function CanvaConnectedPage() {
   return (
     <AppShell>
       <div className="mx-auto max-w-md space-y-4 p-6">
-        <h1 className="text-xl font-semibold">Canva connection</h1>
+        <h1 className="text-xl font-semibold">{t("canva.title")}</h1>
         {success ? (
           <p className="text-sm text-muted-foreground">
-            Canva is connected. You can create a group to generate a presentation
-            automatically.
+            {t("canva.connected")}
           </p>
         ) : error ? (
           <p className="text-sm text-destructive">
-            Could not connect Canva:{" "}
+            {t("canva.error")}{" "}
             <span className="font-mono">{error}</span>
           </p>
         ) : (
-          <p className="text-sm text-muted-foreground">Done.</p>
+          <p className="text-sm text-muted-foreground">{t("canva.done")}</p>
         )}
         <div className="flex flex-col gap-2">
           <Link
             to="/settings"
             className="inline-block text-sm text-primary hover:underline"
           >
-            Back to settings
+            {t("canva.backToSettings")}
           </Link>
           <Link
             to="/groups"
             className="inline-block text-sm text-primary hover:underline"
           >
-            Back to groups
+            {t("canva.backToGroups")}
           </Link>
         </div>
       </div>

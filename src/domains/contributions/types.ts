@@ -53,13 +53,14 @@ export interface EvaluationRound {
 }
 
 export interface MyRatingEntry {
-  rateeId: string;
-  rateeFullName: string;
+  taskId: string;
+  taskTitle: string;
+  assigneeFullName: string;
   score: number | null;
 }
 
 export interface AggregatedRatingResult {
-  rateeId: string;
-  rateeFullName: string;
+  assigneeId: string;
+  assigneeFullName: string;
   averageScore: number | null;
 }

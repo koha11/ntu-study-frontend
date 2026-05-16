@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, Plus, Trash2, ListTodo, CalendarIcon, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
 import {
   useTasksList,
@@ -16,14 +17,6 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import type { TaskStatus } from "../types";
-
-const FILTERS: { id: "all" | TaskStatus; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "todo", label: "To do" },
-  { id: "in_progress", label: "In progress" },
-  { id: "pending_review", label: "Review" },
-  { id: "done", label: "Done" },
-];
 
 function toDateOnlyString(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -41,6 +34,16 @@ function dueMeta(due: Date | null, isDone: boolean) {
 }
 
 export function TasksPage() {
+  const { t } = useTranslation();
+
+  const FILTERS: { id: "all" | TaskStatus; label: string }[] = [
+    { id: "all", label: t("tasks.filters.all") },
+    { id: "todo", label: t("tasks.filters.todo") },
+    { id: "in_progress", label: t("tasks.filters.in_progress") },
+    { id: "pending_review", label: t("tasks.filters.pending_review") },
+    { id: "done", label: t("tasks.filters.done") },
+  ];
+
   const { data: personalTasks = [], isLoading: personalLoading } = useTasksList();
   const { data: groupTasks = [], isLoading: groupTasksLoading } = useTasksList({
     assignedInGroups: true,
@@ -97,7 +100,7 @@ export function TasksPage() {
     return (
       <AppShell>
         <div className="flex items-center justify-center py-12">
-          <div className="text-muted-foreground">Loading tasks...</div>
+          <div className="text-muted-foreground">{t("tasks.loading")}</div>
         </div>
       </AppShell>
     );
@@ -106,9 +109,9 @@ export function TasksPage() {
   return (
     <AppShell>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">My tasks</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t("tasks.pageTitle")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Everything assigned to you across your groups.
+          {t("tasks.pageSubtitle")}
         </p>
       </div>
 
@@ -119,9 +122,9 @@ export function TasksPage() {
               <ListTodo className="h-4 w-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold">Personal tasks</h2>
+              <h2 className="text-sm font-bold">{t("tasks.personalTasks")}</h2>
               <p className="text-xs text-muted-foreground">
-                Saved to your account · {openPersonalCount} open
+                {t("tasks.personalTasksDesc", { count: openPersonalCount })}
               </p>
             </div>
           </div>
@@ -131,7 +134,7 @@ export function TasksPage() {
           <input
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
-            placeholder="Add a personal task and press Enter"
+            placeholder={t("tasks.addPersonalTask")}
             className="min-w-[200px] flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
           />
           <Popover>
@@ -146,7 +149,7 @@ export function TasksPage() {
                 <CalendarIcon className="h-3.5 w-3.5" />
                 {newTaskDate
                   ? newTaskDate.toLocaleDateString("en", { month: "short", day: "numeric" })
-                  : "Deadline"}
+                  : t("tasks.deadline")}
                 {newTaskDate && (
                   <X
                     className="h-3 w-3 hover:text-destructive"
@@ -172,7 +175,7 @@ export function TasksPage() {
             type="submit"
             className="flex items-center gap-1 rounded-md bg-gradient-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
           >
-            <Plus className="h-3.5 w-3.5" /> Add
+            <Plus className="h-3.5 w-3.5" /> {t("tasks.add")}
           </button>
         </form>
 
@@ -221,7 +224,7 @@ export function TasksPage() {
                         <CalendarIcon className="h-3 w-3" />
                         {due
                           ? due.toLocaleDateString("en", { month: "short", day: "numeric" })
-                          : "Set date"}
+                          : t("tasks.setDate")}
                       </button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="end">
@@ -239,7 +242,7 @@ export function TasksPage() {
                             onClick={() => setPersonalDueDate(task.id, undefined)}
                             className="w-full rounded px-2 py-1 text-xs text-muted-foreground hover:bg-accent hover:text-destructive"
                           >
-                            Clear date
+                            {t("tasks.clearDate")}
                           </button>
                         </div>
                       )}
@@ -249,7 +252,7 @@ export function TasksPage() {
                     type="button"
                     onClick={() => removeTask(task.id)}
                     className="rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
-                    aria-label="Delete"
+                    aria-label={t("tasks.deleteTask")}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -281,7 +284,7 @@ export function TasksPage() {
                             type="button"
                             onClick={() => removeTask(st.id)}
                             className="rounded p-0.5 text-muted-foreground opacity-0 hover:text-destructive group-hover/sub:opacity-100"
-                            aria-label="Delete subtask"
+                            aria-label={t("tasks.deleteSubtask")}
                           >
                             <Trash2 className="h-3 w-3" />
                           </button>
@@ -300,14 +303,14 @@ export function TasksPage() {
                         onChange={(e) =>
                           setSubtaskDrafts((prev) => ({ ...prev, [task.id]: e.target.value }))
                         }
-                        placeholder="Add subtask…"
+                        placeholder={t("tasks.addSubtask")}
                         className="min-w-0 flex-1 rounded border border-dashed border-border bg-transparent px-2 py-1 text-xs outline-none focus:border-primary"
                       />
                       <button
                         type="submit"
                         className="shrink-0 rounded border border-border px-2 py-1 text-[10px] font-medium hover:bg-accent"
                       >
-                        Add
+                        {t("tasks.add")}
                       </button>
                     </form>
                   </div>
@@ -316,7 +319,7 @@ export function TasksPage() {
           })}
           {personalTasks.length === 0 && (
             <li className="rounded-md border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
-              No personal tasks yet. Add one above.
+              {t("tasks.noPersonalTasks")}
             </li>
           )}
         </ul>
@@ -324,7 +327,7 @@ export function TasksPage() {
 
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-          Group tasks
+          {t("tasks.groupTasks")}
         </h2>
       </div>
 
@@ -347,48 +350,48 @@ export function TasksPage() {
       </div>
 
       <div className="space-y-3">
-        {myTasks.map((t) => {
-          const g = groups.find((gr) => gr.id === t.groupId);
+        {myTasks.map((task) => {
+          const g = groups.find((gr) => gr.id === task.groupId);
           return (
-            <div key={t.id} className="rounded-2xl border border-border bg-card p-5">
+            <div key={task.id} className="rounded-2xl border border-border bg-card p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    {t.groupId ? (
+                    {task.groupId ? (
                       <Link
                         to="/groups/$groupId"
-                        params={{ groupId: t.groupId }}
+                        params={{ groupId: task.groupId }}
                         className="text-[10px] font-bold uppercase tracking-wider text-primary-glow hover:underline"
                       >
                         {g?.name}
                       </Link>
                     ) : null}
-                    {t.groupId ? <ChevronRight className="h-3 w-3 text-muted-foreground" /> : null}
+                    {task.groupId ? <ChevronRight className="h-3 w-3 text-muted-foreground" /> : null}
                     <span
                       className={cn(
                         "rounded-md px-1.5 py-0.5 text-[9px] font-bold uppercase",
-                        t.status === "done" && "bg-success/15 text-success",
-                        t.status === "in_progress" && "bg-info/15 text-info",
-                        t.status === "pending_review" && "bg-warning/15 text-warning",
-                        t.status === "failed" && "bg-destructive/15 text-destructive",
-                        t.status === "todo" && "bg-muted text-muted-foreground",
+                        task.status === "done" && "bg-success/15 text-success",
+                        task.status === "in_progress" && "bg-info/15 text-info",
+                        task.status === "pending_review" && "bg-warning/15 text-warning",
+                        task.status === "failed" && "bg-destructive/15 text-destructive",
+                        task.status === "todo" && "bg-muted text-muted-foreground",
                       )}
                     >
-                      {t.status.replace(/_/g, " ")}
+                      {task.status.replace(/_/g, " ")}
                     </span>
                   </div>
-                  <h3 className="mt-2 font-semibold">{t.title}</h3>
-                  {t.description ? (
-                    <p className="mt-1 text-xs text-muted-foreground">{t.description}</p>
+                  <h3 className="mt-2 font-semibold">{task.title}</h3>
+                  {task.description ? (
+                    <p className="mt-1 text-xs text-muted-foreground">{task.description}</p>
                   ) : null}
                 </div>
                 <div className="text-right">
                   <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                    Due
+                    {t("tasks.due")}
                   </div>
                   <div className="text-sm font-bold">
-                    {t.dueDate
-                      ? new Date(t.dueDate).toLocaleDateString("en", {
+                    {task.dueDate
+                      ? new Date(task.dueDate).toLocaleDateString("en", {
                           month: "short",
                           day: "numeric",
                         })
@@ -397,25 +400,25 @@ export function TasksPage() {
                 </div>
               </div>
 
-              {t.status !== "done" && (
+              {task.status !== "done" && (
                 <div className="mt-3 flex justify-end gap-2">
-                  {t.status === "todo" && (
+                  {task.status === "todo" && (
                     <button
                       type="button"
-                      onClick={() => updateTaskStatus({ id: t.id, status: "in_progress" })}
+                      onClick={() => updateTaskStatus({ id: task.id, status: "in_progress" })}
                       className="rounded-md border border-info/40 bg-info/10 px-3 py-1 text-[11px] font-medium text-info hover:bg-info/20"
                     >
-                      Start working
+                      {t("tasks.startWorking")}
                     </button>
                   )}
-                  {t.status === "in_progress" && (
+                  {task.status === "in_progress" && (
                     <>
                       <button
                         type="button"
-                        onClick={() => submitTask(t.id)}
+                        onClick={() => submitTask(task.id)}
                         className="rounded-md border border-warning/40 bg-warning/10 px-3 py-1 text-[11px] font-medium text-warning hover:bg-warning/20"
                       >
-                        Submit for review
+                        {t("tasks.submitForReview")}
                       </button>
                     </>
                   )}
@@ -427,7 +430,7 @@ export function TasksPage() {
 
         {myTasks.length === 0 && (
           <div className="rounded-2xl border border-dashed border-border bg-card/40 p-12 text-center text-sm text-muted-foreground">
-            No tasks match this filter.
+            {t("tasks.noTasksFilter")}
           </div>
         )}
       </div>

@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Plus, Trash2, Upload } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,7 @@ export type CreateFlashcardSetPageProps = {
 };
 
 export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const isEdit = Boolean(editSetId);
@@ -99,11 +101,11 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
   const saveCreate = async (openPractice: boolean) => {
     setError(null);
     if (!title.trim()) {
-      setError("Please enter a title for your set.");
+      setError(t("flashcards.createPage.errorNoTitle"));
       return;
     }
     if (filledRows.length === 0) {
-      setError("Add at least one card with a term and definition.");
+      setError(t("flashcards.createPage.errorNoCards"));
       return;
     }
     setSaving(true);
@@ -125,7 +127,7 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
         await navigate({ to: "/flashcards" });
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong.");
+      setError(e instanceof Error ? e.message : t("flashcards.createPage.somethingWentWrong"));
     } finally {
       setSaving(false);
     }
@@ -135,11 +137,11 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
     if (!editSetId || !initialSnapshotRef.current) return;
     setError(null);
     if (!title.trim()) {
-      setError("Please enter a title for your set.");
+      setError(t("flashcards.createPage.errorNoTitle"));
       return;
     }
     if (filledRows.length === 0) {
-      setError("Add at least one card with a term and definition.");
+      setError(t("flashcards.createPage.errorNoCards"));
       return;
     }
     setSaving(true);
@@ -187,7 +189,7 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
         await navigate({ to: "/flashcards" });
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong.");
+      setError(e instanceof Error ? e.message : t("flashcards.createPage.somethingWentWrong"));
     } finally {
       setSaving(false);
     }
@@ -205,7 +207,7 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
       return (
         <AppShell>
           <div className="flex min-h-[40vh] items-center justify-center text-muted-foreground">
-            Loading set…
+            {t("flashcards.createPage.loadingSet")}
           </div>
         </AppShell>
       );
@@ -215,10 +217,10 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
         <AppShell>
           <div className="mx-auto max-w-md py-12 text-center">
             <p className="text-destructive">
-              {loadError instanceof Error ? loadError.message : "Could not load this set."}
+              {loadError instanceof Error ? loadError.message : t("flashcards.createPage.couldNotLoad")}
             </p>
             <Button asChild className="mt-4" variant="secondary">
-              <Link to="/flashcards">Back to flashcards</Link>
+              <Link to="/flashcards">{t("flashcards.createPage.backToFlashcardsBtn")}</Link>
             </Button>
           </div>
         </AppShell>
@@ -235,53 +237,53 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to flashcards
+            {t("flashcards.createPage.backToFlashcards")}
           </Link>
           <div className="flex flex-wrap gap-2">
             <Button variant="secondary" disabled={busy} onClick={() => save(false)}>
-              {busy ? "Saving…" : isEdit ? "Save changes" : "Create set"}
+              {busy ? t("flashcards.createPage.saving") : isEdit ? t("flashcards.createPage.saveChanges") : t("flashcards.createPage.createSet")}
             </Button>
             <Button
               className="bg-gradient-primary shadow-glow"
               disabled={busy}
               onClick={() => save(true)}
             >
-              {busy ? "Saving…" : isEdit ? "Save and practice" : "Create and practice"}
+              {busy ? t("flashcards.createPage.saving") : isEdit ? t("flashcards.createPage.saveAndPractice") : t("flashcards.createPage.createAndPractice")}
             </Button>
           </div>
         </div>
 
         <h1 className="text-2xl font-bold tracking-tight">
-          {isEdit ? "Edit flashcard set" : "Create a new flashcard set"}
+          {isEdit ? t("flashcards.createPage.editTitle") : t("flashcards.createPage.createTitle")}
         </h1>
 
         <div className="mt-6 space-y-4">
           <div>
-            <Label htmlFor="set-title">Title</Label>
+            <Label htmlFor="set-title">{t("flashcards.createPage.titleLabel")}</Label>
             <Input
               id="set-title"
               className="mt-1.5"
-              placeholder="Title"
+              placeholder={t("flashcards.createPage.titlePlaceholder")}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           <div>
-            <Label htmlFor="set-subject">Subject (optional)</Label>
+            <Label htmlFor="set-subject">{t("flashcards.createPage.subjectLabel")}</Label>
             <Input
               id="set-subject"
               className="mt-1.5"
-              placeholder="e.g. CS2040"
+              placeholder={t("flashcards.createPage.subjectPlaceholder")}
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
             />
           </div>
           <div>
-            <Label htmlFor="set-desc">Description (optional)</Label>
+            <Label htmlFor="set-desc">{t("flashcards.createPage.descLabel")}</Label>
             <Textarea
               id="set-desc"
               className="mt-1.5 min-h-[80px]"
-              placeholder="Add a description…"
+              placeholder={t("flashcards.createPage.descPlaceholder")}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -291,7 +293,7 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
         <div className="mt-6 flex items-center gap-2 border-b border-border pb-3">
           <Button type="button" variant="outline" size="sm" onClick={() => setImportOpen(true)}>
             <Upload className="mr-2 h-4 w-4" />
-            Import
+            {t("flashcards.createPage.import")}
           </Button>
         </div>
 
@@ -308,10 +310,10 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
                 {index + 1}
               </div>
               <div>
-                <Label className="text-[10px] uppercase text-muted-foreground">Term</Label>
+                <Label className="text-[10px] uppercase text-muted-foreground">{t("flashcards.createPage.term")}</Label>
                 <Input
                   className="mt-1"
-                  placeholder="Enter term"
+                  placeholder={t("flashcards.createPage.enterTerm")}
                   value={row.front}
                   onChange={(e) =>
                     setRows((prev) =>
@@ -321,10 +323,10 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
                 />
               </div>
               <div>
-                <Label className="text-[10px] uppercase text-muted-foreground">Definition</Label>
+                <Label className="text-[10px] uppercase text-muted-foreground">{t("flashcards.createPage.definition")}</Label>
                 <Input
                   className="mt-1"
-                  placeholder="Enter definition"
+                  placeholder={t("flashcards.createPage.enterDefinition")}
                   value={row.back}
                   onChange={(e) =>
                     setRows((prev) =>
@@ -341,7 +343,7 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
                   className="text-muted-foreground hover:text-destructive"
                   disabled={rows.length <= 1}
                   onClick={() => setRows((prev) => prev.filter((r) => r.key !== row.key))}
-                  aria-label="Remove card"
+                  aria-label={t("flashcards.createPage.removeCard")}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -357,17 +359,17 @@ export function CreateFlashcardSetPage({ editSetId }: CreateFlashcardSetPageProp
           onClick={() => setRows((prev) => [...prev, newRow()])}
         >
           <Plus className="mr-2 h-4 w-4" />
-          Add a card
+          {t("flashcards.createPage.addCard")}
         </Button>
 
         {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
 
         <div className="mt-8 flex flex-wrap justify-end gap-2 border-t border-border pt-6">
           <Button variant="secondary" disabled={busy} onClick={() => save(false)}>
-            {busy ? "Saving…" : isEdit ? "Save changes" : "Create set"}
+            {busy ? t("flashcards.createPage.saving") : isEdit ? t("flashcards.createPage.saveChanges") : t("flashcards.createPage.createSet")}
           </Button>
           <Button className="bg-gradient-primary" disabled={busy} onClick={() => save(true)}>
-            {busy ? "Saving…" : isEdit ? "Save and practice" : "Create and practice"}
+            {busy ? t("flashcards.createPage.saving") : isEdit ? t("flashcards.createPage.saveAndPractice") : t("flashcards.createPage.createAndPractice")}
           </Button>
         </div>
       </div>

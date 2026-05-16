@@ -59,6 +59,7 @@ export const flashcardKeys = {
   details: () => [...flashcardKeys.all, "detail"] as const,
   detail: (id: string) => [...flashcardKeys.details(), id] as const,
   cards: (id: string) => [...flashcardKeys.detail(id), "cards"] as const,
+  groupShared: (groupId: string) => [...flashcardKeys.all, "group-shared", groupId] as const,
 };
 
 /**

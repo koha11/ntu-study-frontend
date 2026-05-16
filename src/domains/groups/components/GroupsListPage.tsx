@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
 import { Plus, Users, Activity } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
 import { useGroupsList, useCreateGroup } from "@/domains/groups";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 export function GroupsListPage() {
+  const { t } = useTranslation();
   const { data: groups = [], isLoading } = useGroupsList();
   const { mutate: createGroup, isPending } = useCreateGroup();
   const [open, setOpen] = React.useState(false);
@@ -30,7 +32,7 @@ export function GroupsListPage() {
     return (
       <AppShell>
         <div className="flex items-center justify-center py-12">
-          <div className="text-muted-foreground">Loading groups...</div>
+          <div className="text-muted-foreground">{t("groups.loading")}</div>
         </div>
       </AppShell>
     );
@@ -40,38 +42,38 @@ export function GroupsListPage() {
     <AppShell>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Groups</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t("groups.pageTitle")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Collaborate with classmates on courses, projects, and reading clubs.
+            {t("groups.pageSubtitle")}
           </p>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className="bg-gradient-primary shadow-glow">
-              <Plus className="h-4 w-4" /> New group
+              <Plus className="h-4 w-4" /> {t("groups.newGroup")}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create a new group</DialogTitle>
+              <DialogTitle>{t("groups.createGroup")}</DialogTitle>
               <DialogDescription>
-                Set up a group for collaboration. You&apos;ll be the leader.
+                {t("groups.createGroupDesc")}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium">Group name</label>
+                <label className="block text-sm font-medium">{t("groups.groupName")}</label>
                 <Input
-                  placeholder="e.g., CS101 Study Group"
+                  placeholder={t("groups.groupNamePlaceholder")}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="mt-1"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">Description</label>
+                <label className="block text-sm font-medium">{t("groups.description")}</label>
                 <Textarea
-                  placeholder="What's this group about?"
+                  placeholder={t("groups.descriptionPlaceholder")}
                   value={desc}
                   onChange={(e) => setDesc(e.target.value)}
                   className="mt-1"
@@ -79,7 +81,7 @@ export function GroupsListPage() {
               </div>
               <div>
                 <Label htmlFor="new-group-report-date" className="text-sm font-medium">
-                  Report / due date
+                  {t("groups.reportDate")}
                 </Label>
                 <Input
                   id="new-group-report-date"
@@ -89,13 +91,13 @@ export function GroupsListPage() {
                   className="mt-1"
                 />
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Optional target date for the deliverable or report.
+                  {t("groups.reportDateHint")}
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium">Tags</label>
+                <label className="block text-sm font-medium">{t("groups.tags")}</label>
                 <Input
-                  placeholder="e.g., CS, algorithms, study"
+                  placeholder={t("groups.tagsPlaceholder")}
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
                   className="mt-1"
@@ -128,7 +130,7 @@ export function GroupsListPage() {
                 disabled={isPending || !name.trim()}
                 className="bg-gradient-primary"
               >
-                {isPending ? "Creating..." : "Create group"}
+                {isPending ? t("groups.creating") : t("groups.createGroup")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -149,7 +151,7 @@ export function GroupsListPage() {
                 Group
               </span>
               <span className="text-[10px] text-muted-foreground">
-                Created {new Date(g.created_at).toLocaleDateString()}
+                {t("groups.created")} {new Date(g.created_at).toLocaleDateString()}
               </span>
             </div>
 
@@ -164,7 +166,7 @@ export function GroupsListPage() {
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-muted-foreground" />
                 <span className="text-xs text-muted-foreground">
-                  {g.member_count} members
+                  {g.member_count} {t("groups.membersCount")}
                 </span>
               </div>
             </div>
