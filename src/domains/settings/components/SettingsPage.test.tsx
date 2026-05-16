@@ -36,6 +36,17 @@ vi.mock("@/domains/auth/token-storage", async (importOriginal) => {
   };
 });
 
+vi.mock("i18next", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("i18next")>();
+  return {
+    ...actual,
+    default: {
+      ...actual.default,
+      changeLanguage: vi.fn().mockResolvedValue(undefined),
+    },
+  };
+});
+
 const baseUser = {
   id: "u1",
   email: "student@ntu.edu.sg",
@@ -43,6 +54,7 @@ const baseUser = {
   avatar: "https://example.com/a.png",
   role: UserRole.USER,
   notificationEnabled: true,
+  preferredLanguage: "vi" as const,
   canvaConnected: false,
   driveTotalQuotaBytes: null,
   createdAt: new Date(),

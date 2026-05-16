@@ -469,6 +469,12 @@
       "connect": "Kết nối với Canva",
       "connecting": "Đang kết nối…"
     },
+    "language": {
+      "title": "Ngôn ngữ",
+      "desc": "Chọn ngôn ngữ hiển thị cho ứng dụng, email và thông báo.",
+      "saved": "Đã lưu ngôn ngữ ưa thích.",
+      "error": "Không thể lưu ngôn ngữ ưa thích."
+    },
     "toast": {
       "enterLimit": "Nhập giới hạn tính bằng GB.",
       "invalidNumber": "Nhập số không âm hợp lệ.",

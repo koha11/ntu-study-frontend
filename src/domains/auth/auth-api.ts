@@ -152,6 +152,7 @@ export interface UserProfileResponse {
   avatar_url: string | null;
   role: string;
   notification_enabled: boolean;
+  preferred_language: "en" | "vi";
   canva_connected: boolean;
   /** Manual Drive quota cap in bytes (decimal string). Null if unset. */
   drive_total_quota?: string | null;
@@ -165,6 +166,7 @@ export type PatchUserBody = {
   notification_enabled?: boolean;
   /** Bytes as decimal string, or null to clear the manual limit. */
   drive_total_quota?: string | null;
+  preferred_language?: "en" | "vi";
 };
 
 export async function fetchCurrentUser(accessToken: string): Promise<UserProfileResponse> {

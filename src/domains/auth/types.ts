@@ -13,6 +13,7 @@ export interface User {
   avatar?: string;
   role: UserRole;
   notificationEnabled: boolean;
+  preferredLanguage: "en" | "vi";
   canvaConnected: boolean;
   /** Manual Drive quota cap in bytes (decimal string). Undefined/null when unset. */
   driveTotalQuotaBytes?: string | null;

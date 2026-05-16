@@ -469,6 +469,12 @@
       "connect": "Connect to Canva",
       "connecting": "Connecting…"
     },
+    "language": {
+      "title": "Language",
+      "desc": "Choose the language for the app interface, emails, and notifications.",
+      "saved": "Language preference saved.",
+      "error": "Could not save language preference."
+    },
     "toast": {
       "enterLimit": "Enter a limit in GB, or clear the limit instead.",
       "invalidNumber": "Enter a valid non-negative number.",

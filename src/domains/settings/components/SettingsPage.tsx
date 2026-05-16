@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import { useCurrentUser, usePatchProfile, useSyncGoogleProfile } from "@/domains/auth";
 import { startCanvaOAuth } from "@/domains/auth/auth-api";
 import { getAccessToken } from "@/domains/auth/token-storage";
@@ -44,6 +45,7 @@ export function SettingsPage() {
     if (!user) return;
     setDriveLimitGb(gbDraftFromBytes(user.driveTotalQuotaBytes));
     setNameDraft(user.name);
+    void i18next.changeLanguage(user.preferredLanguage);
   }, [user]);
 
   const handleSaveDriveLimit = () => {
@@ -100,6 +102,19 @@ export function SettingsPage() {
       onSuccess: () => toast.success(t("settings.toast.googleSynced")),
       onError: () => toast.error(t("settings.toast.googleSyncError")),
     });
+  };
+
+  const handleSelectLanguage = (lang: "en" | "vi") => {
+    patchProfile(
+      { preferred_language: lang },
+      {
+        onSuccess: () => {
+          void i18next.changeLanguage(lang);
+          toast.success(t("settings.language.saved"));
+        },
+        onError: () => toast.error(t("settings.language.error")),
+      },
+    );
   };
 
   const handleCanvaConnect = async () => {
@@ -310,6 +325,35 @@ export function SettingsPage() {
               </Button>
             </>
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("settings.language.title")}</CardTitle>
+          <CardDescription>{t("settings.language.desc")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant={user.preferredLanguage === "vi" ? "default" : "outline"}
+              disabled={isPatching}
+              onClick={() => handleSelectLanguage("vi")}
+              data-testid="lang-vi"
+            >
+              Tiếng Việt
+            </Button>
+            <Button
+              type="button"
+              variant={user.preferredLanguage === "en" ? "default" : "outline"}
+              disabled={isPatching}
+              onClick={() => handleSelectLanguage("en")}
+              data-testid="lang-en"
+            >
+              English
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

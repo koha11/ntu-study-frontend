@@ -16,6 +16,7 @@ export function mapProfileToUser(p: UserProfileResponse): User {
     avatar: p.avatar_url ?? undefined,
     role: mapRole(p.role),
     notificationEnabled: p.notification_enabled,
+    preferredLanguage: (p.preferred_language ?? "vi") as "en" | "vi",
     canvaConnected: p.canva_connected,
     driveTotalQuotaBytes: p.drive_total_quota ?? null,
     createdAt: new Date(p.created_at),
