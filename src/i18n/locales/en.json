@@ -318,7 +318,13 @@
       "openEvaluation": "Open evaluation",
       "loading": "Loading…",
       "couldNotLoad": "Could not load evaluation rounds.",
-      "noRoundsYet": "The leader has not opened evaluation yet."
+      "noRoundsYet": "The leader has not opened evaluation yet.",
+      "viewOverallScore": "View overall score",
+      "overallScoreTitle": "Overall average scores",
+      "overallScoreEmpty": "No scores available yet.",
+      "overallScoreLoading": "Loading scores…",
+      "overallScoreMember": "Member",
+      "overallScoreAvg": "Avg score"
     },
     "openEvaluationDialog": {
       "title": "Open anonymous evaluation",

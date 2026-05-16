@@ -318,7 +318,13 @@
       "openEvaluation": "Mở đánh giá",
       "loading": "Đang tải…",
       "couldNotLoad": "Không thể tải vòng đánh giá.",
-      "noRoundsYet": "Trưởng nhóm chưa mở đánh giá."
+      "noRoundsYet": "Trưởng nhóm chưa mở đánh giá.",
+      "viewOverallScore": "Xem điểm tổng hợp",
+      "overallScoreTitle": "Điểm trung bình tổng hợp",
+      "overallScoreEmpty": "Chưa có điểm nào.",
+      "overallScoreLoading": "Đang tải điểm…",
+      "overallScoreMember": "Thành viên",
+      "overallScoreAvg": "Điểm TB"
     },
     "openEvaluationDialog": {
       "title": "Mở đánh giá ẩn danh",

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useGroupEvaluationRounds } from "@/domains/contributions";
 import { OpenEvaluationDialog } from "./OpenEvaluationDialog";
 import { EvaluationRoundCard } from "./EvaluationRoundCard";
+import { OverallScoreModal } from "./OverallScoreModal";
 
 interface ContributionTabProps {
   groupId: string;
@@ -15,6 +16,9 @@ export function ContributionTab({ groupId, isLeader, groupLocked }: Contribution
   const { t } = useTranslation();
   const { data: rounds = [], isLoading, isError } = useGroupEvaluationRounds(groupId);
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [openOverall, setOpenOverall] = React.useState(false);
+
+  const closedRounds = rounds.filter((r) => r.isClosed);
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6">
@@ -25,19 +29,36 @@ export function ContributionTab({ groupId, isLeader, groupLocked }: Contribution
             {t("groups.contribution.subtitle")}
           </p>
         </div>
-        {isLeader && !groupLocked && (
-          <Button
-            type="button"
-            variant="outline"
-            className="border-warning/40 text-warning hover:bg-warning/10"
-            onClick={() => setOpenDialog(true)}
-          >
-            {t("groups.contribution.openEvaluation")}
-          </Button>
-        )}
+        <div className="flex flex-wrap gap-2">
+          {closedRounds.length > 0 && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpenOverall(true)}
+            >
+              {t("groups.contribution.viewOverallScore")}
+            </Button>
+          )}
+          {isLeader && !groupLocked && (
+            <Button
+              type="button"
+              variant="outline"
+              className="border-warning/40 text-warning hover:bg-warning/10"
+              onClick={() => setOpenDialog(true)}
+            >
+              {t("groups.contribution.openEvaluation")}
+            </Button>
+          )}
+        </div>
       </div>
 
       <OpenEvaluationDialog groupId={groupId} open={openDialog} onOpenChange={setOpenDialog} />
+      <OverallScoreModal
+        groupId={groupId}
+        closedRounds={closedRounds}
+        open={openOverall}
+        onOpenChange={setOpenOverall}
+      />
 
       <div className="mt-8 rounded-xl border border-dashed border-border/70 bg-muted/10 p-8">
         {isLoading ? (
