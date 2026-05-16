@@ -320,6 +320,18 @@
       "couldNotLoad": "Không thể tải vòng đánh giá.",
       "noRoundsYet": "Trưởng nhóm chưa mở đánh giá."
     },
+    "openEvaluationDialog": {
+      "title": "Mở đánh giá ẩn danh",
+      "description": "Mọi thành viên đang hoạt động sẽ có thể đánh giá các thành viên khác (0–10). Đánh giá ẩn danh; kết quả trung bình hiển thị sau khi bạn đóng vòng.",
+      "deadlineLabel": "Hạn chót",
+      "deadlinePlaceholder": "Chọn ngày hạn chót",
+      "errorNoDate": "Vui lòng chọn ngày hạn chót.",
+      "errorInvalidDate": "Ngày không hợp lệ.",
+      "errorPastDate": "Hạn chót phải là ngày trong tương lai.",
+      "errorGeneric": "Có lỗi xảy ra.",
+      "opening": "Đang mở…",
+      "open": "Mở đánh giá"
+    },
     "sharedFlashcards": {
       "title": "Bộ thẻ học chung",
       "subtitle": "Bộ thẻ học được chia sẻ bởi thành viên nhóm. Chia sẻ bộ thẻ của bạn để người khác học.",

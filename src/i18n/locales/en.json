@@ -320,6 +320,18 @@
       "couldNotLoad": "Could not load evaluation rounds.",
       "noRoundsYet": "The leader has not opened evaluation yet."
     },
+    "openEvaluationDialog": {
+      "title": "Open anonymous evaluation",
+      "description": "Every active member will be able to rate every other member (0–10). Ratings stay anonymous; averages appear after you close the round.",
+      "deadlineLabel": "Deadline",
+      "deadlinePlaceholder": "Pick a deadline date",
+      "errorNoDate": "Choose a deadline date.",
+      "errorInvalidDate": "Invalid date.",
+      "errorPastDate": "Deadline must be in the future.",
+      "errorGeneric": "Something went wrong.",
+      "opening": "Opening…",
+      "open": "Open evaluation"
+    },
     "sharedFlashcards": {
       "title": "Shared flashcard sets",
       "subtitle": "Flashcard sets shared by group members. Share your own sets for others to study.",

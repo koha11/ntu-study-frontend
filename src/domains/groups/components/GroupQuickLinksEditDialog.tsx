@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/ui/date-picker";
 
 export interface GroupQuickLinksEditDialogProps {
   open: boolean;
@@ -107,12 +108,10 @@ export function GroupQuickLinksEditDialog({
             <Label htmlFor="overview-due" className="text-xs font-medium text-muted-foreground">
               Project due date
             </Label>
-            <Input
+            <DatePicker
               id="overview-due"
-              type="date"
-              className="mt-1"
               value={dateDraft}
-              onChange={(e) => onDateDraftChange(e.target.value)}
+              onChange={onDateDraftChange}
               disabled={isSaving}
             />
           </div>

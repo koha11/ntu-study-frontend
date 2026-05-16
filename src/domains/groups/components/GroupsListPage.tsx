@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { DatePicker } from "@/components/ui/date-picker";
 
 export function GroupsListPage() {
   const { t } = useTranslation();
@@ -83,12 +84,10 @@ export function GroupsListPage() {
                 <Label htmlFor="new-group-report-date" className="text-sm font-medium">
                   {t("groups.reportDate")}
                 </Label>
-                <Input
+                <DatePicker
                   id="new-group-report-date"
-                  type="date"
                   value={reportDate}
-                  onChange={(e) => setReportDate(e.target.value)}
-                  className="mt-1"
+                  onChange={setReportDate}
                 />
                 <p className="mt-1 text-xs text-muted-foreground">
                   {t("groups.reportDateHint")}

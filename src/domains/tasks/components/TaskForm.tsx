@@ -13,6 +13,7 @@
 
 import { useState } from "react";
 import type { CreateTaskInput, UpdateTaskInput } from "../types";
+import { DatePicker } from "@/components/ui/date-picker";
 
 function toDateInputValue(iso?: string): string {
   if (!iso?.trim()) return "";
@@ -143,11 +144,9 @@ export function TaskForm({
       </div>
       <div>
         <label className="text-sm font-medium text-foreground">Due Date</label>
-        <input
-          type="date"
+        <DatePicker
           value={formData.dueDate}
-          onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-          className="mt-1 w-full rounded-md border border-border px-3 py-2"
+          onChange={(value) => setFormData({ ...formData, dueDate: value })}
         />
       </div>
       {defaultGroupId && memberOptions && memberOptions.length > 0 && (

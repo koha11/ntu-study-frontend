@@ -24,7 +24,7 @@ export function RatingForm({ groupId, roundStartedAt, entries }: RatingFormProps
       }
       return next;
     });
-  }, [entriesKey]);
+  }, [entries, entriesKey]);
 
   const handleSaveAll = async () => {
     for (const e of entries) {
