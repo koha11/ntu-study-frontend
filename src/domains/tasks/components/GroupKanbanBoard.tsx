@@ -26,7 +26,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { TaskForm, type TaskFormMemberOption } from "./TaskForm";
 
 const COLUMNS: { id: TaskStatus; label: string }[] = [
@@ -400,6 +403,9 @@ export function GroupKanbanBoard({
     () => new Map(),
   );
 
+  const [rejectionTask, setRejectionTask] = React.useState<Task | null>(null);
+  const [rejectionComment, setRejectionComment] = React.useState("");
+
   // Auto-clear optimistic overrides once server data confirms the new status.
   React.useEffect(() => {
     setOptimisticStatuses((prev) => {
@@ -455,31 +461,110 @@ export function GroupKanbanBoard({
         return;
       }
 
-      setOptimisticStatuses((prev) => new Map(prev).set(task.id, newStatus));
-
-      const onError = (err: unknown) => {
+      const makeOnError = (taskId: string) => (err: unknown) => {
         setOptimisticStatuses((prev) => {
           const next = new Map(prev);
-          next.delete(task.id);
+          next.delete(taskId);
           return next;
         });
         toast.error(err instanceof Error ? err.message : "Failed to update task status");
       };
 
-      if (newStatus === "done" || newStatus === "failed") {
-        approveTask({ id: task.id, input: { status: newStatus } }, { onError });
+      if (newStatus === "failed") {
+        // Show rejection dialog — optimistic update deferred until leader confirms
+        setRejectionTask(task);
+        setRejectionComment("");
+        return;
+      }
+
+      setOptimisticStatuses((prev) => new Map(prev).set(task.id, newStatus));
+
+      if (newStatus === "done") {
+        approveTask({ id: task.id, input: { status: "done" } }, { onError: makeOnError(task.id) });
         return;
       }
       if (newStatus === "pending_review") {
-        submitTask(task.id, { onError });
+        submitTask(task.id, { onError: makeOnError(task.id) });
         return;
       }
-      updateStatus({ id: task.id, status: newStatus }, { onError });
+      updateStatus({ id: task.id, status: newStatus }, { onError: makeOnError(task.id) });
     },
-    [tasks, isLeader, updateStatus, submitTask, approveTask],
+    [tasks, isLeader, updateStatus, submitTask, approveTask, setRejectionTask, setRejectionComment],
   );
 
+  function handleRejectConfirm() {
+    if (!rejectionTask || !rejectionComment.trim()) return;
+    const task = rejectionTask;
+    const comment = rejectionComment.trim();
+    setRejectionTask(null);
+    setRejectionComment("");
+    setOptimisticStatuses((prev) => new Map(prev).set(task.id, "failed"));
+    const onError = (err: unknown) => {
+      setOptimisticStatuses((prev) => {
+        const next = new Map(prev);
+        next.delete(task.id);
+        return next;
+      });
+      toast.error(err instanceof Error ? err.message : "Failed to update task status");
+    };
+    approveTask({ id: task.id, input: { status: "failed", comment } }, { onError });
+  }
+
   return (
+    <>
+    <Dialog
+      open={rejectionTask !== null}
+      onOpenChange={(open) => {
+        if (!open) {
+          setRejectionTask(null);
+          setRejectionComment("");
+        }
+      }}
+    >
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Reject task</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground">
+            Provide a reason for rejecting{" "}
+            <span className="font-medium text-foreground">
+              &ldquo;{rejectionTask?.title}&rdquo;
+            </span>
+            . This will be included in the notification sent to the assignee.
+          </p>
+          <Label htmlFor="rejection-comment" className="sr-only">
+            Rejection reason
+          </Label>
+          <Textarea
+            id="rejection-comment"
+            placeholder="Enter rejection reason…"
+            rows={3}
+            value={rejectionComment}
+            onChange={(e) => setRejectionComment(e.target.value)}
+            className="resize-none"
+          />
+        </div>
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setRejectionTask(null);
+              setRejectionComment("");
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            disabled={!rejectionComment.trim()}
+            onClick={handleRejectConfirm}
+          >
+            Reject
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <div className="flex gap-3 overflow-x-auto pb-2">
         {COLUMNS.map((col) => {
@@ -516,5 +601,6 @@ export function GroupKanbanBoard({
         })}
       </div>
     </DndContext>
+    </>
   );
 }
