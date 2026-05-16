@@ -10,6 +10,7 @@ import {
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { CornerDownRight, GripVertical, Layers, Pencil, Plus } from "lucide-react";
+import { toast } from "sonner";
 import type { Task, TaskStatus } from "../types";
 import {
   useUpdateTaskStatusMutation,
@@ -389,13 +390,42 @@ export function GroupKanbanBoard({
   defaultAssigneeId,
   currentUserId,
 }: GroupKanbanBoardProps) {
-  const { mutateAsync: updateStatus } = useUpdateTaskStatusMutation();
-  const { mutateAsync: submitTask } = useSubmitTaskMutation();
-  const { mutateAsync: approveTask } = useApproveTaskMutation();
+  const { mutate: updateStatus } = useUpdateTaskStatusMutation();
+  const { mutate: submitTask } = useSubmitTaskMutation();
+  const { mutate: approveTask } = useApproveTaskMutation();
 
   const contextLabel = groupName.trim() || "Group";
 
-  const flatTasks = React.useMemo(() => flattenTasksForBoard(tasks), [tasks]);
+  const [optimisticStatuses, setOptimisticStatuses] = React.useState<Map<string, TaskStatus>>(
+    () => new Map(),
+  );
+
+  // Auto-clear optimistic overrides once server data confirms the new status.
+  React.useEffect(() => {
+    setOptimisticStatuses((prev) => {
+      if (prev.size === 0) return prev;
+      const flat = flattenTasksForBoard(tasks);
+      const next = new Map(prev);
+      let changed = false;
+      for (const [id, status] of prev) {
+        const serverTask = flat.find((t) => t.id === id);
+        if (serverTask?.status === status) {
+          next.delete(id);
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [tasks]);
+
+  const flatTasks = React.useMemo(() => {
+    const flat = flattenTasksForBoard(tasks);
+    if (optimisticStatuses.size === 0) return flat;
+    return flat.map((t) => {
+      const override = optimisticStatuses.get(t.id);
+      return override !== undefined ? { ...t, status: override } : t;
+    });
+  }, [tasks, optimisticStatuses]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -404,7 +434,7 @@ export function GroupKanbanBoard({
   );
 
   const handleDragEnd = React.useCallback(
-    async (event: DragEndEvent) => {
+    (event: DragEndEvent) => {
       const { active, over } = event;
       if (!over) return;
 
@@ -417,23 +447,34 @@ export function GroupKanbanBoard({
 
       if (newStatus === "done" || newStatus === "failed") {
         if (!isLeader || task.status !== "pending_review") return;
-        await approveTask({ id: task.id, input: { status: newStatus } });
-        return;
-      }
-
-      if (newStatus === "pending_review") {
+      } else if (newStatus === "pending_review") {
         if (task.status !== "in_progress") return;
-        await submitTask(task.id);
+      } else if (task.status === "pending_review") {
+        if (!isLeader) return;
+      } else if (task.status === "done") {
         return;
       }
 
-      if (task.status === "pending_review" && (newStatus === "todo" || newStatus === "in_progress")) {
-        if (!isLeader) return;
+      setOptimisticStatuses((prev) => new Map(prev).set(task.id, newStatus));
+
+      const onError = (err: unknown) => {
+        setOptimisticStatuses((prev) => {
+          const next = new Map(prev);
+          next.delete(task.id);
+          return next;
+        });
+        toast.error(err instanceof Error ? err.message : "Failed to update task status");
+      };
+
+      if (newStatus === "done" || newStatus === "failed") {
+        approveTask({ id: task.id, input: { status: newStatus } }, { onError });
+        return;
       }
-
-      if (task.status === "done") return;
-
-      await updateStatus({ id: task.id, status: newStatus });
+      if (newStatus === "pending_review") {
+        submitTask(task.id, { onError });
+        return;
+      }
+      updateStatus({ id: task.id, status: newStatus }, { onError });
     },
     [tasks, isLeader, updateStatus, submitTask, approveTask],
   );
