@@ -244,8 +244,8 @@
     "created": "Đã tạo",
     "membersCount": "thành viên",
     "groupNotFound": "Không tìm thấy nhóm",
-    "backToGroups": "← Quay lại nhóm",
-    "allGroups": "← Tất cả nhóm",
+    "backToGroups": "Quay lại nhóm",
+    "allGroups": "Tất cả nhóm",
     "loadingGroup": "Đang tải nhóm...",
     "locked": "đã khóa",
     "tabs": {
@@ -548,7 +548,7 @@
       "invalid_status": "Lời mời này không còn hợp lệ.",
       "default": "Lời mời này không thể sử dụng."
     },
-    "home": "← Trang chủ",
+    "home": "Trang chủ",
     "title": "Lời mời nhóm",
     "joinGroup": "Tham gia {{groupName}}",
     "invitedEmail": "Email được mời:",

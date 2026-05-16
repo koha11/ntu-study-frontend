@@ -244,8 +244,8 @@
     "created": "Created",
     "membersCount": "members",
     "groupNotFound": "Group not found",
-    "backToGroups": "← Back to groups",
-    "allGroups": "← All groups",
+    "backToGroups": "Back to groups",
+    "allGroups": "All groups",
     "loadingGroup": "Loading group...",
     "locked": "locked",
     "tabs": {
@@ -548,7 +548,7 @@
       "invalid_status": "This invitation is no longer valid.",
       "default": "This invitation cannot be used."
     },
-    "home": "← Home",
+    "home": "Home",
     "title": "Group invitation",
     "joinGroup": "Join {{groupName}}",
     "invitedEmail": "Invited email:",
