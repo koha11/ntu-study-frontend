@@ -14,13 +14,13 @@ export function GroupCalendarDayHeader({ date }: HeaderProps) {
 
   return (
     <div className="flex w-full max-w-full flex-col items-center justify-center gap-0.5 px-0.5 pt-0.5 pb-1.5">
-      <span className="text-[10px] font-medium uppercase leading-tight tracking-wide text-[#70757a] sm:text-[11px]">
+      <span className="text-[10px] font-medium uppercase leading-tight tracking-wide text-[#70757a] dark:text-[#94a3b8] sm:text-[11px]">
         {weekday}
       </span>
       <span
         className={cn(
           "flex size-8 shrink-0 items-center justify-center rounded-full text-base font-normal tabular-nums leading-none sm:size-9 sm:text-lg",
-          isToday ? "bg-[#1a73e8] text-white shadow-sm" : "text-[#3c4043]",
+          isToday ? "bg-[#1a73e8] text-white shadow-sm" : "text-[#3c4043] dark:text-[#e2e8f0]",
         )}
       >
         {dom}

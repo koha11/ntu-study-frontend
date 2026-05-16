@@ -47,7 +47,7 @@ export function GroupCalendarToolbar({
   const title = React.useMemo(() => formatToolbarRange(date, view), [date, view]);
 
   return (
-    <div className="gcal-toolbar flex flex-wrap items-center justify-between gap-3 border-b border-[#dadce0] bg-white px-3 py-2.5 sm:px-4">
+    <div className="gcal-toolbar flex flex-wrap items-center justify-between gap-3 border-b border-[#dadce0] bg-white px-3 py-2.5 dark:border-[#334155] dark:bg-[#1e2028] sm:px-4">
       <div className="flex min-w-0 flex-wrap items-center gap-1 sm:gap-2">
         <Button
           type="button"
@@ -56,6 +56,7 @@ export function GroupCalendarToolbar({
           className={cn(
             "h-9 rounded-full border-[#dadce0] px-4 text-sm font-medium text-[#5f6368]",
             "bg-white hover:bg-[#f1f3f4]",
+            "dark:border-[#334155] dark:bg-[#1e2028] dark:text-[#94a3b8] dark:hover:bg-[#293548]",
           )}
           onClick={() => onNavigate("TODAY")}
         >
@@ -66,7 +67,7 @@ export function GroupCalendarToolbar({
             type="button"
             variant="ghost"
             size="icon"
-            className="h-9 w-9 shrink-0 rounded-full text-[#5f6368] hover:bg-[#f1f3f4]"
+            className="h-9 w-9 shrink-0 rounded-full text-[#5f6368] hover:bg-[#f1f3f4] dark:text-[#94a3b8] dark:hover:bg-[#293548]"
             aria-label="Previous"
             onClick={() => onNavigate("PREV")}
           >
@@ -76,14 +77,14 @@ export function GroupCalendarToolbar({
             type="button"
             variant="ghost"
             size="icon"
-            className="h-9 w-9 shrink-0 rounded-full text-[#5f6368] hover:bg-[#f1f3f4]"
+            className="h-9 w-9 shrink-0 rounded-full text-[#5f6368] hover:bg-[#f1f3f4] dark:text-[#94a3b8] dark:hover:bg-[#293548]"
             aria-label="Next"
             onClick={() => onNavigate("NEXT")}
           >
             <ChevronRight className="h-5 w-5" />
           </Button>
         </div>
-        <h2 className="min-w-0 truncate text-lg font-normal tracking-tight text-[#3c4043] sm:text-[22px] sm:leading-7">
+        <h2 className="min-w-0 truncate text-lg font-normal tracking-tight text-[#3c4043] dark:text-[#e2e8f0] sm:text-[22px] sm:leading-7">
           {title}
         </h2>
       </div>
@@ -93,6 +94,7 @@ export function GroupCalendarToolbar({
           className={cn(
             "h-9 w-[110px] rounded-lg border-[#dadce0] bg-white text-sm font-medium text-[#3c4043]",
             "hover:bg-[#f8f9fa]",
+            "dark:border-[#334155] dark:bg-[#1e2028] dark:text-[#e2e8f0] dark:hover:bg-[#293548]",
           )}
         >
           <SelectValue />

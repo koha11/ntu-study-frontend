@@ -13,7 +13,7 @@ export function GroupTimeGutterHeader() {
     m === 0 ? `GMT${sign}${h}` : `GMT${sign}${h}:${String(m).padStart(2, "0")}`;
 
   return (
-    <div className="flex min-h-[84px] items-end justify-center self-stretch pb-2 text-[10px] font-medium leading-tight text-[#70757a]">
+    <div className="flex min-h-[84px] items-end justify-center self-stretch pb-2 text-[10px] font-medium leading-tight text-[#70757a] dark:text-[#94a3b8]">
       {label}
     </div>
   );

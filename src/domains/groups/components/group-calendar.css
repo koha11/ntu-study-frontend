@@ -15,6 +15,8 @@
   --gcal-today-column: #e8f0fe;
   --gcal-slot-hover: rgba(26, 115, 232, 0.05);
   --gcal-selection: rgba(26, 115, 232, 0.18);
+  --gcal-off-range-bg: #f8f9fa;
+  --gcal-shadow: 0 1px 2px rgba(60, 64, 67, 0.08), 0 2px 6px rgba(60, 64, 67, 0.06);
 
   box-sizing: border-box;
   width: 100%;
@@ -24,9 +26,7 @@
   color: var(--gcal-text);
   border-radius: 12px;
   border: 1px solid var(--gcal-border);
-  box-shadow:
-    0 1px 2px rgba(60, 64, 67, 0.08),
-    0 2px 6px rgba(60, 64, 67, 0.06);
+  box-shadow: var(--gcal-shadow);
   font-family:
     "Google Sans",
     Roboto,
@@ -37,6 +37,23 @@
     sans-serif;
   /* Let the inner scroll area handle overflow; clipping hid grid + headers */
   overflow: visible;
+}
+
+/* Dark mode overrides — matches the app's dark-first strategy (:root:not(.light)) */
+:root:not(.light) .gcal-skin {
+  --gcal-bg: #1e2028;
+  --gcal-surface: #1e2028;
+  --gcal-text: #e2e8f0;
+  --gcal-text-secondary: #94a3b8;
+  --gcal-border: #334155;
+  --gcal-border-subtle: #293548;
+  --gcal-blue: #4d90fe;
+  --gcal-blue-hover: #6ba3fe;
+  --gcal-today-column: rgba(77, 144, 254, 0.12);
+  --gcal-slot-hover: rgba(77, 144, 254, 0.07);
+  --gcal-selection: rgba(77, 144, 254, 0.22);
+  --gcal-off-range-bg: #171a22;
+  --gcal-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .gcal-skin *,
@@ -177,7 +194,7 @@
 }
 
 .gcal-skin .rbc-off-range-bg {
-  background: #f8f9fa;
+  background: var(--gcal-off-range-bg);
 }
 
 .gcal-skin .rbc-current-time-indicator {
