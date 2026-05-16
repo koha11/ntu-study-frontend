@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Bell, Eye, Globe, Loader2, LogOut, User as UserIcon } from "lucide-react";
+import { Bell, Eye, Loader2, LogOut, User as UserIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { useLogout, useCurrentUser } from "@/domains/auth";
@@ -32,7 +32,7 @@ function initials(name: string): string {
 const BELL_PREVIEW_LIMIT = 8;
 
 export function TopBar() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const { data: user } = useCurrentUser();
@@ -71,25 +71,9 @@ export function TopBar() {
     }
   }
 
-  const toggleLanguage = () => {
-    const next = i18n.language === "vi" ? "en" : "vi";
-    void i18n.changeLanguage(next);
-  };
-
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-end gap-2 border-b border-border bg-background/70 px-4 backdrop-blur-xl md:px-6">
       <ThemeToggle />
-
-      {/* Language switcher */}
-      <button
-        type="button"
-        onClick={toggleLanguage}
-        className="flex h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-        aria-label={t("lang.toggle")}
-      >
-        <Globe className="h-3.5 w-3.5" />
-        {i18n.language === "vi" ? "VI" : "EN"}
-      </button>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
