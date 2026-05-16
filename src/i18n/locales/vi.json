@@ -332,6 +332,26 @@
       "opening": "Đang mở…",
       "open": "Mở đánh giá"
     },
+    "evaluationRoundCard": {
+      "roundOpened": "Vòng mở {{date}}",
+      "deadline": "Hạn chót: {{date}}",
+      "statusClosed": "· Đã đóng",
+      "statusOpen": "· Đang mở",
+      "statusPastDeadline": "· Quá hạn",
+      "progress": "Tiến độ: {{rated}} / {{total}} đánh giá đã gửi (tất cả thành viên)",
+      "closing": "Đang đóng…",
+      "closeRound": "Đóng vòng",
+      "aggregatedResults": "Kết quả tổng hợp",
+      "aggregatedResultsDesc": "Điểm trung bình ẩn danh; điểm cá nhân không được hiển thị.",
+      "loadingResults": "Đang tải kết quả…",
+      "cannotViewResults": "Bạn không thể xem kết quả này.",
+      "couldNotLoadResults": "Không thể tải kết quả.",
+      "yourRatings": "Đánh giá của bạn",
+      "yourRatingsDesc": "Đánh giá từng thành viên từ 0 (không có) đến 10 (xuất sắc). Bạn có thể cập nhật đến hạn chót.",
+      "loading": "Đang tải…",
+      "couldNotLoadRatingForm": "Không thể tải biểu mẫu đánh giá.",
+      "deadlinePassed": "Hạn chót đã qua; đánh giá không thể thay đổi nữa. Trưởng nhóm có thể đóng vòng này để công bố điểm trung bình."
+    },
     "sharedFlashcards": {
       "title": "Bộ thẻ học chung",
       "subtitle": "Bộ thẻ học được chia sẻ bởi thành viên nhóm. Chia sẻ bộ thẻ của bạn để người khác học.",

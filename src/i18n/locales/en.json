@@ -332,6 +332,26 @@
       "opening": "Opening…",
       "open": "Open evaluation"
     },
+    "evaluationRoundCard": {
+      "roundOpened": "Round opened {{date}}",
+      "deadline": "Deadline: {{date}}",
+      "statusClosed": "· Closed",
+      "statusOpen": "· Open",
+      "statusPastDeadline": "· Past deadline",
+      "progress": "Progress: {{rated}} / {{total}} ratings submitted (all members)",
+      "closing": "Closing…",
+      "closeRound": "Close round",
+      "aggregatedResults": "Aggregated results",
+      "aggregatedResultsDesc": "Averages are anonymous; individual scores are not shown.",
+      "loadingResults": "Loading results…",
+      "cannotViewResults": "You cannot view these results.",
+      "couldNotLoadResults": "Could not load results.",
+      "yourRatings": "Your ratings",
+      "yourRatingsDesc": "Rate each member from 0 (none) to 10 (outstanding). You can update until the deadline.",
+      "loading": "Loading…",
+      "couldNotLoadRatingForm": "Could not load your rating form.",
+      "deadlinePassed": "The deadline has passed; ratings can no longer be changed. The leader can close this round to publish averages."
+    },
     "sharedFlashcards": {
       "title": "Shared flashcard sets",
       "subtitle": "Flashcard sets shared by group members. Share your own sets for others to study.",
