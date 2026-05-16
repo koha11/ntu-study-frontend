@@ -1,19 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  GraduationCap,
   Users,
   CheckSquare,
   Sparkles,
   TrendingUp,
   ShieldCheck,
   ArrowRight,
-  Twitter,
-  Github,
+  GraduationCap,
+  XIcon,
+  GithubIcon,
   Mail,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import ntuLogo from "@/assets/ntu_logo.png";
+import ntuLongLogo from "@/assets/ntu_long_logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -100,10 +102,12 @@ function LandingPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 md:px-6">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-primary shadow-glow">
-              <GraduationCap className="h-5 w-5 text-primary-foreground" />
-            </div>
+          <Link to="/" className="flex items-center gap-2.5">
+            <img
+              src={ntuLogo}
+              alt="Trường Đại học Nha Trang"
+              className="h-9 w-9 shrink-0 rounded-full object-contain"
+            />
             <div className="leading-tight">
               <div className="text-sm font-semibold tracking-tight">NTU Study</div>
               <div className="text-[10px] text-muted-foreground">{t("landing.tagline")}</div>
@@ -141,36 +145,135 @@ function LandingPage() {
           aria-hidden
         />
         <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 md:px-6 md:pb-28 md:pt-24">
-          <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-primary-glow">
-              <Sparkles className="h-3 w-3" /> {t("landing.badge")}
-            </span>
-            <h1 className="mt-6 text-4xl font-bold tracking-tight md:text-6xl">
-              {t("landing.hero.title1")}{" "}
-              <span className="bg-gradient-primary bg-clip-text text-transparent">
-                {t("landing.hero.title2")}
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+
+            {/* Left: text content */}
+            <div className="text-center lg:text-left">
+              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-primary-glow">
+                <Sparkles className="h-3 w-3" /> {t("landing.badge")}
               </span>
-            </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground md:text-lg">
-              {t("landing.hero.subtitle")}
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Link to="/login">
-                <Button className="h-12 bg-gradient-primary px-6 text-sm shadow-glow">
-                  {t("landing.hero.continueWithGoogle")} <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-              <a
-                href="#features"
-                className="inline-flex h-12 items-center rounded-lg border border-border bg-card px-5 text-sm font-medium transition-colors hover:bg-accent"
+              <h1 className="mt-6 text-4xl font-bold tracking-tight md:text-5xl">
+                {t("landing.hero.title1")}{" "}
+                <span className="bg-gradient-primary bg-clip-text text-transparent">
+                  {t("landing.hero.title2")}
+                </span>
+              </h1>
+              <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground lg:mx-0 md:text-lg">
+                {t("landing.hero.subtitle")}
+              </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+                <Link to="/login">
+                  <Button className="h-12 bg-gradient-primary px-6 text-sm shadow-glow">
+                    {t("landing.hero.continueWithGoogle")} <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <a
+                  href="#features"
+                  className="inline-flex h-12 items-center rounded-lg border border-border bg-card px-5 text-sm font-medium transition-colors hover:bg-accent"
+                >
+                  {t("landing.hero.seeHowItWorks")}
+                </a>
+              </div>
+
+              {/* NTU trust badge */}
+              <div className="mt-8 flex items-center justify-center gap-3 lg:justify-start">
+                <div className="h-px flex-1 bg-border lg:max-w-[60px]" />
+                <img
+                  src={ntuLongLogo}
+                  alt="Trường Đại học Nha Trang"
+                  className="h-7 object-contain opacity-70 dark:brightness-0 dark:invert dark:opacity-50"
+                />
+                <div className="h-px flex-1 bg-border lg:max-w-[60px]" />
+              </div>
+            </div>
+
+            {/* Right: app mockup */}
+            <div className="relative hidden lg:flex items-center justify-center">
+              {/* Ambient glow */}
+              <div
+                className="pointer-events-none absolute inset-0 -z-10 blur-3xl"
+                style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, oklch(0.40 0.15 259 / 0.18), transparent 75%)" }}
+                aria-hidden
+              />
+
+              {/* Browser frame */}
+              <div
+                className="w-full max-w-[480px] overflow-hidden rounded-2xl border border-border shadow-2xl"
+                style={{ transform: "perspective(1200px) rotateY(-6deg) rotateX(2deg)" }}
               >
-                {t("landing.hero.seeHowItWorks")}
-              </a>
+                {/* Window chrome */}
+                <div className="flex items-center gap-1.5 border-b border-border bg-card/90 px-4 py-3">
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
+                  <div className="mx-3 flex h-5 flex-1 items-center rounded-md bg-muted/40 px-2">
+                    <span className="text-[9px] text-muted-foreground">ntu-study.app/dashboard</span>
+                  </div>
+                </div>
+
+                {/* Dashboard body */}
+                <div className="flex h-[272px] bg-background/95">
+                  {/* Sidebar */}
+                  <div className="flex w-12 shrink-0 flex-col items-center gap-3 border-r border-border bg-card/60 py-4">
+                    <div className="h-7 w-7 rounded-lg bg-gradient-primary shadow-glow" />
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="h-7 w-7 rounded-lg bg-muted" />
+                    ))}
+                  </div>
+
+                  {/* Main content */}
+                  <div className="flex-1 overflow-hidden p-4">
+                    {/* Greeting */}
+                    <div className="mb-3 flex items-center justify-between">
+                      <div>
+                        <div className="text-[11px] font-semibold text-foreground">Xin chào! 👋</div>
+                        <div className="text-[9px] text-muted-foreground">3 nhiệm vụ đến hạn hôm nay</div>
+                      </div>
+                      <div className="h-6 w-6 rounded-full bg-gradient-primary" />
+                    </div>
+
+                    {/* Stat cards */}
+                    <div className="mb-3 grid grid-cols-3 gap-2">
+                      {[
+                        { label: "Nhóm", value: "5" },
+                        { label: "Nhiệm vụ", value: "12" },
+                        { label: "Flashcard", value: "847" },
+                      ].map((stat, i) => (
+                        <div key={stat.label} className="rounded-lg border border-border bg-card/60 p-2">
+                          <div className={`mb-1 h-1 w-5 rounded-full ${i === 0 ? "bg-gradient-primary" : i === 1 ? "bg-success" : "bg-primary/60"}`} />
+                          <div className="text-[13px] font-bold text-foreground">{stat.value}</div>
+                          <div className="text-[8px] text-muted-foreground">{stat.label}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Group list */}
+                    <div className="space-y-1.5">
+                      {[
+                        { name: "Nhóm Lập trình Web", tasks: 4 },
+                        { name: "CLB Đọc sách Toán", tasks: 2 },
+                        { name: "Đồ án tốt nghiệp", tasks: 7 },
+                      ].map((group, i) => (
+                        <div key={group.name} className="flex items-center gap-2 rounded-lg border border-border bg-card/60 p-2">
+                          <div className={`h-6 w-6 shrink-0 rounded-md ${i === 0 ? "bg-gradient-primary" : i === 1 ? "bg-success/70" : "bg-warning/70"}`} />
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate text-[9px] font-medium text-foreground">{group.name}</div>
+                            <div className="text-[8px] text-muted-foreground">{group.tasks} nhiệm vụ</div>
+                          </div>
+                          <div className="shrink-0 rounded-full bg-primary/15 px-1.5 py-0.5 text-[7px] font-medium text-primary">
+                            Active
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-4">
+          {/* Stats — full width below the grid */}
+          <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4">
             {stats.map((s) => (
               <div
                 key={s.label}
@@ -287,10 +390,12 @@ function LandingPage() {
       <footer className="border-t border-border/60 bg-card/30">
         <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary shadow-glow">
-                <GraduationCap className="h-4 w-4 text-primary-foreground" />
-              </div>
+            <div className="flex items-center gap-2.5">
+              <img
+                src={ntuLogo}
+                alt="Trường Đại học Nha Trang"
+                className="h-8 w-8 shrink-0 rounded-full object-contain"
+              />
               <div>
                 <div className="text-sm font-semibold">NTU Study</div>
                 <div className="text-[11px] text-muted-foreground">
@@ -320,14 +425,14 @@ function LandingPage() {
                 aria-label="Twitter"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
               >
-                <Twitter className="h-4 w-4" />
+                <XIcon className="h-4 w-4" />
               </a>
               <a
                 href="#"
                 aria-label="GitHub"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
               >
-                <Github className="h-4 w-4" />
+                <GithubIcon className="h-4 w-4" />
               </a>
             </div>
           </div>

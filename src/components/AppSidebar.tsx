@@ -6,11 +6,11 @@ import {
   Sparkles,
   Bell,
   Settings,
-  GraduationCap,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { DriveQuotaCard } from "@/components/DriveQuotaCard";
+import ntuLongLogo from "@/assets/ntu_long_logo.png";
 
 const NAV_ITEMS: { key: string; to: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
   { key: "sidebar.dashboard", to: "/dashboard", icon: LayoutDashboard, exact: true },
@@ -28,16 +28,8 @@ export function AppSidebar() {
 
   return (
     <aside className="hidden md:flex h-screen w-60 shrink-0 sticky top-0 flex-col border-r border-sidebar-border bg-sidebar/80 backdrop-blur-xl">
-      <div className="flex items-center gap-2 px-5 h-16 border-b border-sidebar-border">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-primary shadow-glow">
-          <GraduationCap className="h-5 w-5 text-primary-foreground" />
-        </div>
-        <div>
-          <div className="text-sm font-semibold tracking-tight text-sidebar-foreground">
-            NTU Study
-          </div>
-          <div className="text-[10px] text-muted-foreground">{t("sidebar.tagline")}</div>
-        </div>
+      <div className="flex items-center px-4 h-16 border-b border-sidebar-border">
+        <img src={ntuLongLogo} alt="NTU Study" className="h-10 w-auto object-contain" />
       </div>
 
       <nav className="flex-1 space-y-1 p-3">

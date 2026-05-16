@@ -1,7 +1,9 @@
 import { createFileRoute, Link, Outlet, redirect, useRouterState } from "@tanstack/react-router";
 import { z } from "zod";
-import { GraduationCap, ArrowLeft, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import ntuLongLogo from "@/assets/ntu_long_logo.png";
+import ntuLogo from "@/assets/ntu_logo.png";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { normalizeSafeAppPath } from "@/domains/auth/post-login-redirect";
@@ -49,14 +51,8 @@ function LoginPage() {
       {/* Branded header */}
       <header className="border-b border-border/60 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 md:px-6">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-primary shadow-glow">
-              <GraduationCap className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <div className="leading-tight">
-              <div className="text-sm font-semibold tracking-tight">NTU Study</div>
-              <div className="text-[10px] text-muted-foreground">{t("login.tagline")}</div>
-            </div>
+          <Link to="/" className="flex items-center">
+            <img src={ntuLongLogo} alt="NTU Study" className="h-10 w-auto object-contain" />
           </Link>
 
           <div className="ml-auto flex items-center gap-2">
@@ -82,9 +78,7 @@ function LoginPage() {
 
         <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-elegant">
           <div className="text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
-              <GraduationCap className="h-6 w-6 text-primary-foreground" />
-            </div>
+            <img src={ntuLogo} alt="Nha Trang University" className="mx-auto h-16 w-16 object-contain" />
             <h1 className="mt-5 text-2xl font-semibold tracking-tight">{t("login.welcomeBack")}</h1>
             <p className="mt-2 text-sm text-muted-foreground">{t("login.signInToContinue")}</p>
           </div>
