@@ -27,7 +27,7 @@ export function AppSidebar() {
   const path = location.pathname;
 
   return (
-    <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar/80 backdrop-blur-xl">
+    <aside className="hidden md:flex h-screen w-60 shrink-0 sticky top-0 flex-col border-r border-sidebar-border bg-sidebar/80 backdrop-blur-xl">
       <div className="flex items-center gap-2 px-5 h-16 border-b border-sidebar-border">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-primary shadow-glow">
           <GraduationCap className="h-5 w-5 text-primary-foreground" />
