@@ -215,6 +215,8 @@
     "submitForReview": "Submit for review",
     "deleteTask": "Delete",
     "deleteSubtask": "Delete subtask",
+    "viewCompleted": "View {{count}} completed",
+    "completedTasksTitle": "Completed tasks",
     "filters": {
       "all": "All",
       "todo": "To do",

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronRight, Plus, Trash2, ListTodo, CalendarIcon, X } from "lucide-react";
+import { ChevronRight, Plus, Trash2, ListTodo, CalendarIcon, X, CheckCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
 import {
@@ -16,6 +16,12 @@ import { useGroupsList } from "@/domains/groups";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import type { TaskStatus } from "../types";
 
 function toDateOnlyString(d: Date): string {
@@ -60,8 +66,13 @@ export function TasksPage() {
   const [newTaskTitle, setNewTaskTitle] = React.useState("");
   const [newTaskDate, setNewTaskDate] = React.useState<Date | undefined>();
   const [subtaskDrafts, setSubtaskDrafts] = React.useState<Record<string, string>>({});
+  const [showDoneModal, setShowDoneModal] = React.useState(false);
+  const [editingTaskId, setEditingTaskId] = React.useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = React.useState("");
 
-  const openPersonalCount = personalTasks.filter((t) => t.status === "todo").length;
+  const activeTasks = personalTasks.filter((t) => t.status !== "done");
+  const doneTasks = personalTasks.filter((t) => t.status === "done");
+  const openPersonalCount = activeTasks.filter((t) => t.status === "todo").length;
 
   const handleAddPersonalTask = (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,6 +103,23 @@ export function TasksPage() {
     if (!title) return;
     createTask({ title, parentTaskId: parentId });
     setSubtaskDrafts((prev) => ({ ...prev, [parentId]: "" }));
+  };
+
+  const startEditingTitle = (task: Task) => {
+    setEditingTaskId(task.id);
+    setEditingTitle(task.title);
+  };
+
+  const commitTitleEdit = (taskId: string, originalTitle: string) => {
+    const trimmed = editingTitle.trim();
+    if (trimmed && trimmed !== originalTitle) {
+      patchTask({ id: taskId, input: { title: trimmed } });
+    }
+    setEditingTaskId(null);
+  };
+
+  const cancelTitleEdit = () => {
+    setEditingTaskId(null);
   };
 
   const myTasks = groupTasks.filter((t) => filter === "all" || t.status === filter);
@@ -128,6 +156,17 @@ export function TasksPage() {
               </p>
             </div>
           </div>
+          {doneTasks.length > 0 && (
+            <button
+              type="button"
+              data-testid="view-completed-btn"
+              onClick={() => setShowDoneModal(true)}
+              className="flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground hover:border-primary hover:text-foreground"
+            >
+              <CheckCheck className="h-3.5 w-3.5" />
+              {t("tasks.viewCompleted", { count: doneTasks.length })}
+            </button>
+          )}
         </div>
 
         <form onSubmit={handleAddPersonalTask} className="mb-3 flex flex-wrap gap-2">
@@ -180,7 +219,7 @@ export function TasksPage() {
         </form>
 
         <ul className="space-y-3">
-          {personalTasks.map((task) => {
+          {activeTasks.map((task) => {
             const isDone = task.status === "done";
             const due = task.dueDate ? new Date(task.dueDate) : null;
             const { overdue, dueToday } = dueMeta(due, isDone);
@@ -197,14 +236,31 @@ export function TasksPage() {
                     onChange={() => togglePersonalDone(task)}
                     className="h-4 w-4 shrink-0 accent-primary"
                   />
-                  <span
-                    className={cn(
-                      "flex-1 text-sm",
-                      isDone ? "text-muted-foreground line-through" : "text-foreground",
-                    )}
-                  >
-                    {task.title}
-                  </span>
+                  {editingTaskId === task.id ? (
+                    <input
+                      autoFocus
+                      data-testid={`task-title-input-${task.id}`}
+                      value={editingTitle}
+                      onChange={(e) => setEditingTitle(e.target.value)}
+                      onBlur={() => commitTitleEdit(task.id, task.title)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") commitTitleEdit(task.id, task.title);
+                        if (e.key === "Escape") cancelTitleEdit();
+                      }}
+                      className="flex-1 rounded border border-primary bg-background px-1.5 py-0.5 text-sm outline-none"
+                    />
+                  ) : (
+                    <span
+                      data-testid={`task-title-${task.id}`}
+                      onClick={() => startEditingTitle(task)}
+                      className={cn(
+                        "flex-1 cursor-text text-sm",
+                        isDone ? "text-muted-foreground line-through" : "text-foreground",
+                      )}
+                    >
+                      {task.title}
+                    </span>
+                  )}
                   <Popover>
                     <PopoverTrigger asChild>
                       <button
@@ -317,7 +373,7 @@ export function TasksPage() {
               </li>
             );
           })}
-          {personalTasks.length === 0 && (
+          {activeTasks.length === 0 && (
             <li className="rounded-md border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
               {t("tasks.noPersonalTasks")}
             </li>
@@ -434,6 +490,62 @@ export function TasksPage() {
           </div>
         )}
       </div>
+
+      <Dialog open={showDoneModal} onOpenChange={setShowDoneModal}>
+        <DialogContent data-testid="completed-tasks-dialog" className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{t("tasks.completedTasksTitle")}</DialogTitle>
+          </DialogHeader>
+          <ul className="max-h-[60vh] space-y-2 overflow-y-auto">
+            {doneTasks.map((task) => {
+              const sortedSubs = [...(task.subtasks ?? [])].sort(
+                (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+              );
+              return (
+                <li
+                  key={task.id}
+                  className="rounded-md border border-border bg-background/40 p-2"
+                >
+                  <div className="group flex items-center gap-2 hover:bg-accent/30 rounded-md p-1">
+                    <input
+                      type="checkbox"
+                      checked
+                      data-testid={`completed-task-checkbox-${task.id}`}
+                      onChange={() => togglePersonalDone(task)}
+                      className="h-4 w-4 shrink-0 accent-primary"
+                    />
+                    <span className="flex-1 text-sm text-muted-foreground line-through">
+                      {task.title}
+                    </span>
+                    <button
+                      type="button"
+                      data-testid={`completed-task-delete-${task.id}`}
+                      onClick={() => removeTask(task.id)}
+                      className="rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
+                      aria-label={t("tasks.deleteTask")}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  {sortedSubs.length > 0 && (
+                    <ul className="mt-1 ml-6 space-y-0.5 border-l border-border pl-3">
+                      {sortedSubs.map((st) => (
+                        <li
+                          key={st.id}
+                          data-testid={`completed-subtask-${st.id}`}
+                          className="text-xs text-muted-foreground line-through py-0.5"
+                        >
+                          {st.title}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </DialogContent>
+      </Dialog>
     </AppShell>
   );
 }

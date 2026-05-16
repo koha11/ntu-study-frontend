@@ -215,6 +215,8 @@
     "submitForReview": "Gửi để xem xét",
     "deleteTask": "Xóa nhiệm vụ",
     "deleteSubtask": "Xóa nhiệm vụ con",
+    "viewCompleted": "Xem {{count}} đã hoàn thành",
+    "completedTasksTitle": "Nhiệm vụ đã hoàn thành",
     "filters": {
       "all": "Tất cả",
       "todo": "Cần làm",
