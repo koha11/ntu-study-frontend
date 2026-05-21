@@ -11,3 +11,4 @@ export { useInviteMember } from "./useInviteMember";
 export { useToggleMemberStatus } from "./useToggleMemberStatus";
 export { useRemoveMember } from "./useRemoveMember";
 export { useCreateGroupMeetEvent } from "./useCreateGroupMeetEvent";
+export { useCanvaPreview } from "./useCanvaPreview";

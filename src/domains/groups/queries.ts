@@ -17,6 +17,7 @@ import {
   createGroupMeetEvent,
   fetchGroupCalendarEvents,
   createGroupCalendarEvent,
+  fetchCanvaPreview,
 } from "./groups-api";
 import type {
   CreateGroupCalendarEventInput,
@@ -171,6 +172,21 @@ export const useRemoveMemberMutation = () => {
     },
   });
 };
+
+/**
+ * Query: Canva design preview (thumbnail + edit URL) for a group
+ */
+export const canvaPreviewQueryOptions = (groupId: string) =>
+  queryOptions({
+    queryKey: [...groupKeys.detail(groupId), "canva-preview"] as const,
+    queryFn: async () => {
+      const token = requireAccessToken();
+      return fetchCanvaPreview(groupId, token);
+    },
+    staleTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 15,
+    enabled: Boolean(groupId),
+  });
 
 /**
  * Mutation: Create Calendar event with Meet + invites (POST .../calendar/meet-event)

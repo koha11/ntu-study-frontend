@@ -214,7 +214,7 @@ export function GroupDetailPage() {
         </TabsContent>
 
         <TabsContent value="canva" className="mt-6">
-          <CanvaTab canvaFileUrl={group.canva_file_url} />
+          <CanvaTab groupId={groupId} hasDesign={Boolean(group.canva_design_id)} />
         </TabsContent>
 
         <TabsContent value="calendar" className="mt-6">

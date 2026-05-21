@@ -204,6 +204,22 @@ export async function fetchGroupCalendarEvents(
   return handleJson(res);
 }
 
+export interface CanvaPreview {
+  editUrl: string | null;
+  pages: { index: number; thumbnailUrl: string }[];
+}
+
+export async function fetchCanvaPreview(
+  groupId: string,
+  token: string,
+): Promise<CanvaPreview> {
+  const res = await fetch(
+    `${getApiBase()}/groups/${encodeURIComponent(groupId)}/canva-preview`,
+    { method: "GET", headers: bearerHeaders(token) },
+  );
+  return handleJson(res);
+}
+
 export async function createGroupCalendarEvent(
   groupId: string,
   input: CreateGroupCalendarEventInput,
