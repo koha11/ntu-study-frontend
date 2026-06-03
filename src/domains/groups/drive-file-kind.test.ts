@@ -39,4 +39,24 @@ describe("getDriveFileKindLabel", () => {
       ".xyz",
     );
   });
+
+  it("returns MIME tail when no file extension and MIME unknown", () => {
+    const result = getDriveFileKindLabel("application/octet-stream", "noextension");
+    expect(result).toBe("octet-stream");
+  });
+
+  it("truncates long MIME tail to 16 chars with ellipsis", () => {
+    const result = getDriveFileKindLabel("application/very-long-unknown-type-for-test", "file");
+    expect(result).toMatch(/…$/);
+    expect(result.length).toBeLessThanOrEqual(15);
+  });
+
+  it("uses filename extension when MIME is fully unknown", () => {
+    expect(getDriveFileKindLabel("unknown/type", "archive.tar")).toBe(".tar");
+  });
+
+  it("returns MIME when filename has no extension and MIME has no slash", () => {
+    const result = getDriveFileKindLabel("binarydata", "noext");
+    expect(result).toBe("binarydata");
+  });
 });

@@ -7,7 +7,7 @@ describe("GroupForm", () => {
   const onSubmit = vi.fn();
   const onCancel = vi.fn();
 
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => { vi.clearAllMocks(); });
 
   it("renders empty form with no initial data", () => {
     render(<GroupForm onSubmit={onSubmit} />);

@@ -50,12 +50,9 @@ const makeGroup = (id: string, name: string): GroupSummary => ({
   id,
   name,
   description: `Description for ${name}`,
-  status: "active",
   member_count: 3,
   leader_id: "u1",
-  tags: [],
   created_at: "2026-01-01T00:00:00.000Z",
-  updated_at: "2026-01-01T00:00:00.000Z",
 });
 
 describe("GroupsListPage", () => {

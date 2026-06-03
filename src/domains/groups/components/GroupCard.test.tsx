@@ -8,17 +8,14 @@ const makeGroup = (overrides: Partial<GroupSummary> = {}): GroupSummary => ({
   id: "g1",
   name: "Test Group",
   description: "A test group",
-  status: "active",
   member_count: 3,
   leader_id: "u1",
-  tags: [],
   created_at: "2026-01-01T00:00:00.000Z",
-  updated_at: "2026-01-01T00:00:00.000Z",
   ...overrides,
 });
 
 describe("GroupCard", () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => { vi.clearAllMocks(); });
 
   it("renders group name", () => {
     render(<GroupCard group={makeGroup()} />);

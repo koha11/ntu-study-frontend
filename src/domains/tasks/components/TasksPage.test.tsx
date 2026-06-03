@@ -15,6 +15,13 @@ vi.mock("@/components/AppShell", () => ({
   AppShell: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
+vi.mock("@tanstack/react-router", () => ({
+  Link: ({ children, to, params }: { children: React.ReactNode; to: string; params?: Record<string, string> }) => (
+    <a href={params ? `${to}/${params.groupId}` : to}>{children}</a>
+  ),
+  useNavigate: () => vi.fn(),
+}));
+
 vi.mock("@/domains/groups", () => ({
   useGroupsList: () => ({ data: [], isLoading: false }),
 }));
@@ -300,5 +307,162 @@ describe("TasksPage – inline title editing for personal tasks", () => {
 
     expect(screen.queryByTestId("task-title-input-task-1")).not.toBeInTheDocument();
     expect(screen.getByTestId("task-title-task-1")).toBeInTheDocument();
+  });
+});
+
+describe("TasksPage – loading state", () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it("shows loading indicator when personal tasks are loading", () => {
+    mockUseTasksList.mockImplementation((opts?: { assignedInGroups?: boolean }) => {
+      if (opts?.assignedInGroups) return { data: [], isLoading: false };
+      return { data: [], isLoading: true };
+    });
+    render(<TasksPage />);
+    expect(screen.getByText("tasks.loading")).toBeInTheDocument();
+  });
+
+  it("shows loading indicator when group tasks are loading", () => {
+    mockUseTasksList.mockImplementation((opts?: { assignedInGroups?: boolean }) => {
+      if (opts?.assignedInGroups) return { data: [], isLoading: true };
+      return { data: [], isLoading: false };
+    });
+    render(<TasksPage />);
+    expect(screen.getByText("tasks.loading")).toBeInTheDocument();
+  });
+});
+
+describe("TasksPage – add personal task", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    setupMocks([]);
+  });
+
+  it("calls createTask with title on form submit", () => {
+    render(<TasksPage />);
+    const input = screen.getByPlaceholderText("tasks.addPersonalTask");
+    fireEvent.change(input, { target: { value: "New Task" } });
+    fireEvent.submit(input.closest("form")!);
+    expect(mockCreateTask).toHaveBeenCalledWith({ title: "New Task", dueDate: undefined });
+  });
+
+  it("does not call createTask when title is empty", () => {
+    render(<TasksPage />);
+    const input = screen.getByPlaceholderText("tasks.addPersonalTask");
+    fireEvent.submit(input.closest("form")!);
+    expect(mockCreateTask).not.toHaveBeenCalled();
+  });
+
+  it("shows empty state when no active personal tasks", () => {
+    render(<TasksPage />);
+    expect(screen.getByText("tasks.noPersonalTasks")).toBeInTheDocument();
+  });
+});
+
+describe("TasksPage – toggle personal task done", () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it("calls updateTaskStatus with done when checking an active task", () => {
+    setupMocks([activeTask]);
+    render(<TasksPage />);
+    const checkbox = screen.getByRole("checkbox");
+    fireEvent.click(checkbox);
+    expect(mockUpdateTaskStatus).toHaveBeenCalledWith({ id: "task-1", status: "done" });
+  });
+});
+
+describe("TasksPage – add subtask", () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it("calls createTask with parentTaskId when subtask is submitted", () => {
+    setupMocks([activeTask]);
+    render(<TasksPage />);
+    const subtaskInput = screen.getByPlaceholderText("tasks.addSubtask");
+    fireEvent.change(subtaskInput, { target: { value: "Sub item" } });
+    fireEvent.submit(subtaskInput.closest("form")!);
+    expect(mockCreateTask).toHaveBeenCalledWith({ title: "Sub item", parentTaskId: "task-1" });
+  });
+
+  it("does not call createTask when subtask title is empty", () => {
+    setupMocks([activeTask]);
+    render(<TasksPage />);
+    const subtaskInput = screen.getByPlaceholderText("tasks.addSubtask");
+    fireEvent.submit(subtaskInput.closest("form")!);
+    expect(mockCreateTask).not.toHaveBeenCalled();
+  });
+});
+
+describe("TasksPage – group tasks and filters", () => {
+  const groupTask = makeTask({
+    id: "gt-1",
+    title: "Group Task One",
+    status: "todo",
+    groupId: "g1",
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseTasksList.mockImplementation((opts?: { assignedInGroups?: boolean }) => {
+      if (opts?.assignedInGroups) return { data: [groupTask], isLoading: false };
+      return { data: [], isLoading: false };
+    });
+  });
+
+  it("shows group tasks in the group section", () => {
+    render(<TasksPage />);
+    expect(screen.getByText("Group Task One")).toBeInTheDocument();
+  });
+
+  it("shows empty state text when filter matches no group tasks", () => {
+    render(<TasksPage />);
+    fireEvent.click(screen.getByText("tasks.filters.done"));
+    expect(screen.getByText("tasks.noTasksFilter")).toBeInTheDocument();
+  });
+
+  it("filters group tasks by status", () => {
+    render(<TasksPage />);
+    fireEvent.click(screen.getByText("tasks.filters.todo"));
+    expect(screen.getByText("Group Task One")).toBeInTheDocument();
+  });
+
+  it("calls updateTaskStatus with in_progress when start working is clicked", () => {
+    render(<TasksPage />);
+    fireEvent.click(screen.getByText("tasks.startWorking"));
+    expect(mockUpdateTaskStatus).toHaveBeenCalledWith({ id: "gt-1", status: "in_progress" });
+  });
+});
+
+describe("TasksPage – group task submit for review", () => {
+  const inProgressTask = makeTask({
+    id: "gt-2",
+    title: "In Progress Task",
+    status: "in_progress",
+    groupId: "g1",
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseTasksList.mockImplementation((opts?: { assignedInGroups?: boolean }) => {
+      if (opts?.assignedInGroups) return { data: [inProgressTask], isLoading: false };
+      return { data: [], isLoading: false };
+    });
+  });
+
+  it("calls submitTask when submit for review is clicked", () => {
+    render(<TasksPage />);
+    fireEvent.click(screen.getByText("tasks.submitForReview"));
+    expect(mockSubmitTask).toHaveBeenCalledWith("gt-2");
+  });
+});
+
+describe("TasksPage – delete personal task", () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it("calls removeTask with task id when delete button is clicked", () => {
+    setupMocks([activeTask]);
+    render(<TasksPage />);
+    const deleteBtn = screen.getByRole("button", { name: "tasks.deleteTask" });
+    fireEvent.click(deleteBtn);
+    expect(mockDeleteTask).toHaveBeenCalledWith("task-1");
   });
 });

@@ -6,6 +6,10 @@ import {
   setTokens,
   clearTokens,
   authHeaders,
+  setOAuthSession,
+  getOAuthVerifier,
+  getOAuthState,
+  clearOAuthSession,
 } from "./token-storage";
 
 describe("token-storage", () => {
@@ -52,5 +56,28 @@ describe("token-storage", () => {
   it("authHeaders omits Authorization without token", () => {
     clearTokens();
     expect(authHeaders()).toEqual({});
+  });
+
+  it("setOAuthSession stores verifier and state", () => {
+    setOAuthSession("verifier123", "state456");
+    expect(getOAuthVerifier()).toBe("verifier123");
+    expect(getOAuthState()).toBe("state456");
+  });
+
+  it("getOAuthVerifier returns null after clear", () => {
+    clearOAuthSession();
+    expect(getOAuthVerifier()).toBeNull();
+  });
+
+  it("getOAuthState returns null after clear", () => {
+    clearOAuthSession();
+    expect(getOAuthState()).toBeNull();
+  });
+
+  it("clearOAuthSession removes verifier and state", () => {
+    setOAuthSession("v", "s");
+    clearOAuthSession();
+    expect(getOAuthVerifier()).toBeNull();
+    expect(getOAuthState()).toBeNull();
   });
 });

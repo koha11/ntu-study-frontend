@@ -1,10 +1,17 @@
+import React from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   contributionSummaryQueryOptions,
   groupLeaderboardQueryOptions,
   evaluationRoundsQueryOptions,
   myRoundRatingsQueryOptions,
   roundResultsQueryOptions,
+  useRecordContributionMutation,
+  useOpenEvaluationRoundMutation,
+  useCloseEvaluationRoundMutation,
+  useSubmitRoundRatingMutation,
 } from "./queries";
 
 vi.mock("@/domains/auth/token-storage", () => ({
@@ -165,5 +172,43 @@ describe("contributions/queries – factory functions", () => {
       const opts = roundResultsQueryOptions("g1", "");
       expect(opts.enabled).toBe(false);
     });
+  });
+});
+
+function makeWrapper() {
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
+  return ({ children }: { children: React.ReactNode }) =>
+    React.createElement(QueryClientProvider, { client: qc }, children);
+}
+
+describe("contributions/queries – mutation coverage", () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it("useRecordContributionMutation fires and succeeds", async () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useRecordContributionMutation(), { wrapper });
+    result.current.mutate({ userId: "u1", groupId: "g1", type: "task-completed", points: 10, description: "Coded the feature" });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+  });
+
+  it("useOpenEvaluationRoundMutation fires and succeeds", async () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useOpenEvaluationRoundMutation(), { wrapper });
+    result.current.mutate({ groupId: "g1", dueDateIso: "2026-06-15T00:00:00.000Z" });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+  });
+
+  it("useCloseEvaluationRoundMutation fires and succeeds", async () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useCloseEvaluationRoundMutation(), { wrapper });
+    result.current.mutate({ groupId: "g1", roundStartedAt: "2026-06-01T00:00:00.000Z" });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+  });
+
+  it("useSubmitRoundRatingMutation fires and succeeds", async () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSubmitRoundRatingMutation(), { wrapper });
+    result.current.mutate({ groupId: "g1", roundStartedAt: "2026-06-01T00:00:00.000Z", taskId: "t1", score: 8 });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
   });
 });

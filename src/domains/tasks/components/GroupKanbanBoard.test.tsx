@@ -63,7 +63,7 @@ const defaultProps = {
 };
 
 describe("GroupKanbanBoard", () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => { vi.clearAllMocks(); });
 
   it("renders all five kanban columns", () => {
     render(<GroupKanbanBoard {...defaultProps} />);

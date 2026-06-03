@@ -109,4 +109,16 @@ describe("AppShell", () => {
     expect(container).toBeTruthy();
     void main;
   });
+
+  it("renders admin sidebar layout for admin users", () => {
+    const { container } = render(
+      withQueryClient(
+        <AppShell>
+          <div data-testid="admin-content" />
+        </AppShell>,
+        UserRole.ADMIN,
+      ),
+    );
+    expect(container).toBeTruthy();
+  });
 });

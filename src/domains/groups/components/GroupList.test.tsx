@@ -8,12 +8,9 @@ const makeGroup = (id: string, name: string): GroupSummary => ({
   id,
   name,
   description: `Desc for ${name}`,
-  status: "active",
   member_count: 2,
   leader_id: "u1",
-  tags: [],
   created_at: "2026-01-01T00:00:00.000Z",
-  updated_at: "2026-01-01T00:00:00.000Z",
 });
 
 describe("GroupList", () => {

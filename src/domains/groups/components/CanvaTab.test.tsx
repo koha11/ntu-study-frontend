@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@/test/test-utils";
+import { render, screen, fireEvent } from "@/test/test-utils";
 import { CanvaTab } from "./CanvaTab";
 
 vi.mock("@/domains/groups", () => ({
@@ -115,5 +115,34 @@ describe("CanvaTab", () => {
 
     expect(screen.getByLabelText(/Go to slide 1/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Go to slide 2/i)).toBeInTheDocument();
+  });
+
+  it("advances to next slide when next button is clicked", () => {
+    mockUseCanvaPreview.mockReturnValue({
+      data: { editUrl: null, pages: twoPages },
+      isLoading: false,
+      isError: false,
+    } as unknown as ReturnType<typeof useCanvaPreview>);
+
+    render(<CanvaTab groupId="g1" hasDesign={true} />);
+
+    fireEvent.click(screen.getByLabelText(/Next slide/i));
+
+    expect(screen.getByAltText(/Slide 2 of 2/i)).toBeInTheDocument();
+  });
+
+  it("goes back to previous slide when prev button is clicked", () => {
+    mockUseCanvaPreview.mockReturnValue({
+      data: { editUrl: null, pages: twoPages },
+      isLoading: false,
+      isError: false,
+    } as unknown as ReturnType<typeof useCanvaPreview>);
+
+    render(<CanvaTab groupId="g1" hasDesign={true} />);
+
+    fireEvent.click(screen.getByLabelText(/Next slide/i));
+    fireEvent.click(screen.getByLabelText(/Previous slide/i));
+
+    expect(screen.getByAltText(/Slide 1 of 2/i)).toBeInTheDocument();
   });
 });

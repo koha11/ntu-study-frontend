@@ -4,13 +4,22 @@ import {
   mapFlashcardSetFromApi,
   mapStartStudyFromApi,
   mapCompleteStudyFromApi,
+  mapSharedFlashcardSetFromApi,
   fetchFlashcardSets,
+  fetchFlashcardSetById,
   createFlashcardSet,
+  updateFlashcardSet,
+  updateFlashcard,
   deleteFlashcardSet,
+  deleteFlashcard,
   addFlashcard,
   startFlashcardStudy,
   completeFlashcardStudy,
+  fetchGroupSharedFlashcardSets,
+  shareFlashcardSetWithGroup,
+  unshareFlashcardSetFromGroup,
 } from "./flashcards-api";
+import { HttpError } from "@/domains/auth/auth-api";
 
 describe("flashcards-api", () => {
   beforeEach(() => {
@@ -228,6 +237,241 @@ describe("flashcards-api", () => {
       expect(r.score).toBe(70);
       const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
       expect(JSON.parse((init.body as string) ?? "{}")).toEqual({ score: 70 });
+    });
+  });
+
+  describe("fetchFlashcardSetById", () => {
+    it("calls GET /flashcard-sets/:id with Authorization", async () => {
+      const row = { id: "s1", name: "N", owner_id: "u1", card_count: 0, created_at: "", updated_at: "" };
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200, json: () => Promise.resolve(row) });
+      vi.stubGlobal("fetch", fetchMock);
+
+      const s = await fetchFlashcardSetById("s1", "tok");
+
+      expect(s.id).toBe("s1");
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toBe("http://localhost:3000/flashcard-sets/s1");
+      expect(init.method).toBe("GET");
+    });
+
+    it("throws HttpError on non-ok response", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        statusText: "Not Found",
+        text: () => Promise.resolve("not found"),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      await expect(fetchFlashcardSetById("missing", "tok")).rejects.toBeInstanceOf(HttpError);
+    });
+  });
+
+  describe("updateFlashcardSet", () => {
+    it("PATCHes set with provided fields", async () => {
+      const row = { id: "s1", name: "Updated", owner_id: "u1", card_count: 0, created_at: "", updated_at: "" };
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200, json: () => Promise.resolve(row) });
+      vi.stubGlobal("fetch", fetchMock);
+
+      const s = await updateFlashcardSet("s1", { name: "Updated", subject: "Math" }, "tok");
+
+      expect(s.name).toBe("Updated");
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toBe("http://localhost:3000/flashcard-sets/s1");
+      expect(init.method).toBe("PATCH");
+      expect(JSON.parse((init.body as string) ?? "{}")).toEqual({ name: "Updated", subject: "Math" });
+    });
+  });
+
+  describe("updateFlashcard", () => {
+    it("PATCHes card with provided fields", async () => {
+      const row = { id: "c1", set_id: "s1", front: "NewF", back: "NewB" };
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200, json: () => Promise.resolve(row) });
+      vi.stubGlobal("fetch", fetchMock);
+
+      const c = await updateFlashcard("s1", "c1", { front: "NewF", back: "NewB" }, "tok");
+
+      expect(c.front).toBe("NewF");
+      expect(c.back).toBe("NewB");
+      const [url] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toContain("/flashcard-sets/s1/cards/c1");
+    });
+  });
+
+  describe("deleteFlashcard", () => {
+    it("DELETEs the card", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 204, text: () => Promise.resolve("") });
+      vi.stubGlobal("fetch", fetchMock);
+
+      await deleteFlashcard("s1", "c1", "tok");
+
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toContain("/flashcard-sets/s1/cards/c1");
+      expect(init.method).toBe("DELETE");
+    });
+
+    it("throws HttpError on non-ok response", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        statusText: "Forbidden",
+        text: () => Promise.resolve("forbidden"),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      await expect(deleteFlashcard("s1", "c1", "tok")).rejects.toBeInstanceOf(HttpError);
+    });
+  });
+
+  describe("mapSharedFlashcardSetFromApi", () => {
+    it("maps shared set fields", () => {
+      const entry = mapSharedFlashcardSetFromApi({
+        share_id: "sh1",
+        shared_at: "2026-01-01T00:00:00.000Z",
+        set_id: "s1",
+        group_id: "g1",
+        owner_id: "u1",
+        name: "SharedSet",
+        subject: "Physics",
+        description: "desc",
+        card_count: 3,
+      });
+
+      expect(entry.shareId).toBe("sh1");
+      expect(entry.setId).toBe("s1");
+      expect(entry.groupId).toBe("g1");
+      expect(entry.ownerId).toBe("u1");
+      expect(entry.name).toBe("SharedSet");
+      expect(entry.subject).toBe("Physics");
+      expect(entry.description).toBe("desc");
+      expect(entry.cardCount).toBe(3);
+    });
+
+    it("sets subject and description to undefined when null", () => {
+      const entry = mapSharedFlashcardSetFromApi({
+        share_id: "sh2",
+        shared_at: "",
+        set_id: "s2",
+        group_id: "g2",
+        owner_id: "u2",
+        name: "No extras",
+        subject: null,
+        description: null,
+        card_count: 0,
+      });
+
+      expect(entry.subject).toBeUndefined();
+      expect(entry.description).toBeUndefined();
+    });
+  });
+
+  describe("fetchGroupSharedFlashcardSets", () => {
+    it("calls correct URL and maps results", async () => {
+      const row = {
+        share_id: "sh1", shared_at: "", set_id: "s1",
+        group_id: "g1", owner_id: "u1", name: "Set1", card_count: 2,
+      };
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200, json: () => Promise.resolve([row]) });
+      vi.stubGlobal("fetch", fetchMock);
+
+      const result = await fetchGroupSharedFlashcardSets("g1", "tok");
+
+      expect(result).toHaveLength(1);
+      expect(result[0]?.shareId).toBe("sh1");
+      const [url] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toContain("/flashcard-sets/groups/g1/shared");
+    });
+  });
+
+  describe("shareFlashcardSetWithGroup", () => {
+    it("POSTs group_id and returns share info", async () => {
+      const row = { share_id: "sh1", set_id: "s1", group_id: "g1", shared_at: "2026-01-01T00:00:00.000Z" };
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 201, json: () => Promise.resolve(row) });
+      vi.stubGlobal("fetch", fetchMock);
+
+      const result = await shareFlashcardSetWithGroup("s1", "g1", "tok");
+
+      expect(result.shareId).toBe("sh1");
+      expect(result.setId).toBe("s1");
+      expect(result.groupId).toBe("g1");
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toContain("/flashcard-sets/s1/share");
+      expect(JSON.parse((init.body as string) ?? "{}")).toEqual({ group_id: "g1" });
+    });
+  });
+
+  describe("unshareFlashcardSetFromGroup", () => {
+    it("DELETEs the share", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 204, text: () => Promise.resolve("") });
+      vi.stubGlobal("fetch", fetchMock);
+
+      await unshareFlashcardSetFromGroup("s1", "g1", "tok");
+
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toContain("/flashcard-sets/s1/share/g1");
+      expect(init.method).toBe("DELETE");
+    });
+  });
+
+  describe("mapFlashcardSetFromApi – edge cases", () => {
+    it("sets nextReviewAt to null when field is empty string", () => {
+      const s = mapFlashcardSetFromApi({
+        id: "s1", name: "N", owner_id: "u1", card_count: 0,
+        created_at: "", updated_at: "", next_review_at: "",
+      });
+      expect(s.nextReviewAt).toBeNull();
+    });
+
+    it("sets nextReviewAt to null when field is null", () => {
+      const s = mapFlashcardSetFromApi({
+        id: "s1", name: "N", owner_id: "u1", card_count: 0,
+        created_at: "", updated_at: "", next_review_at: null,
+      });
+      expect(s.nextReviewAt).toBeNull();
+    });
+
+    it("sets subject/description to undefined when null", () => {
+      const s = mapFlashcardSetFromApi({
+        id: "s1", name: "N", owner_id: "u1", card_count: 0,
+        created_at: "", updated_at: "", subject: null, description: null,
+      });
+      expect(s.subject).toBeUndefined();
+      expect(s.description).toBeUndefined();
+    });
+  });
+
+  describe("mapStartStudyFromApi – nextReviewAt branches", () => {
+    it("sets nextReviewAt when field is a non-empty string", () => {
+      const r = mapStartStudyFromApi({ set_id: "s1", total_cards: 1, next_review_at: "2026-07-01T00:00:00.000Z" });
+      expect(r.nextReviewAt).toBe("2026-07-01T00:00:00.000Z");
+    });
+
+    it("sets nextReviewAt to null when field is empty string", () => {
+      const r = mapStartStudyFromApi({ set_id: "s1", total_cards: 0, next_review_at: "" });
+      expect(r.nextReviewAt).toBeNull();
+    });
+  });
+
+  describe("mapCompleteStudyFromApi – nextReviewAt null", () => {
+    it("sets nextReviewAt to null when field is null", () => {
+      const r = mapCompleteStudyFromApi({ id: "l1", score: 0, next_review_at: null });
+      expect(r.nextReviewAt).toBeNull();
+    });
+  });
+
+  describe("error handling", () => {
+    it("fetchFlashcardSets throws HttpError with status on failure", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 401,
+        statusText: "Unauthorized",
+        text: () => Promise.resolve("Unauthorized"),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      const err = await fetchFlashcardSets("bad-token").catch((e: unknown) => e);
+      expect(err).toBeInstanceOf(HttpError);
+      expect((err as HttpError).status).toBe(401);
     });
   });
 });

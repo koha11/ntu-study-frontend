@@ -12,7 +12,8 @@ function makeWrapper() {
 }
 
 function renderTab(props: React.ComponentProps<typeof ContributionTab>) {
-  return render(<ContributionTab {...props} />, { wrapper: makeWrapper() });
+  const Wrapper = makeWrapper();
+  return render(<Wrapper><ContributionTab {...props} /></Wrapper>);
 }
 
 vi.mock("react-i18next", () => ({
@@ -53,7 +54,8 @@ const makeRound = (overrides: Partial<EvaluationRound> = {}): EvaluationRound =>
   roundStartedAt: "2026-01-01T00:00:00.000Z",
   dueDate: "2026-01-15T23:59:59.000Z",
   isClosed: false,
-  ratingsCreated: 0,
+  ratedCount: 0,
+  totalCount: 5,
   ...overrides,
 });
 

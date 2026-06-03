@@ -325,6 +325,37 @@ describe("DashboardPage", () => {
     expect(screen.getByText("dashboard.noUpcoming")).toBeInTheDocument();
   });
 
+  it("clicking a notification activity calls handleNotificationClick", async () => {
+    const { navigateFromNotification } = await import("@/domains/notifications/navigate-from-notification");
+    vi.mocked(navigateFromNotification).mockResolvedValue(true);
+
+    mockUseQuery.mockReturnValue({
+      data: {
+        recentActivity: [
+          {
+            kind: "notification",
+            occurredAt: "2026-05-01T10:00:00.000Z",
+            notification: {
+              id: "n1",
+              type: "task_assigned",
+              message: "Click me notification",
+              isRead: false,
+              relatedEntityType: "task",
+              relatedEntityId: "t1",
+            },
+          },
+        ],
+        upcoming: [],
+      },
+      isLoading: false,
+    });
+
+    render(<DashboardPage />);
+    fireEvent.click(screen.getByText("Click me notification").closest("button")!);
+
+    expect(navigateFromNotification).toHaveBeenCalled();
+  });
+
   it("clicking a drive activity with fileId opens Drive link in new tab", () => {
     const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
     mockUseQuery.mockReturnValue({

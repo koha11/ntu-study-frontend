@@ -31,7 +31,8 @@ const makeRound = (startedAt: string): EvaluationRound => ({
   roundStartedAt: startedAt,
   dueDate: "2026-01-15T23:59:59.000Z",
   isClosed: true,
-  ratingsCreated: 2,
+  ratedCount: 2,
+  totalCount: 5,
 });
 
 describe("OverallScoreModal", () => {
