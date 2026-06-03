@@ -3,6 +3,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@/test/test-utils";
 import { GroupForm } from "./GroupForm";
 
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string, opts?: Record<string, unknown>) =>
+      opts?.count !== undefined ? `${key}:${opts.count}` : key,
+  }),
+}));
+
 describe("GroupForm", () => {
   const onSubmit = vi.fn();
   const onCancel = vi.fn();
@@ -11,9 +18,9 @@ describe("GroupForm", () => {
 
   it("renders empty form with no initial data", () => {
     render(<GroupForm onSubmit={onSubmit} />);
-    expect(screen.getByText("Group Name")).toBeInTheDocument();
-    expect(screen.getByText("Description")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+    expect(screen.getByText("groups.groupName")).toBeInTheDocument();
+    expect(screen.getByText("groups.description")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "common.save" })).toBeInTheDocument();
   });
 
   it("pre-fills name and description from initialData", () => {
@@ -37,7 +44,7 @@ describe("GroupForm", () => {
     fireEvent.change(inputs[1], {
       target: { value: "A new group description" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ name: "New Group", description: "A new group description" }),
     );
@@ -45,29 +52,29 @@ describe("GroupForm", () => {
 
   it("renders Cancel button when onCancel is provided", () => {
     render(<GroupForm onSubmit={onSubmit} onCancel={onCancel} />);
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "common.cancel" })).toBeInTheDocument();
   });
 
   it("calls onCancel when Cancel is clicked", () => {
     render(<GroupForm onSubmit={onSubmit} onCancel={onCancel} />);
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "common.cancel" }));
     expect(onCancel).toHaveBeenCalledTimes(1);
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
   it("does not render Cancel button when onCancel is not provided", () => {
     render(<GroupForm onSubmit={onSubmit} />);
-    expect(screen.queryByRole("button", { name: "Cancel" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "common.cancel" })).not.toBeInTheDocument();
   });
 
   it("shows Saving... and disables button when isLoading is true", () => {
     render(<GroupForm onSubmit={onSubmit} isLoading />);
-    const btn = screen.getByRole("button", { name: "Saving..." });
+    const btn = screen.getByRole("button", { name: "common.saving" });
     expect(btn).toBeDisabled();
   });
 
   it("shows Save and enables button when isLoading is false", () => {
     render(<GroupForm onSubmit={onSubmit} isLoading={false} />);
-    expect(screen.getByRole("button", { name: "Save" })).not.toBeDisabled();
+    expect(screen.getByRole("button", { name: "common.save" })).not.toBeDisabled();
   });
 });

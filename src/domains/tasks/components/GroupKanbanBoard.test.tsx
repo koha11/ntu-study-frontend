@@ -4,6 +4,13 @@ import { render, screen, fireEvent } from "@/test/test-utils";
 import { GroupKanbanBoard } from "./GroupKanbanBoard";
 import type { Task } from "../types";
 
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string, opts?: Record<string, unknown>) =>
+      opts?.count !== undefined ? `${key}:${opts.count}` : key,
+  }),
+}));
+
 vi.mock("@dnd-kit/core", () => ({
   DndContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   useSensor: vi.fn(),
@@ -67,16 +74,16 @@ describe("GroupKanbanBoard", () => {
 
   it("renders all five kanban columns", () => {
     render(<GroupKanbanBoard {...defaultProps} />);
-    expect(screen.getByText("To do")).toBeInTheDocument();
-    expect(screen.getByText("In progress")).toBeInTheDocument();
-    expect(screen.getByText("Review")).toBeInTheDocument();
-    expect(screen.getByText("Done")).toBeInTheDocument();
-    expect(screen.getByText("Failed")).toBeInTheDocument();
+    expect(screen.getByText("tasks.filters.todo")).toBeInTheDocument();
+    expect(screen.getByText("tasks.filters.in_progress")).toBeInTheDocument();
+    expect(screen.getByText("tasks.filters.pending_review")).toBeInTheDocument();
+    expect(screen.getByText("tasks.filters.done")).toBeInTheDocument();
+    expect(screen.getByText("tasks.filters.failed")).toBeInTheDocument();
   });
 
   it("shows Empty placeholder in columns with no tasks", () => {
     render(<GroupKanbanBoard {...defaultProps} />);
-    const emptyItems = screen.getAllByText("Empty");
+    const emptyItems = screen.getAllByText("tasks.kanban.empty");
     expect(emptyItems.length).toBe(5);
   });
 
@@ -126,7 +133,7 @@ describe("GroupKanbanBoard", () => {
         currentUserId="leader-id"
       />,
     );
-    expect(screen.getByLabelText("Edit task")).toBeInTheDocument();
+    expect(screen.getByLabelText("tasks.kanban.editTask")).toBeInTheDocument();
   });
 
   it("shows edit button for task assignee", () => {
@@ -147,7 +154,7 @@ describe("GroupKanbanBoard", () => {
         currentUserId="current-user"
       />,
     );
-    expect(screen.getByLabelText("Edit task")).toBeInTheDocument();
+    expect(screen.getByLabelText("tasks.kanban.editTask")).toBeInTheDocument();
   });
 
   it("does not show edit button for non-assignee non-leader", () => {
@@ -168,7 +175,7 @@ describe("GroupKanbanBoard", () => {
         currentUserId="current-user"
       />,
     );
-    expect(screen.queryByLabelText("Edit task")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("tasks.kanban.editTask")).not.toBeInTheDocument();
   });
 
   it("renders subtask with parent task badge", () => {
@@ -198,12 +205,12 @@ describe("GroupKanbanBoard", () => {
   it("shows 'Unassigned' when assigneeName is absent", () => {
     const tasks = [makeTask({ id: "t1", title: "Task", status: "todo", assigneeName: undefined })];
     render(<GroupKanbanBoard {...defaultProps} tasks={tasks} />);
-    expect(screen.getByText("Unassigned")).toBeInTheDocument();
+    expect(screen.getByText("tasks.kanban.unassigned")).toBeInTheDocument();
   });
 
   it("renders drag handle button on each task card", () => {
     const tasks = [makeTask({ id: "t1", title: "Draggable Task", status: "todo" })];
     render(<GroupKanbanBoard {...defaultProps} tasks={tasks} />);
-    expect(screen.getByLabelText("Drag task")).toBeInTheDocument();
+    expect(screen.getByLabelText("tasks.kanban.dragTask")).toBeInTheDocument();
   });
 });

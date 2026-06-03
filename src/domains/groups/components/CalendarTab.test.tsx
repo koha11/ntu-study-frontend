@@ -5,6 +5,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CalendarTab } from "./CalendarTab";
 import * as groupsApi from "../groups-api";
 
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string, opts?: Record<string, unknown>) =>
+      opts?.count !== undefined ? `${key}:${opts.count}` : key,
+  }),
+}));
+
 vi.mock("../groups-api", async (importOriginal) => {
   const mod = await importOriginal<typeof import("../groups-api")>();
   return {
@@ -40,7 +47,7 @@ describe("CalendarTab", () => {
       />,
     );
 
-    expect(screen.getByText(/Connect a Google Calendar/i)).toBeInTheDocument();
+    expect(screen.getByText("groups.calendar.connectTitle")).toBeInTheDocument();
     expect(fetchCal).not.toHaveBeenCalled();
   });
 
@@ -70,6 +77,6 @@ describe("CalendarTab", () => {
     );
 
     await waitFor(() => expect(fetchCal).toHaveBeenCalled());
-    expect(screen.getByText(/View-only/i)).toBeInTheDocument();
+    expect(screen.getByText("groups.calendar.viewOnly")).toBeInTheDocument();
   });
 });

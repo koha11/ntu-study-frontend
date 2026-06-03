@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@/test/test-utils";
+import { render, screen, fireEvent, waitFor } from "@/test/test-utils";
 import { TopBar } from "./TopBar";
 import { UserRole } from "@/common/enums/user-role.enum";
 import type { NotificationListItem } from "@/domains/notifications/notifications-api";
@@ -50,6 +50,14 @@ vi.mock("@/domains/notifications/navigate-from-notification", () => ({
 
 vi.mock("@/domains/auth/token-storage", () => ({
   getAccessToken: vi.fn(() => "tok"),
+}));
+
+const mockMobileNavIsAdmin = vi.fn();
+vi.mock("./MobileNav", () => ({
+  MobileNav: ({ isAdmin }: { isAdmin: boolean }) => {
+    mockMobileNavIsAdmin(isAdmin);
+    return <button type="button" aria-label="Open navigation menu">Menu</button>;
+  },
 }));
 
 const baseUser = {
@@ -190,5 +198,56 @@ describe("TopBar", () => {
     render(<TopBar />);
     fireEvent.click(screen.getByText("topBar.dashboard"));
     expect(mockNavigate).toHaveBeenCalledWith({ to: "/dashboard" });
+  });
+
+  it("renders the mobile nav hamburger button", () => {
+    render(<TopBar />);
+    expect(screen.getByRole("button", { name: "Open navigation menu" })).toBeInTheDocument();
+  });
+
+  it("passes isAdmin=false to MobileNav by default", () => {
+    render(<TopBar />);
+    expect(mockMobileNavIsAdmin).toHaveBeenCalledWith(false);
+  });
+
+  it("passes isAdmin=true to MobileNav when prop is set", () => {
+    render(<TopBar isAdmin={true} />);
+    expect(mockMobileNavIsAdmin).toHaveBeenCalledWith(true);
+  });
+
+  it("shows loading indicator while notifications are being fetched", () => {
+    mockUseNotificationsList.mockReturnValue({ data: [], isLoading: true });
+    render(<TopBar />);
+    expect(screen.getByText("topBar.loading")).toBeInTheDocument();
+  });
+
+  it("calls markRead with notification id when per-notification read button is clicked", () => {
+    mockUseNotificationsList.mockReturnValue({
+      data: [makeNotification({ id: "n1", isRead: false })],
+      isLoading: false,
+    });
+    render(<TopBar />);
+    fireEvent.click(screen.getByRole("button", { name: "topBar.read" }));
+    expect(mockMarkRead).toHaveBeenCalledWith("n1");
+  });
+
+  it("calls navigateFromNotification and markRead when unread notification body is clicked", async () => {
+    mockUseNotificationsList.mockReturnValue({
+      data: [makeNotification({ id: "n1", isRead: false, message: "You have a new task" })],
+      isLoading: false,
+    });
+    render(<TopBar />);
+    fireEvent.click(screen.getByText("You have a new task").closest("button")!);
+    await waitFor(() => expect(mockMarkRead).toHaveBeenCalledWith("n1"));
+  });
+
+  it("does not call markRead when an already-read notification body is clicked", async () => {
+    mockUseNotificationsList.mockReturnValue({
+      data: [makeNotification({ id: "n1", isRead: true, message: "Already read task" })],
+      isLoading: false,
+    });
+    render(<TopBar />);
+    fireEvent.click(screen.getByText("Already read task").closest("button")!);
+    await waitFor(() => expect(mockMarkRead).not.toHaveBeenCalled());
   });
 });

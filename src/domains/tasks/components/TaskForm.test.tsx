@@ -3,6 +3,13 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@/test/test-utils";
 import { TaskForm } from "./TaskForm";
 
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string, opts?: Record<string, unknown>) =>
+      opts?.count !== undefined ? `${key}:${opts.count}` : key,
+  }),
+}));
+
 // DatePicker is a UI-only component — stub it with a simple input
 vi.mock("@/components/ui/date-picker", () => ({
   DatePicker: ({
@@ -24,13 +31,13 @@ vi.mock("@/components/ui/date-picker", () => ({
 describe("TaskForm – create mode", () => {
   it("renders Task Title and Description inputs", () => {
     render(<TaskForm />);
-    expect(screen.getByText("Task Title")).toBeInTheDocument();
-    expect(screen.getByText("Description")).toBeInTheDocument();
+    expect(screen.getByText("tasks.form.taskTitle")).toBeInTheDocument();
+    expect(screen.getByText("tasks.form.description")).toBeInTheDocument();
   });
 
   it("renders Save button in create mode", () => {
     render(<TaskForm />);
-    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "common.save" })).toBeInTheDocument();
   });
 
   it("renders Status select in personal (no group) create mode", () => {
@@ -45,13 +52,13 @@ describe("TaskForm – create mode", () => {
 
   it("shows Cancel button when onCancel is provided", () => {
     render(<TaskForm onCancel={vi.fn()} />);
-    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "common.cancel" })).toBeInTheDocument();
   });
 
   it("calls onCancel when Cancel button is clicked", () => {
     const onCancel = vi.fn();
     render(<TaskForm onCancel={onCancel} />);
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "common.cancel" }));
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
 
@@ -62,7 +69,7 @@ describe("TaskForm – create mode", () => {
     // title input is the only text input initially
     const titleInput = screen.getAllByRole("textbox")[0];
     fireEvent.change(titleInput, { target: { value: "My New Task" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ title: "My New Task" }),
@@ -75,7 +82,7 @@ describe("TaskForm – create mode", () => {
 
     const titleInput = screen.getAllByRole("textbox")[0];
     fireEvent.change(titleInput, { target: { value: "Group Task" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ groupId: "grp-99" }),
@@ -92,12 +99,12 @@ describe("TaskForm – create mode", () => {
       />,
     );
 
-    expect(screen.getByText(/Subtask of/)).toBeInTheDocument();
+    expect(screen.getByText("tasks.form.subtaskOf")).toBeInTheDocument();
     expect(screen.getByText("Parent Task")).toBeInTheDocument();
 
     const titleInput = screen.getAllByRole("textbox")[0];
     fireEvent.change(titleInput, { target: { value: "Child Task" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ parentTaskId: "parent-t1" }),
@@ -115,7 +122,7 @@ describe("TaskForm – create mode", () => {
       />,
     );
 
-    expect(screen.getByText("Assignee")).toBeInTheDocument();
+    expect(screen.getByText("tasks.form.assignee")).toBeInTheDocument();
     expect(screen.getByRole("combobox")).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Alice" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Bob" })).toBeInTheDocument();
@@ -137,7 +144,7 @@ describe("TaskForm – create mode", () => {
     const titleInput = screen.getAllByRole("textbox")[0];
     fireEvent.change(titleInput, { target: { value: "Assigned Task" } });
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "u2" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ assigneeId: "u2" }),
@@ -150,7 +157,7 @@ describe("TaskForm – create mode", () => {
 
     const titleInput = screen.getAllByRole("textbox")[0];
     fireEvent.change(titleInput, { target: { value: "Personal Task" } });
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     const call = onSubmit.mock.calls[0][0] as Record<string, unknown>;
     expect(call.assigneeId).toBeUndefined();
@@ -158,7 +165,7 @@ describe("TaskForm – create mode", () => {
 
   it("disables Save button while loading", () => {
     render(<TaskForm isLoading={true} />);
-    expect(screen.getByRole("button", { name: "Saving..." })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "tasks.form.saving" })).toBeDisabled();
   });
 });
 
@@ -174,7 +181,7 @@ describe("TaskForm – edit mode", () => {
 
   it("shows 'Update task' button in edit mode", () => {
     render(<TaskForm isEdit={true} initialData={existing} />);
-    expect(screen.getByRole("button", { name: "Update task" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "tasks.form.updateTask" })).toBeInTheDocument();
   });
 
   it("pre-fills title with initialData", () => {
@@ -191,7 +198,7 @@ describe("TaskForm – edit mode", () => {
 
   it("shows status hint message in edit mode", () => {
     render(<TaskForm isEdit={true} initialData={existing} />);
-    expect(screen.getByText(/Status is changed from the board/)).toBeInTheDocument();
+    expect(screen.getByText("tasks.form.statusNote")).toBeInTheDocument();
   });
 
   it("hides Status select in edit mode", () => {
@@ -214,7 +221,7 @@ describe("TaskForm – edit mode", () => {
     fireEvent.change(screen.getByDisplayValue("Existing Task"), {
       target: { value: "Updated Title" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Update task" }));
+    fireEvent.click(screen.getByRole("button", { name: "tasks.form.updateTask" }));
 
     expect(onUpdate).toHaveBeenCalledWith(
       expect.objectContaining({ title: "Updated Title" }),
@@ -229,7 +236,7 @@ describe("TaskForm – edit mode", () => {
     fireEvent.change(screen.getByDisplayValue("Existing Task"), {
       target: { value: "  Trimmed  " },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Update task" }));
+    fireEvent.click(screen.getByRole("button", { name: "tasks.form.updateTask" }));
 
     const call = onUpdate.mock.calls[0][0] as Record<string, unknown>;
     expect(call.title).toBe("Trimmed");

@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "./ThemeToggle";
+import { MobileNav } from "./MobileNav";
 import { UserRole } from "@/common/enums/user-role.enum";
 import { Button } from "@/components/ui/button";
 
@@ -31,7 +32,7 @@ function initials(name: string): string {
 
 const BELL_PREVIEW_LIMIT = 8;
 
-export function TopBar() {
+export function TopBar({ isAdmin = false }: { isAdmin?: boolean }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
@@ -72,7 +73,9 @@ export function TopBar() {
   }
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-end gap-2 border-b border-border bg-background/70 px-4 backdrop-blur-xl md:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-2 border-b border-border bg-background/70 px-4 backdrop-blur-xl md:px-6">
+      <MobileNav isAdmin={isAdmin} />
+      <div className="flex items-center gap-2 md:ml-auto">
       <ThemeToggle />
 
       <DropdownMenu>
@@ -225,6 +228,7 @@ export function TopBar() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      </div>
     </header>
   );
 }
