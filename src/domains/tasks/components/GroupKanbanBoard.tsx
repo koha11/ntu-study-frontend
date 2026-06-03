@@ -11,6 +11,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { CornerDownRight, GripVertical, Layers, Pencil, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import type { Task, TaskStatus } from "../types";
 import {
   useUpdateTaskStatusMutation,
@@ -32,13 +33,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { TaskForm, type TaskFormMemberOption } from "./TaskForm";
 
-const COLUMNS: { id: TaskStatus; label: string }[] = [
-  { id: "todo", label: "To do" },
-  { id: "in_progress", label: "In progress" },
-  { id: "pending_review", label: "Review" },
-  { id: "done", label: "Done" },
-  { id: "failed", label: "Failed" },
-];
 
 function columnDroppableId(status: TaskStatus) {
   return `column-${status}` as const;
@@ -162,6 +156,7 @@ function KanbanCard({
   currentUserId?: string;
   isLeader: boolean;
 }) {
+  const { t } = useTranslation();
   const [subtaskOpen, setSubtaskOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
   const { mutate: createSubtask, isPending: subtaskPending } = useCreateTaskMutation();
@@ -193,8 +188,8 @@ function KanbanCard({
     due && task.status !== "done" && due.toDateString() === today.toDateString();
 
   const isSubtask = Boolean(task.parentTaskId);
-  const parentTaskNameForBadge = (task.parentTaskTitle ?? "").trim() || "Parent task";
-  const displayName = task.assigneeName?.trim() || "Unassigned";
+  const parentTaskNameForBadge = (task.parentTaskTitle ?? "").trim() || t("tasks.kanban.parentTask");
+  const displayName = task.assigneeName?.trim() || t("tasks.kanban.unassigned");
   const initials = initialsFromName(task.assigneeName, task.assigneeId);
   const canEdit = canEditGroupTask(task, currentUserId, isLeader);
   const canAddSubtask = Boolean(task.groupId && !isSubtask);
@@ -215,7 +210,7 @@ function KanbanCard({
             className="mt-1 shrink-0 cursor-grab touch-none text-muted-foreground hover:text-foreground active:cursor-grabbing"
             {...listeners}
             {...attributes}
-            aria-label="Drag task"
+            aria-label={t("tasks.kanban.dragTask")}
           >
             <GripVertical className="h-4 w-4" />
           </button>
@@ -248,7 +243,7 @@ function KanbanCard({
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
-                  aria-label="Edit task"
+                  aria-label={t("tasks.kanban.editTask")}
                   onClick={() => setEditOpen(true)}
                 >
                   <Pencil className="h-3.5 w-3.5" />
@@ -305,7 +300,7 @@ function KanbanCard({
                   onClick={() => setSubtaskOpen(true)}
                 >
                   <Plus className="h-3.5 w-3.5" />
-                  Add subtask
+                  {t("tasks.kanban.addSubtask")}
                 </Button>
               </div>
             ) : null}
@@ -316,7 +311,7 @@ function KanbanCard({
       <Dialog open={subtaskOpen} onOpenChange={setSubtaskOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>New subtask</DialogTitle>
+            <DialogTitle>{t("tasks.kanban.newSubtask")}</DialogTitle>
           </DialogHeader>
           <TaskForm
             defaultGroupId={task.groupId}
@@ -338,7 +333,7 @@ function KanbanCard({
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Edit task</DialogTitle>
+            <DialogTitle>{t("tasks.kanban.editTaskTitle")}</DialogTitle>
           </DialogHeader>
           {editOpen ? (
             <TaskForm
@@ -393,9 +388,21 @@ export function GroupKanbanBoard({
   defaultAssigneeId,
   currentUserId,
 }: GroupKanbanBoardProps) {
+  const { t } = useTranslation();
   const { mutate: updateStatus } = useUpdateTaskStatusMutation();
   const { mutate: submitTask } = useSubmitTaskMutation();
   const { mutate: approveTask } = useApproveTaskMutation();
+
+  const columns = React.useMemo(
+    () => [
+      { id: "todo" as TaskStatus, label: t("tasks.filters.todo") },
+      { id: "in_progress" as TaskStatus, label: t("tasks.filters.in_progress") },
+      { id: "pending_review" as TaskStatus, label: t("tasks.filters.pending_review") },
+      { id: "done" as TaskStatus, label: t("tasks.filters.done") },
+      { id: "failed" as TaskStatus, label: t("tasks.filters.failed") },
+    ],
+    [t],
+  );
 
   const contextLabel = groupName.trim() || "Group";
 
@@ -467,7 +474,7 @@ export function GroupKanbanBoard({
           next.delete(taskId);
           return next;
         });
-        toast.error(err instanceof Error ? err.message : "Failed to update task status");
+        toast.error(err instanceof Error ? err.message : t("tasks.kanban.failedToUpdateStatus"));
       };
 
       if (newStatus === "failed") {
@@ -489,7 +496,7 @@ export function GroupKanbanBoard({
       }
       updateStatus({ id: task.id, status: newStatus }, { onError: makeOnError(task.id) });
     },
-    [tasks, isLeader, updateStatus, submitTask, approveTask, setRejectionTask, setRejectionComment],
+    [tasks, isLeader, updateStatus, submitTask, approveTask, setRejectionTask, setRejectionComment, t],
   );
 
   function handleRejectConfirm() {
@@ -505,7 +512,7 @@ export function GroupKanbanBoard({
         next.delete(task.id);
         return next;
       });
-      toast.error(err instanceof Error ? err.message : "Failed to update task status");
+      toast.error(err instanceof Error ? err.message : t("tasks.kanban.failedToUpdateStatus"));
     };
     approveTask({ id: task.id, input: { status: "failed", comment } }, { onError });
   }
@@ -523,22 +530,18 @@ export function GroupKanbanBoard({
     >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Reject task</DialogTitle>
+          <DialogTitle>{t("tasks.kanban.rejectTask")}</DialogTitle>
         </DialogHeader>
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">
-            Provide a reason for rejecting{" "}
-            <span className="font-medium text-foreground">
-              &ldquo;{rejectionTask?.title}&rdquo;
-            </span>
-            . This will be included in the notification sent to the assignee.
+            {t("tasks.kanban.rejectTaskDesc", { title: rejectionTask?.title })}
           </p>
           <Label htmlFor="rejection-comment" className="sr-only">
-            Rejection reason
+            {t("tasks.kanban.rejectionReason")}
           </Label>
           <Textarea
             id="rejection-comment"
-            placeholder="Enter rejection reason…"
+            placeholder={t("tasks.kanban.rejectReasonPlaceholder")}
             rows={3}
             value={rejectionComment}
             onChange={(e) => setRejectionComment(e.target.value)}
@@ -553,21 +556,21 @@ export function GroupKanbanBoard({
               setRejectionComment("");
             }}
           >
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             variant="destructive"
             disabled={!rejectionComment.trim()}
             onClick={handleRejectConfirm}
           >
-            Reject
+            {t("tasks.kanban.reject")}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <div className="flex gap-3 overflow-x-auto pb-2">
-        {COLUMNS.map((col) => {
+        {columns.map((col) => {
           const colTasks = flatTasks
             .filter((t) => t.status === col.id)
             .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""));
@@ -582,7 +585,7 @@ export function GroupKanbanBoard({
               dropDisabled={dropDisabled}
             >
               {colTasks.length === 0 ? (
-                <p className="py-6 text-center text-xs text-muted-foreground">Empty</p>
+                <p className="py-6 text-center text-xs text-muted-foreground">{t("tasks.kanban.empty")}</p>
               ) : (
                 colTasks.map((t) => (
                   <KanbanCard

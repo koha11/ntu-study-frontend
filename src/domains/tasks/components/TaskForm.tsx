@@ -12,6 +12,7 @@
  */
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { CreateTaskInput, UpdateTaskInput } from "../types";
 import { DatePicker } from "@/components/ui/date-picker";
 
@@ -66,6 +67,7 @@ export function TaskForm({
   onUpdate,
   onCancel,
 }: TaskFormProps) {
+  const { t } = useTranslation();
   const initialAssignee =
     initialData?.assigneeId?.trim() ||
     defaultAssigneeId ||
@@ -114,17 +116,17 @@ export function TaskForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       {isEdit ? (
         <p className="text-xs text-muted-foreground">
-          Status is changed from the board (drag columns or submit for review).
+          {t("tasks.form.statusNote")}
         </p>
       ) : null}
       {!isEdit && parentTaskId && parentTaskTitle ? (
         <p className="rounded-md border border-border/60 bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
-          Subtask of{" "}
+          {t("tasks.form.subtaskOf")}{" "}
           <span className="font-semibold text-foreground">{parentTaskTitle}</span>
         </p>
       ) : null}
       <div>
-        <label className="text-sm font-medium text-foreground">Task Title</label>
+        <label className="text-sm font-medium text-foreground">{t("tasks.form.taskTitle")}</label>
         <input
           type="text"
           value={formData.title}
@@ -134,7 +136,7 @@ export function TaskForm({
         />
       </div>
       <div>
-        <label className="text-sm font-medium text-foreground">Description</label>
+        <label className="text-sm font-medium text-foreground">{t("tasks.form.description")}</label>
         <textarea
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -143,7 +145,7 @@ export function TaskForm({
         />
       </div>
       <div>
-        <label className="text-sm font-medium text-foreground">Due Date</label>
+        <label className="text-sm font-medium text-foreground">{t("tasks.form.dueDate")}</label>
         <DatePicker
           value={formData.dueDate}
           onChange={(value) => setFormData({ ...formData, dueDate: value })}
@@ -151,7 +153,7 @@ export function TaskForm({
       </div>
       {defaultGroupId && memberOptions && memberOptions.length > 0 && (
         <div>
-          <label className="text-sm font-medium text-foreground">Assignee</label>
+          <label className="text-sm font-medium text-foreground">{t("tasks.form.assignee")}</label>
           <select
             value={formData.assigneeId}
             onChange={(e) => setFormData({ ...formData, assigneeId: e.target.value })}
@@ -168,17 +170,17 @@ export function TaskForm({
       )}
       {!defaultGroupId && !isEdit && (
         <div>
-          <label className="text-sm font-medium text-foreground">Status</label>
+          <label className="text-sm font-medium text-foreground">{t("tasks.form.status")}</label>
           <select
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
             className="mt-1 w-full rounded-md border border-border px-3 py-2"
           >
-            <option value="todo">To Do</option>
-            <option value="in_progress">In Progress</option>
-            <option value="pending_review">Pending review</option>
-            <option value="done">Done</option>
-            <option value="failed">Failed</option>
+            <option value="todo">{t("tasks.filters.todo")}</option>
+            <option value="in_progress">{t("tasks.filters.in_progress")}</option>
+            <option value="pending_review">{t("tasks.filters.pending_review")}</option>
+            <option value="done">{t("tasks.filters.done")}</option>
+            <option value="failed">{t("tasks.filters.failed")}</option>
           </select>
         </div>
       )}
@@ -188,7 +190,7 @@ export function TaskForm({
           disabled={isLoading}
           className="rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50"
         >
-          {isLoading ? "Saving..." : isEdit ? "Update task" : "Save"}
+          {isLoading ? t("tasks.form.saving") : isEdit ? t("tasks.form.updateTask") : t("common.save")}
         </button>
         {onCancel && (
           <button
@@ -196,7 +198,7 @@ export function TaskForm({
             onClick={onCancel}
             className="rounded-md border border-border px-4 py-2 text-foreground"
           >
-            Cancel
+            {t("common.cancel")}
           </button>
         )}
       </div>

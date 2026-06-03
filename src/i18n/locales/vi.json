@@ -15,7 +15,8 @@
     "confirm": "Xác nhận",
     "yes": "Có",
     "no": "Không",
-    "vsLastWeek": "so với tuần trước"
+    "vsLastWeek": "so với tuần trước",
+    "saving": "Đang lưu…"
   },
   "lang": {
     "toggle": "Ngôn ngữ",
@@ -150,6 +151,18 @@
       "signIn": "Đăng nhập",
       "privacy": "Bảo mật",
       "terms": "Điều khoản"
+    },
+    "mockDashboard": {
+      "greeting": "Xin chào! 👋",
+      "tasksDue": "3 nhiệm vụ đến hạn hôm nay",
+      "groups": "Nhóm",
+      "tasks": "Nhiệm vụ",
+      "flashcards": "Flashcard",
+      "active": "Active",
+      "tasksCount": "{{count}} nhiệm vụ",
+      "group1": "Nhóm Lập trình Web",
+      "group2": "CLB Đọc sách Toán",
+      "group3": "Đồ án tốt nghiệp"
     }
   },
   "login": {
@@ -222,7 +235,35 @@
       "todo": "Cần làm",
       "in_progress": "Đang làm",
       "pending_review": "Chờ xem xét",
-      "done": "Hoàn thành"
+      "done": "Hoàn thành",
+      "failed": "Thất bại"
+    },
+    "kanban": {
+      "dragTask": "Kéo nhiệm vụ",
+      "editTask": "Chỉnh sửa nhiệm vụ",
+      "addSubtask": "Thêm nhiệm vụ con",
+      "newSubtask": "Nhiệm vụ con mới",
+      "editTaskTitle": "Chỉnh sửa nhiệm vụ",
+      "empty": "Trống",
+      "unassigned": "Chưa phân công",
+      "parentTask": "Nhiệm vụ cha",
+      "rejectTask": "Từ chối nhiệm vụ",
+      "rejectTaskDesc": "Cung cấp lý do từ chối \"{{title}}\". Lý do này sẽ được gửi trong thông báo đến người được giao.",
+      "rejectionReason": "Lý do từ chối",
+      "rejectReasonPlaceholder": "Nhập lý do từ chối…",
+      "reject": "Từ chối",
+      "failedToUpdateStatus": "Không thể cập nhật trạng thái nhiệm vụ"
+    },
+    "form": {
+      "statusNote": "Trạng thái được thay đổi từ bảng (kéo cột hoặc gửi để xem xét).",
+      "subtaskOf": "Nhiệm vụ con của",
+      "taskTitle": "Tiêu đề nhiệm vụ",
+      "description": "Mô tả",
+      "dueDate": "Hạn chót",
+      "assignee": "Người được giao",
+      "status": "Trạng thái",
+      "saving": "Đang lưu…",
+      "updateTask": "Cập nhật nhiệm vụ"
     }
   },
   "groups": {
@@ -377,6 +418,88 @@
       "sharedWithGroup": "Đã chia sẻ bộ thẻ với nhóm",
       "failedToShare": "Chia sẻ thất bại",
       "failedToRemove": "Xóa thất bại"
+    },
+    "calendar": {
+      "connectTitle": "Kết nối Google Calendar",
+      "connectDesc": "Khi bạn tạo nhóm trong khi đăng nhập Google, chúng tôi thường tự động thêm lịch chung. Nếu nhóm này chưa có, hãy tạo lịch phụ trong Google Calendar, mở Cài đặt → Tích hợp lịch và sao chép ID Lịch (thường kết thúc bằng @group.calendar.google.com).",
+      "calendarId": "ID Lịch",
+      "saving": "Đang lưu…",
+      "save": "Lưu",
+      "update": "Cập nhật",
+      "settings": "Cài đặt lịch",
+      "couldNotLoad": "Không thể tải sự kiện lịch.",
+      "viewOnly": "Chỉ xem: chỉ trưởng nhóm mới có thể tạo sự kiện bằng cách nhấp vào khung giờ.",
+      "leaderOnly": "Chỉ trưởng nhóm mới có thể kết nối lịch.",
+      "messages": {
+        "today": "Hôm nay",
+        "back": "Trước",
+        "next": "Tiếp",
+        "week": "Tuần",
+        "day": "Ngày"
+      }
+    },
+    "quickLinksEdit": {
+      "triggerButton": "Chỉnh sửa",
+      "title": "Chỉnh sửa liên kết nhanh",
+      "desc": "Cập nhật Canva, tài liệu dự án, Meet và ngày hạn. Thành viên thấy thay đổi sau khi bạn lưu.",
+      "canvaUrl": "URL bản trình bày Canva",
+      "docUrl": "URL tài liệu dự án",
+      "meetLink": "Liên kết Meet",
+      "dueDate": "Ngày hạn dự án",
+      "saving": "Đang lưu…"
+    },
+    "scheduleMeet": {
+      "triggerButton": "Lên lịch Meet & mời",
+      "title": "Lên lịch Meet & mời",
+      "desc": "Tạo sự kiện Google Calendar một lần với Meet và mời tất cả thành viên đang hoạt động. Điều này không thay đổi liên kết Meet đã lưu của nhóm ở trên.",
+      "chooseStart": "Chọn ngày và giờ bắt đầu.",
+      "invalidStart": "Ngày bắt đầu không hợp lệ.",
+      "invalidEnd": "Ngày kết thúc không hợp lệ.",
+      "endAfterStart": "Thời gian kết thúc phải sau thời gian bắt đầu.",
+      "eventCreated": "Đã tạo sự kiện lịch và gửi lời mời.",
+      "couldNotCreate": "Không thể tạo cuộc họp.",
+      "missingCalendarAccess": "Thiếu quyền truy cập Google Calendar. Đăng xuất và đăng nhập lại để cấp quyền.",
+      "meetingCreated": "Cuộc họp đã được tạo. Chia sẻ liên kết bên dưới hoặc mở trong Lịch.",
+      "meetLabel": "Meet",
+      "copyMeetLink": "Sao chép liên kết Meet",
+      "openMeet": "Mở Meet",
+      "openInCalendar": "Mở trong Lịch",
+      "meetLinkCopied": "Đã sao chép liên kết Meet",
+      "couldNotCopy": "Không thể sao chép",
+      "startRequired": "Thời gian bắt đầu (bắt buộc)",
+      "endOptional": "Thời gian kết thúc (tùy chọn — mặc định 1 giờ sau bắt đầu)",
+      "creating": "Đang tạo…",
+      "createInvite": "Tạo & mời"
+    },
+    "scheduleEvent": {
+      "title": "Lên lịch cuộc họp",
+      "desc": "Tạo sự kiện trên Google Calendar của nhóm và gửi email cho các thành viên đang hoạt động.",
+      "eventTitle": "Tiêu đề",
+      "start": "Bắt đầu",
+      "end": "Kết thúc",
+      "locationType": "Loại địa điểm",
+      "online": "Trực tuyến (Google Meet)",
+      "offline": "Trực tiếp (gặp mặt)",
+      "placeName": "Tên địa điểm",
+      "placeNamePlaceholder": "Ví dụ: Hive tầng 2",
+      "addressDetail": "Chi tiết địa chỉ (tùy chọn)",
+      "addressDetailPlaceholder": "Phòng, tòa nhà, ghi chú",
+      "mapsUrl": "Liên kết Google Maps (tùy chọn)",
+      "meetOption": "Tùy chọn Meet",
+      "useGroupMeetLink": "Dùng liên kết Meet nhóm (Tổng quan)",
+      "createOneTimeMeet": "Tạo liên kết Meet một lần",
+      "addMeetOnOverview": "Thêm URL Meet ở tab Tổng quan để bật tùy chọn liên kết nhóm.",
+      "setGroupMeetFirst": "Đặt liên kết Meet nhóm ở tab Tổng quan trước.",
+      "eventCreated": "Đã tạo sự kiện và gửi lời mời.",
+      "couldNotCreate": "Không thể tạo sự kiện.",
+      "creating": "Đang tạo…",
+      "createEvent": "Tạo sự kiện",
+      "mapPreview": "Xem trước bản đồ",
+      "startRequired": "Bắt đầu là bắt buộc",
+      "endRequired": "Kết thúc là bắt buộc",
+      "endAfterStart": "Thời gian kết thúc phải sau bắt đầu",
+      "placeNameRequired": "Tên địa điểm là bắt buộc",
+      "chooseVideoOption": "Chọn tùy chọn cuộc họp video"
     }
   },
   "flashcards": {

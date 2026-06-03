@@ -11,6 +11,7 @@ import type { Event as RBCEventModel } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./group-calendar.css";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { calendarLocalizer } from "./calendar-localizer";
@@ -101,6 +102,7 @@ export function CalendarTab({
 
   const events = React.useMemo(() => rawEvents.map(toRbcEvent), [rawEvents]);
 
+  const { t } = useTranslation();
   const { mutate: patchGroup, isPending: savingCalId } = useUpdateGroup();
 
   const calendarFormats = React.useMemo(
@@ -152,19 +154,14 @@ export function CalendarTab({
   if (!hasCalendar) {
     return (
       <div className="rounded-xl border border-border bg-card/40 p-6">
-        <h2 className="text-lg font-semibold">Connect a Google Calendar</h2>
+        <h2 className="text-lg font-semibold">{t("groups.calendar.connectTitle")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          When you create a group while signed in with Google, we usually add a shared calendar
-          automatically. If this group does not have one yet, create a secondary calendar in Google
-          Calendar, open{" "}
-          <span className="font-medium text-foreground">Settings → Integrate calendar</span>, and
-          copy the <span className="font-medium text-foreground">Calendar ID</span> (it often ends with{" "}
-          <code className="text-xs">@group.calendar.google.com</code>).
+          {t("groups.calendar.connectDesc")}
         </p>
         {isLeader ? (
           <div className="mt-4 flex max-w-xl flex-col gap-3 sm:flex-row sm:items-end">
             <div className="min-w-0 flex-1 space-y-2">
-              <Label htmlFor="gcal-id">Calendar ID</Label>
+              <Label htmlFor="gcal-id">{t("groups.calendar.calendarId")}</Label>
               <Input
                 id="gcal-id"
                 value={calInput}
@@ -179,12 +176,12 @@ export function CalendarTab({
               disabled={savingCalId}
               onClick={handleSaveCalendarId}
             >
-              {savingCalId ? "Saving…" : "Save"}
+              {savingCalId ? t("groups.calendar.saving") : t("groups.calendar.save")}
             </Button>
           </div>
         ) : (
           <p className="mt-4 text-sm text-muted-foreground">
-            Only the group leader can connect the calendar.
+            {t("groups.calendar.leaderOnly")}
           </p>
         )}
       </div>
@@ -195,10 +192,10 @@ export function CalendarTab({
     <div className="space-y-4">
       {isLeader ? (
         <details className="rounded-lg border border-border bg-muted/20 px-3 py-2 text-sm">
-          <summary className="cursor-pointer font-medium text-foreground">Calendar settings</summary>
+          <summary className="cursor-pointer font-medium text-foreground">{t("groups.calendar.settings")}</summary>
           <div className="mt-3 flex max-w-xl flex-col gap-3 sm:flex-row sm:items-end">
             <div className="min-w-0 flex-1 space-y-2">
-              <Label htmlFor="gcal-id-edit">Calendar ID</Label>
+              <Label htmlFor="gcal-id-edit">{t("groups.calendar.calendarId")}</Label>
               <Input
                 id="gcal-id-edit"
                 value={calInput}
@@ -207,7 +204,7 @@ export function CalendarTab({
               />
             </div>
             <Button type="button" variant="secondary" disabled={savingCalId} onClick={handleSaveCalendarId}>
-              {savingCalId ? "Saving…" : "Update"}
+              {savingCalId ? t("groups.calendar.saving") : t("groups.calendar.update")}
             </Button>
           </div>
         </details>
@@ -216,7 +213,7 @@ export function CalendarTab({
       <div className={cn("min-w-0 w-full", isLoading && "opacity-75")}>
         {isError ? (
           <div className="rounded-xl border border-border bg-card p-4 text-sm text-destructive">
-            {(error as Error)?.message ?? "Could not load calendar events."}
+            {(error as Error)?.message ?? t("groups.calendar.couldNotLoad")}
           </div>
         ) : (
           <div className="gcal-skin w-full min-w-0">
@@ -242,11 +239,11 @@ export function CalendarTab({
               scrollToTime={scrollToTime}
               components={calendarComponents}
               messages={{
-                today: "Today",
-                previous: "Back",
-                next: "Next",
-                week: "Week",
-                day: "Day",
+                today: t("groups.calendar.messages.today"),
+                previous: t("groups.calendar.messages.back"),
+                next: t("groups.calendar.messages.next"),
+                week: t("groups.calendar.messages.week"),
+                day: t("groups.calendar.messages.day"),
               }}
             />
           </div>
@@ -255,7 +252,7 @@ export function CalendarTab({
 
       {!isLeader ? (
         <p className="text-xs text-muted-foreground">
-          View-only: only the leader can create events by clicking a time slot.
+          {t("groups.calendar.viewOnly")}
         </p>
       ) : null}
 

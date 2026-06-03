@@ -15,7 +15,8 @@
     "confirm": "Confirm",
     "yes": "Yes",
     "no": "No",
-    "vsLastWeek": "vs last week"
+    "vsLastWeek": "vs last week",
+    "saving": "Saving…"
   },
   "lang": {
     "toggle": "Language",
@@ -150,6 +151,18 @@
       "signIn": "Sign in",
       "privacy": "Privacy",
       "terms": "Terms"
+    },
+    "mockDashboard": {
+      "greeting": "Hello! 👋",
+      "tasksDue": "3 tasks due today",
+      "groups": "Groups",
+      "tasks": "Tasks",
+      "flashcards": "Flashcards",
+      "active": "Active",
+      "tasksCount": "{{count}} tasks",
+      "group1": "Web Programming Club",
+      "group2": "Math Book Club",
+      "group3": "Graduation Project"
     }
   },
   "login": {
@@ -222,7 +235,35 @@
       "todo": "To do",
       "in_progress": "In progress",
       "pending_review": "Review",
-      "done": "Done"
+      "done": "Done",
+      "failed": "Failed"
+    },
+    "kanban": {
+      "dragTask": "Drag task",
+      "editTask": "Edit task",
+      "addSubtask": "Add subtask",
+      "newSubtask": "New subtask",
+      "editTaskTitle": "Edit task",
+      "empty": "Empty",
+      "unassigned": "Unassigned",
+      "parentTask": "Parent task",
+      "rejectTask": "Reject task",
+      "rejectTaskDesc": "Provide a reason for rejecting \"{{title}}\". This will be included in the notification sent to the assignee.",
+      "rejectionReason": "Rejection reason",
+      "rejectReasonPlaceholder": "Enter rejection reason…",
+      "reject": "Reject",
+      "failedToUpdateStatus": "Failed to update task status"
+    },
+    "form": {
+      "statusNote": "Status is changed from the board (drag columns or submit for review).",
+      "subtaskOf": "Subtask of",
+      "taskTitle": "Task Title",
+      "description": "Description",
+      "dueDate": "Due Date",
+      "assignee": "Assignee",
+      "status": "Status",
+      "saving": "Saving…",
+      "updateTask": "Update task"
     }
   },
   "groups": {
@@ -377,6 +418,88 @@
       "sharedWithGroup": "Flashcard set shared with group",
       "failedToShare": "Failed to share",
       "failedToRemove": "Failed to remove"
+    },
+    "calendar": {
+      "connectTitle": "Connect a Google Calendar",
+      "connectDesc": "When you create a group while signed in with Google, we usually add a shared calendar automatically. If this group does not have one yet, create a secondary calendar in Google Calendar, open Settings → Integrate calendar, and copy the Calendar ID (it often ends with @group.calendar.google.com).",
+      "calendarId": "Calendar ID",
+      "saving": "Saving…",
+      "save": "Save",
+      "update": "Update",
+      "settings": "Calendar settings",
+      "couldNotLoad": "Could not load calendar events.",
+      "viewOnly": "View-only: only the leader can create events by clicking a time slot.",
+      "leaderOnly": "Only the group leader can connect the calendar.",
+      "messages": {
+        "today": "Today",
+        "back": "Back",
+        "next": "Next",
+        "week": "Week",
+        "day": "Day"
+      }
+    },
+    "quickLinksEdit": {
+      "triggerButton": "Edit",
+      "title": "Edit quick links",
+      "desc": "Update Canva, project doc, Meet, and due date. Members see changes after you save.",
+      "canvaUrl": "Canva presentation URL",
+      "docUrl": "Project doc URL",
+      "meetLink": "Meet link",
+      "dueDate": "Project due date",
+      "saving": "Saving…"
+    },
+    "scheduleMeet": {
+      "triggerButton": "Schedule Meet & invite",
+      "title": "Schedule Meet & invite",
+      "desc": "Creates a one-time Google Calendar event with Meet and invites all active members. This does not change the group's saved Meet link above.",
+      "chooseStart": "Choose a start date and time.",
+      "invalidStart": "Invalid start date.",
+      "invalidEnd": "Invalid end date.",
+      "endAfterStart": "End time must be after start time.",
+      "eventCreated": "Calendar event created and invitations sent.",
+      "couldNotCreate": "Could not create the meeting.",
+      "missingCalendarAccess": "Google Calendar access is missing. Sign out and sign in again to grant permission.",
+      "meetingCreated": "Meeting created. Share the link below or open it in Calendar.",
+      "meetLabel": "Meet",
+      "copyMeetLink": "Copy Meet link",
+      "openMeet": "Open Meet",
+      "openInCalendar": "Open in Calendar",
+      "meetLinkCopied": "Meet link copied",
+      "couldNotCopy": "Could not copy",
+      "startRequired": "Start (required)",
+      "endOptional": "End (optional — defaults to 1 hour after start)",
+      "creating": "Creating…",
+      "createInvite": "Create & invite"
+    },
+    "scheduleEvent": {
+      "title": "Schedule meeting",
+      "desc": "Creates an event on the group's Google Calendar and emails active members.",
+      "eventTitle": "Title",
+      "start": "Start",
+      "end": "End",
+      "locationType": "Location type",
+      "online": "Online (Google Meet)",
+      "offline": "Offline (in person)",
+      "placeName": "Place name",
+      "placeNamePlaceholder": "e.g. Hive Level 2",
+      "addressDetail": "Address details (optional)",
+      "addressDetailPlaceholder": "Room, building, notes",
+      "mapsUrl": "Google Maps link (optional)",
+      "meetOption": "Meet option",
+      "useGroupMeetLink": "Use group Meet link (Overview)",
+      "createOneTimeMeet": "Create one-time Meet link",
+      "addMeetOnOverview": "Add a Meet URL on the Overview tab to enable the group link option.",
+      "setGroupMeetFirst": "Set the group Meet link on the Overview tab first.",
+      "eventCreated": "Event created and invitations sent.",
+      "couldNotCreate": "Could not create the event.",
+      "creating": "Creating…",
+      "createEvent": "Create event",
+      "mapPreview": "Map preview",
+      "startRequired": "Start is required",
+      "endRequired": "End is required",
+      "endAfterStart": "End must be after start",
+      "placeNameRequired": "Place name is required",
+      "chooseVideoOption": "Choose a video meeting option"
     }
   },
   "flashcards": {

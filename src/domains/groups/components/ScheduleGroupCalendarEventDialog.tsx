@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -28,44 +29,46 @@ function isoToDatetimeLocalValue(iso: string): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-const formSchema = z
-  .object({
-    summary: z.string().max(500).optional(),
-    startLocal: z.string().min(1, "Start is required"),
-    endLocal: z.string().min(1, "End is required"),
-    mode: z.enum(["offline", "online"]),
-    place_name: z.string().max(500).optional(),
-    address_detail: z.string().max(2000).optional(),
-    maps_url: z.union([z.string().url(), z.literal("")]).optional(),
-    online_option: z.enum(["group_meet_link", "one_time_meet"]).optional(),
-  })
-  .superRefine((data, ctx) => {
-    const start = new Date(data.startLocal);
-    const end = new Date(data.endLocal);
-    if (!Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime()) && end <= start) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "End must be after start",
-        path: ["endLocal"],
-      });
-    }
-    if (data.mode === "offline" && !data.place_name?.trim()) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Place name is required",
-        path: ["place_name"],
-      });
-    }
-    if (data.mode === "online" && !data.online_option) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Choose a video meeting option",
-        path: ["online_option"],
-      });
-    }
-  });
+function makeFormSchema(t: (key: string) => string) {
+  return z
+    .object({
+      summary: z.string().max(500).optional(),
+      startLocal: z.string().min(1, t("groups.scheduleEvent.startRequired")),
+      endLocal: z.string().min(1, t("groups.scheduleEvent.endRequired")),
+      mode: z.enum(["offline", "online"]),
+      place_name: z.string().max(500).optional(),
+      address_detail: z.string().max(2000).optional(),
+      maps_url: z.union([z.string().url(), z.literal("")]).optional(),
+      online_option: z.enum(["group_meet_link", "one_time_meet"]).optional(),
+    })
+    .superRefine((data, ctx) => {
+      const start = new Date(data.startLocal);
+      const end = new Date(data.endLocal);
+      if (!Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime()) && end <= start) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("groups.scheduleEvent.endAfterStart"),
+          path: ["endLocal"],
+        });
+      }
+      if (data.mode === "offline" && !data.place_name?.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("groups.scheduleEvent.placeNameRequired"),
+          path: ["place_name"],
+        });
+      }
+      if (data.mode === "online" && !data.online_option) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("groups.scheduleEvent.chooseVideoOption"),
+          path: ["online_option"],
+        });
+      }
+    });
+}
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<ReturnType<typeof makeFormSchema>>;
 
 export interface ScheduleGroupCalendarEventDialogProps {
   open: boolean;
@@ -84,7 +87,10 @@ export function ScheduleGroupCalendarEventDialog({
   meetLink,
   defaultRange,
 }: ScheduleGroupCalendarEventDialogProps) {
+  const { t } = useTranslation();
   const { mutateAsync: createEvent, isPending } = useCreateGroupCalendarEventMutation();
+
+  const formSchema = React.useMemo(() => makeFormSchema(t), [t]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -128,7 +134,7 @@ export function ScheduleGroupCalendarEventDialog({
     const end = new Date(values.endLocal);
     if (values.mode === "online" && values.online_option === "group_meet_link" && !meetLink?.trim()) {
       form.setError("online_option", {
-        message: "Set the group Meet link on the Overview tab first.",
+        message: t("groups.scheduleEvent.setGroupMeetFirst"),
       });
       return;
     }
@@ -154,14 +160,14 @@ export function ScheduleGroupCalendarEventDialog({
               }),
         },
       });
-      toast.success("Event created and invitations sent.");
+      toast.success(t("groups.scheduleEvent.eventCreated"));
       onOpenChange(false);
     } catch (e) {
       const raw = e instanceof HttpError ? e.message : "";
       const msg =
         raw?.trim() ||
         (e instanceof Error ? e.message : "") ||
-        "Could not create the event.";
+        t("groups.scheduleEvent.couldNotCreate");
       toast.error(msg);
     }
   });
@@ -170,28 +176,28 @@ export function ScheduleGroupCalendarEventDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Schedule meeting</DialogTitle>
+          <DialogTitle>{t("groups.scheduleEvent.title")}</DialogTitle>
           <DialogDescription>
-            Creates an event on the group&apos;s Google Calendar and emails active members.
+            {t("groups.scheduleEvent.desc")}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="cal-event-title">Title</Label>
+            <Label htmlFor="cal-event-title">{t("groups.scheduleEvent.eventTitle")}</Label>
             <Input id="cal-event-title" {...form.register("summary")} />
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div className="space-y-2">
-              <Label htmlFor="cal-start">Start</Label>
+              <Label htmlFor="cal-start">{t("groups.scheduleEvent.start")}</Label>
               <Input id="cal-start" type="datetime-local" {...form.register("startLocal")} />
               {form.formState.errors.startLocal ? (
                 <p className="text-xs text-destructive">{form.formState.errors.startLocal.message}</p>
               ) : null}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="cal-end">End</Label>
+              <Label htmlFor="cal-end">{t("groups.scheduleEvent.end")}</Label>
               <Input id="cal-end" type="datetime-local" {...form.register("endLocal")} />
               {form.formState.errors.endLocal ? (
                 <p className="text-xs text-destructive">{form.formState.errors.endLocal.message}</p>
@@ -200,7 +206,7 @@ export function ScheduleGroupCalendarEventDialog({
           </div>
 
           <div className="space-y-2">
-            <Label>Location type</Label>
+            <Label>{t("groups.scheduleEvent.locationType")}</Label>
             <RadioGroup
               value={mode}
               onValueChange={(v) => form.setValue("mode", v as "offline" | "online")}
@@ -209,13 +215,13 @@ export function ScheduleGroupCalendarEventDialog({
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="online" id="mode-online" />
                 <Label htmlFor="mode-online" className="font-normal">
-                  Online (Google Meet)
+                  {t("groups.scheduleEvent.online")}
                 </Label>
               </div>
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="offline" id="mode-offline" />
                 <Label htmlFor="mode-offline" className="font-normal">
-                  Offline (in person)
+                  {t("groups.scheduleEvent.offline")}
                 </Label>
               </div>
             </RadioGroup>
@@ -224,33 +230,33 @@ export function ScheduleGroupCalendarEventDialog({
           {mode === "offline" ? (
             <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-3">
               <div className="space-y-2">
-                <Label htmlFor="place_name">Place name</Label>
-                <Input id="place_name" {...form.register("place_name")} placeholder="e.g. Hive Level 2" />
+                <Label htmlFor="place_name">{t("groups.scheduleEvent.placeName")}</Label>
+                <Input id="place_name" {...form.register("place_name")} placeholder={t("groups.scheduleEvent.placeNamePlaceholder")} />
                 {form.formState.errors.place_name ? (
                   <p className="text-xs text-destructive">{form.formState.errors.place_name.message}</p>
                 ) : null}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="address_detail">Address details (optional)</Label>
+                <Label htmlFor="address_detail">{t("groups.scheduleEvent.addressDetail")}</Label>
                 <Input
                   id="address_detail"
                   {...form.register("address_detail")}
-                  placeholder="Room, building, notes"
+                  placeholder={t("groups.scheduleEvent.addressDetailPlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="maps_url">Google Maps link (optional)</Label>
+                <Label htmlFor="maps_url">{t("groups.scheduleEvent.mapsUrl")}</Label>
                 <Input id="maps_url" type="url" {...form.register("maps_url")} placeholder="https://maps.google.com/..." />
               </div>
               {embedSrc ? (
                 <div className="overflow-hidden rounded-md border border-border">
-                  <iframe title="Map preview" src={embedSrc} className="h-48 w-full" loading="lazy" />
+                  <iframe title={t("groups.scheduleEvent.mapPreview")} src={embedSrc} className="h-48 w-full" loading="lazy" />
                 </div>
               ) : null}
             </div>
           ) : (
             <div className="space-y-2">
-              <Label>Meet option</Label>
+              <Label>{t("groups.scheduleEvent.meetOption")}</Label>
               <RadioGroup
                 value={form.watch("online_option") ?? "one_time_meet"}
                 onValueChange={(v) =>
@@ -265,13 +271,13 @@ export function ScheduleGroupCalendarEventDialog({
                     disabled={!meetLink?.trim()}
                   />
                   <Label htmlFor="oo-group" className={`font-normal ${!meetLink?.trim() ? "text-muted-foreground" : ""}`}>
-                    Use group Meet link (Overview)
+                    {t("groups.scheduleEvent.useGroupMeetLink")}
                   </Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="one_time_meet" id="oo-new" />
                   <Label htmlFor="oo-new" className="font-normal">
-                    Create one-time Meet link
+                    {t("groups.scheduleEvent.createOneTimeMeet")}
                   </Label>
                 </div>
               </RadioGroup>
@@ -280,7 +286,7 @@ export function ScheduleGroupCalendarEventDialog({
               ) : null}
               {!meetLink?.trim() ? (
                 <p className="text-xs text-muted-foreground">
-                  Add a Meet URL on the Overview tab to enable the group link option.
+                  {t("groups.scheduleEvent.addMeetOnOverview")}
                 </p>
               ) : null}
             </div>
@@ -288,10 +294,10 @@ export function ScheduleGroupCalendarEventDialog({
 
           <DialogFooter className="gap-2 sm:gap-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button type="submit" disabled={isPending} className="bg-gradient-primary">
-              {isPending ? "Creating…" : "Create event"}
+              {isPending ? t("groups.scheduleEvent.creating") : t("groups.scheduleEvent.createEvent")}
             </Button>
           </DialogFooter>
         </form>

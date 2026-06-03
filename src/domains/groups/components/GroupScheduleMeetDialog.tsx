@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,6 +24,7 @@ export interface GroupScheduleMeetDialogProps {
 }
 
 export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
   const [scheduleStart, setScheduleStart] = React.useState("");
   const [scheduleEnd, setScheduleEnd] = React.useState("");
@@ -50,23 +52,23 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
   const handleSubmit = async () => {
     setScheduleError(null);
     if (!scheduleStart.trim()) {
-      setScheduleError("Choose a start date and time.");
+      setScheduleError(t("groups.scheduleMeet.chooseStart"));
       return;
     }
     const startDate = new Date(scheduleStart);
     if (Number.isNaN(startDate.getTime())) {
-      setScheduleError("Invalid start date.");
+      setScheduleError(t("groups.scheduleMeet.invalidStart"));
       return;
     }
     let endIso: string | undefined;
     if (scheduleEnd.trim()) {
       const endDate = new Date(scheduleEnd);
       if (Number.isNaN(endDate.getTime())) {
-        setScheduleError("Invalid end date.");
+        setScheduleError(t("groups.scheduleMeet.invalidEnd"));
         return;
       }
       if (endDate.getTime() <= startDate.getTime()) {
-        setScheduleError("End time must be after start time.");
+        setScheduleError(t("groups.scheduleMeet.endAfterStart"));
         return;
       }
       endIso = endDate.toISOString();
@@ -81,18 +83,16 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
         },
       });
       setScheduleResult(result);
-      toast.success("Calendar event created and invitations sent.");
+      toast.success(t("groups.scheduleMeet.eventCreated"));
     } catch (e) {
       const raw = e instanceof HttpError ? e.message : "";
       const msg =
         raw?.trim() ||
         (e instanceof Error ? e.message : "") ||
-        "Could not create the meeting.";
+        t("groups.scheduleMeet.couldNotCreate");
       setScheduleError(msg);
       if (e instanceof HttpError && e.status === 403) {
-        toast.error(
-          "Google Calendar access is missing. Sign out and sign in again to grant permission.",
-        );
+        toast.error(t("groups.scheduleMeet.missingCalendarAccess"));
       }
     }
   };
@@ -101,25 +101,23 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button type="button" variant="outline" className="shadow-sm">
-          Schedule Meet &amp; invite
+          {t("groups.scheduleMeet.triggerButton")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[min(90vh,640px)] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Schedule Meet &amp; invite</DialogTitle>
+          <DialogTitle>{t("groups.scheduleMeet.title")}</DialogTitle>
           <DialogDescription>
-            Creates a one-time Google Calendar event with Meet and invites all{" "}
-            <span className="font-medium text-foreground">active</span> members. This does not change
-            the group&apos;s saved Meet link above.
+            {t("groups.scheduleMeet.desc")}
           </DialogDescription>
         </DialogHeader>
         {scheduleResult ? (
           <div className="space-y-4 py-2">
             <p className="text-sm text-muted-foreground">
-              Meeting created. Share the link below or open it in Calendar.
+              {t("groups.scheduleMeet.meetingCreated")}
             </p>
             <div className="rounded-lg border border-border bg-muted/20 p-3">
-              <p className="text-xs font-medium text-muted-foreground">Meet</p>
+              <p className="text-xs font-medium text-muted-foreground">{t("groups.scheduleMeet.meetLabel")}</p>
               <a
                 href={scheduleResult.meet_link}
                 target="_blank"
@@ -136,12 +134,12 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
                 size="sm"
                 onClick={() => {
                   void navigator.clipboard.writeText(scheduleResult.meet_link).then(
-                    () => toast.success("Meet link copied"),
-                    () => toast.error("Could not copy"),
+                    () => toast.success(t("groups.scheduleMeet.meetLinkCopied")),
+                    () => toast.error(t("groups.scheduleMeet.couldNotCopy")),
                   );
                 }}
               >
-                Copy Meet link
+                {t("groups.scheduleMeet.copyMeetLink")}
               </Button>
               <Button type="button" size="sm" className="bg-gradient-primary" asChild>
                 <a
@@ -149,7 +147,7 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Open Meet
+                  {t("groups.scheduleMeet.openMeet")}
                 </a>
               </Button>
               {scheduleResult.html_link ? (
@@ -159,7 +157,7 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Open in Calendar
+                    {t("groups.scheduleMeet.openInCalendar")}
                   </a>
                 </Button>
               ) : null}
@@ -172,7 +170,7 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
                 htmlFor="schedule-start"
                 className="text-xs font-medium text-muted-foreground"
               >
-                Start (required)
+                {t("groups.scheduleMeet.startRequired")}
               </Label>
               <Input
                 id="schedule-start"
@@ -188,7 +186,7 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
                 htmlFor="schedule-end"
                 className="text-xs font-medium text-muted-foreground"
               >
-                End (optional — defaults to 1 hour after start)
+                {t("groups.scheduleMeet.endOptional")}
               </Label>
               <Input
                 id="schedule-end"
@@ -213,7 +211,7 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
             disabled={meetEventPending}
             onClick={() => setOpen(false)}
           >
-            {scheduleResult ? "Close" : "Cancel"}
+            {scheduleResult ? t("common.close") : t("common.cancel")}
           </Button>
           {scheduleResult ? null : (
             <Button
@@ -222,7 +220,7 @@ export function GroupScheduleMeetDialog({ groupId }: GroupScheduleMeetDialogProp
               disabled={meetEventPending}
               onClick={() => void handleSubmit()}
             >
-              {meetEventPending ? "Creating…" : "Create & invite"}
+              {meetEventPending ? t("groups.scheduleMeet.creating") : t("groups.scheduleMeet.createInvite")}
             </Button>
           )}
         </DialogFooter>

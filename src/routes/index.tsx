@@ -226,8 +226,8 @@ function LandingPage() {
                     {/* Greeting */}
                     <div className="mb-3 flex items-center justify-between">
                       <div>
-                        <div className="text-[11px] font-semibold text-foreground">Xin chào! 👋</div>
-                        <div className="text-[9px] text-muted-foreground">3 nhiệm vụ đến hạn hôm nay</div>
+                        <div className="text-[11px] font-semibold text-foreground">{t("landing.mockDashboard.greeting")}</div>
+                        <div className="text-[9px] text-muted-foreground">{t("landing.mockDashboard.tasksDue")}</div>
                       </div>
                       <div className="h-6 w-6 rounded-full bg-gradient-primary" />
                     </div>
@@ -235,9 +235,9 @@ function LandingPage() {
                     {/* Stat cards */}
                     <div className="mb-3 grid grid-cols-3 gap-2">
                       {[
-                        { label: "Nhóm", value: "5" },
-                        { label: "Nhiệm vụ", value: "12" },
-                        { label: "Flashcard", value: "847" },
+                        { label: t("landing.mockDashboard.groups"), value: "5" },
+                        { label: t("landing.mockDashboard.tasks"), value: "12" },
+                        { label: t("landing.mockDashboard.flashcards"), value: "847" },
                       ].map((stat, i) => (
                         <div key={stat.label} className="rounded-lg border border-border bg-card/60 p-2">
                           <div className={`mb-1 h-1 w-5 rounded-full ${i === 0 ? "bg-gradient-primary" : i === 1 ? "bg-success" : "bg-primary/60"}`} />
@@ -250,18 +250,18 @@ function LandingPage() {
                     {/* Group list */}
                     <div className="space-y-1.5">
                       {[
-                        { name: "Nhóm Lập trình Web", tasks: 4 },
-                        { name: "CLB Đọc sách Toán", tasks: 2 },
-                        { name: "Đồ án tốt nghiệp", tasks: 7 },
+                        { name: t("landing.mockDashboard.group1"), tasks: 4 },
+                        { name: t("landing.mockDashboard.group2"), tasks: 2 },
+                        { name: t("landing.mockDashboard.group3"), tasks: 7 },
                       ].map((group, i) => (
                         <div key={group.name} className="flex items-center gap-2 rounded-lg border border-border bg-card/60 p-2">
                           <div className={`h-6 w-6 shrink-0 rounded-md ${i === 0 ? "bg-gradient-primary" : i === 1 ? "bg-success/70" : "bg-warning/70"}`} />
                           <div className="min-w-0 flex-1">
                             <div className="truncate text-[9px] font-medium text-foreground">{group.name}</div>
-                            <div className="text-[8px] text-muted-foreground">{group.tasks} nhiệm vụ</div>
+                            <div className="text-[8px] text-muted-foreground">{t("landing.mockDashboard.tasksCount", { count: group.tasks })}</div>
                           </div>
                           <div className="shrink-0 rounded-full bg-primary/15 px-1.5 py-0.5 text-[7px] font-medium text-primary">
-                            Active
+                            {t("landing.mockDashboard.active")}
                           </div>
                         </div>
                       ))}

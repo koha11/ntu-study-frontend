@@ -11,6 +11,7 @@
  */
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { CreateGroupInput, UpdateGroupInput } from "../types";
 
 interface GroupFormProps {
@@ -21,6 +22,7 @@ interface GroupFormProps {
 }
 
 export function GroupForm({ initialData, isLoading = false, onSubmit, onCancel }: GroupFormProps) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: initialData?.name || "",
     description: initialData?.description || "",
@@ -39,7 +41,7 @@ export function GroupForm({ initialData, isLoading = false, onSubmit, onCancel }
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="text-sm font-medium text-foreground">Group Name</label>
+        <label className="text-sm font-medium text-foreground">{t("groups.groupName")}</label>
         <input
           type="text"
           value={formData.name}
@@ -49,7 +51,7 @@ export function GroupForm({ initialData, isLoading = false, onSubmit, onCancel }
         />
       </div>
       <div>
-        <label className="text-sm font-medium text-foreground">Description</label>
+        <label className="text-sm font-medium text-foreground">{t("groups.description")}</label>
         <textarea
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -63,7 +65,7 @@ export function GroupForm({ initialData, isLoading = false, onSubmit, onCancel }
           disabled={isLoading}
           className="rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50"
         >
-          {isLoading ? "Saving..." : "Save"}
+          {isLoading ? t("common.saving") : t("common.save")}
         </button>
         {onCancel && (
           <button
@@ -71,7 +73,7 @@ export function GroupForm({ initialData, isLoading = false, onSubmit, onCancel }
             onClick={onCancel}
             className="rounded-md border border-border px-4 py-2 text-foreground"
           >
-            Cancel
+            {t("common.cancel")}
           </button>
         )}
       </div>
