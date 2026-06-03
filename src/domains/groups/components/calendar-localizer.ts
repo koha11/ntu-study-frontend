@@ -28,7 +28,7 @@ const localizer = dayjsLocalizer(dayjs);
 // Override to stay in local mode so min/max/scrollToTime work at true local times.
 // With this fix, getMinutesFromMidnight() returns 0 for a midnight min, so the
 // original getSlotDate correctly places slots at 12 AM, 1 AM, 2 AM … without patching.
-(localizer as any).merge = (date: Date | null, time: Date | null): Date | null => {
+(localizer as unknown as { merge: (d: Date | null, t: Date | null) => Date | null }).merge = (date: Date | null, time: Date | null): Date | null => {
   if (!date && !time) return null;
   const tm = dayjs(time).format("HH:mm:ss");
   const dt = dayjs(date).startOf("day").format("MM/DD/YYYY");

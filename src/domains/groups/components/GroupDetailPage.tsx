@@ -28,7 +28,7 @@ const GROUP_TABS = [
   "overview",
   "tasks",
   "drive",
-  "canva",
+  // "canva", // temporarily hidden
   "calendar",
   "members",
   "contribution",
@@ -128,7 +128,7 @@ export function GroupDetailPage() {
           <TabsTrigger value="overview">{t("groups.tabs.overview")}</TabsTrigger>
           <TabsTrigger value="tasks">{t("groups.tabs.tasks")}</TabsTrigger>
           <TabsTrigger value="drive">{t("groups.tabs.drive")}</TabsTrigger>
-          <TabsTrigger value="canva">{t("groups.tabs.canva")}</TabsTrigger>
+          {/* <TabsTrigger value="canva">{t("groups.tabs.canva")}</TabsTrigger> */}
           <TabsTrigger value="calendar">{t("groups.tabs.calendar")}</TabsTrigger>
           <TabsTrigger value="members">
             {t("groups.tabs.members")} ({membersLoading ? "…" : members.length})
@@ -213,9 +213,9 @@ export function GroupDetailPage() {
           <DriveTab groupId={id} driveFolderId={group.drive_folder_id} />
         </TabsContent>
 
-        <TabsContent value="canva" className="mt-6">
+        {/* <TabsContent value="canva" className="mt-6">
           <CanvaTab groupId={groupId} hasDesign={Boolean(group.canva_design_id)} />
-        </TabsContent>
+        </TabsContent> */}
 
         <TabsContent value="calendar" className="mt-6">
           <CalendarTab

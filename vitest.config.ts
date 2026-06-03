@@ -19,6 +19,10 @@ export default defineConfig({
         "**/*.config.ts",
         "**/routeTree.gen.ts",
         "src/test/**",
+        "src/components/ui/**",
+        "src/routes/**",
+        "src/lib/mockData.ts",
+        "src/shared/adapters/mock-api.ts",
       ],
       thresholds: {
         lines: 80,

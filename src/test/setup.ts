@@ -29,7 +29,7 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
-global.localStorage = localStorageMock as any;
+global.localStorage = localStorageMock as unknown as Storage;
 
 // Suppress console errors during tests (optional, useful for React warnings)
 global.console = {

@@ -4,6 +4,22 @@ import { act, fireEvent, render, screen, waitFor } from "@/test/test-utils";
 import { SettingsPage } from "./SettingsPage";
 import { UserRole } from "@/common/enums/user-role.enum";
 import { startCanvaOAuth } from "@/domains/auth/auth-api";
+import en from "@/i18n/locales/en.json";
+
+function t(key: string): string {
+  const parts = key.split(".");
+  let node: unknown = en;
+  for (const part of parts) {
+    if (typeof node !== "object" || node === null) return key;
+    node = (node as Record<string, unknown>)[part];
+  }
+  return typeof node === "string" ? node : key;
+}
+
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({ t }),
+  Trans: ({ i18nKey }: { i18nKey: string }) => t(i18nKey),
+}));
 
 const mockUseCurrentUser = vi.fn();
 const mockPatchMutate = vi.fn();

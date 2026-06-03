@@ -291,6 +291,7 @@ export function SettingsPage() {
         </CardContent>
       </Card>
 
+      {/* Canva card temporarily hidden
       <Card>
         <CardHeader>
           <CardTitle>{t("settings.canva.title")}</CardTitle>
@@ -327,6 +328,7 @@ export function SettingsPage() {
           )}
         </CardContent>
       </Card>
+      */}
 
       <Card>
         <CardHeader>

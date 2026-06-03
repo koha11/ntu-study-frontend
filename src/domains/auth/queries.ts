@@ -23,7 +23,7 @@ import { mapProfileToUser } from "./map-profile";
 import type { User, LoginInput, RegisterInput, ChangePasswordInput } from "./types";
 
 async function syncGoogleProfileWithRefresh(): Promise<User> {
-  let token = getAccessToken();
+  const token = getAccessToken();
   if (!token) {
     throw new Error("Not authenticated");
   }
@@ -55,7 +55,7 @@ async function syncGoogleProfileWithRefresh(): Promise<User> {
 }
 
 async function patchCurrentUserProfile(body: PatchUserBody): Promise<User> {
-  let token = getAccessToken();
+  const token = getAccessToken();
   if (!token) {
     throw new Error("Not authenticated");
   }
@@ -87,7 +87,7 @@ async function patchCurrentUserProfile(body: PatchUserBody): Promise<User> {
 }
 
 async function loadCurrentUser(): Promise<User> {
-  let token = getAccessToken();
+  const token = getAccessToken();
   if (!token) {
     throw new Error("Not authenticated");
   }

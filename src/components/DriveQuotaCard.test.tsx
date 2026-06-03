@@ -3,6 +3,22 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, fireEvent, waitFor } from "@/test/test-utils";
 import { DriveQuotaCard } from "./DriveQuotaCard";
+import en from "@/i18n/locales/en.json";
+
+function t(key: string): string {
+  const parts = key.split(".");
+  let node: unknown = en;
+  for (const part of parts) {
+    if (typeof node !== "object" || node === null) return key;
+    node = (node as Record<string, unknown>)[part];
+  }
+  return typeof node === "string" ? node : key;
+}
+
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({ t }),
+  Trans: ({ i18nKey }: { i18nKey: string }) => t(i18nKey),
+}));
 
 const fetchDriveQuota = vi.fn();
 const refreshDriveQuota = vi.fn();
