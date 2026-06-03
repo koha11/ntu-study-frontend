@@ -408,8 +408,8 @@ function LandingPage() {
               <a href="#features" className="hover:text-foreground">{t("landing.footer.features")}</a>
               <a href="#how" className="hover:text-foreground">{t("landing.footer.howItWorks")}</a>
               <Link to="/login" className="hover:text-foreground">{t("landing.footer.signIn")}</Link>
-              <a href="#" className="hover:text-foreground">{t("landing.footer.privacy")}</a>
-              <a href="#" className="hover:text-foreground">{t("landing.footer.terms")}</a>
+              <Link to="/privacy" className="hover:text-foreground">{t("landing.footer.privacy")}</Link>
+              <Link to="/terms" className="hover:text-foreground">{t("landing.footer.terms")}</Link>
             </nav>
 
             <div className="flex items-center gap-2">

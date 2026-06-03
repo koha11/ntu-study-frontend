@@ -124,13 +124,13 @@ function LoginPage() {
 
           <p className="mt-6 text-center text-xs text-muted-foreground">
             {t("login.byContiuing")}{" "}
-            <a href="#" className="underline hover:text-foreground">
+            <Link to="/terms" className="underline hover:text-foreground">
               {t("login.terms")}
-            </a>{" "}
+            </Link>{" "}
             {t("login.and")}{" "}
-            <a href="#" className="underline hover:text-foreground">
+            <Link to="/privacy" className="underline hover:text-foreground">
               {t("login.privacy")}
-            </a>
+            </Link>
             .
           </p>
         </div>
@@ -144,12 +144,12 @@ function LoginPage() {
             <Link to="/" className="hover:text-foreground">
               {t("login.footer.home")}
             </Link>
-            <a href="#" className="hover:text-foreground">
+            <Link to="/privacy" className="hover:text-foreground">
               {t("login.footer.privacy")}
-            </a>
-            <a href="#" className="hover:text-foreground">
+            </Link>
+            <Link to="/terms" className="hover:text-foreground">
               {t("login.footer.terms")}
-            </a>
+            </Link>
             <a href="#" className="hover:text-foreground">
               {t("login.footer.support")}
             </a>
