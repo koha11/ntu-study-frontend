@@ -17,12 +17,12 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InvitationsRouteImport } from './routes/invitations'
-import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CanvaConnectedRouteImport } from './routes/canva-connected'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GroupsIndexRouteImport } from './routes/groups.index'
+import { Route as FlashcardsIndexRouteImport } from './routes/flashcards.index'
 import { Route as LoginCallbackRouteImport } from './routes/login.callback'
 import { Route as GroupsGroupIdRouteImport } from './routes/groups.$groupId'
 import { Route as FlashcardsNewRouteImport } from './routes/flashcards.new'
@@ -69,11 +69,6 @@ const InvitationsRoute = InvitationsRouteImport.update({
   path: '/invitations',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FlashcardsRoute = FlashcardsRouteImport.update({
-  id: '/flashcards',
-  path: '/flashcards',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -99,6 +94,11 @@ const GroupsIndexRoute = GroupsIndexRouteImport.update({
   path: '/groups/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FlashcardsIndexRoute = FlashcardsIndexRouteImport.update({
+  id: '/flashcards/',
+  path: '/flashcards/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginCallbackRoute = LoginCallbackRouteImport.update({
   id: '/callback',
   path: '/callback',
@@ -110,9 +110,9 @@ const GroupsGroupIdRoute = GroupsGroupIdRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const FlashcardsNewRoute = FlashcardsNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => FlashcardsRoute,
+  id: '/flashcards/new',
+  path: '/flashcards/new',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const InvitationsTokenAcceptRoute = InvitationsTokenAcceptRouteImport.update({
   id: '/$token/accept',
@@ -120,9 +120,9 @@ const InvitationsTokenAcceptRoute = InvitationsTokenAcceptRouteImport.update({
   getParentRoute: () => InvitationsRoute,
 } as any)
 const FlashcardsSetIdEditRoute = FlashcardsSetIdEditRouteImport.update({
-  id: '/$setId/edit',
-  path: '/$setId/edit',
-  getParentRoute: () => FlashcardsRoute,
+  id: '/flashcards/$setId/edit',
+  path: '/flashcards/$setId/edit',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -131,7 +131,6 @@ export interface FileRoutesByFullPath {
   '/guide': typeof GuideRoute
   '/canva-connected': typeof CanvaConnectedRoute
   '/dashboard': typeof DashboardRoute
-  '/flashcards': typeof FlashcardsRouteWithChildren
   '/invitations': typeof InvitationsRouteWithChildren
   '/login': typeof LoginRouteWithChildren
   '/notifications': typeof NotificationsRoute
@@ -139,11 +138,12 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
   '/terms': typeof TermsRoute
+  '/flashcards/': typeof FlashcardsIndexRoute
   '/flashcards/new': typeof FlashcardsNewRoute
+  '/flashcards/$setId/edit': typeof FlashcardsSetIdEditRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/login/callback': typeof LoginCallbackRoute
   '/groups/': typeof GroupsIndexRoute
-  '/flashcards/$setId/edit': typeof FlashcardsSetIdEditRoute
   '/invitations/$token/accept': typeof InvitationsTokenAcceptRoute
 }
 export interface FileRoutesByTo {
@@ -152,7 +152,6 @@ export interface FileRoutesByTo {
   '/guide': typeof GuideRoute
   '/canva-connected': typeof CanvaConnectedRoute
   '/dashboard': typeof DashboardRoute
-  '/flashcards': typeof FlashcardsRouteWithChildren
   '/invitations': typeof InvitationsRouteWithChildren
   '/login': typeof LoginRouteWithChildren
   '/notifications': typeof NotificationsRoute
@@ -160,11 +159,12 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
   '/terms': typeof TermsRoute
+  '/flashcards': typeof FlashcardsIndexRoute
   '/flashcards/new': typeof FlashcardsNewRoute
+  '/flashcards/$setId/edit': typeof FlashcardsSetIdEditRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/login/callback': typeof LoginCallbackRoute
   '/groups': typeof GroupsIndexRoute
-  '/flashcards/$setId/edit': typeof FlashcardsSetIdEditRoute
   '/invitations/$token/accept': typeof InvitationsTokenAcceptRoute
 }
 export interface FileRoutesById {
@@ -174,7 +174,6 @@ export interface FileRoutesById {
   '/guide': typeof GuideRoute
   '/canva-connected': typeof CanvaConnectedRoute
   '/dashboard': typeof DashboardRoute
-  '/flashcards': typeof FlashcardsRouteWithChildren
   '/invitations': typeof InvitationsRouteWithChildren
   '/login': typeof LoginRouteWithChildren
   '/notifications': typeof NotificationsRoute
@@ -182,11 +181,12 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
   '/terms': typeof TermsRoute
+  '/flashcards/': typeof FlashcardsIndexRoute
   '/flashcards/new': typeof FlashcardsNewRoute
+  '/flashcards/$setId/edit': typeof FlashcardsSetIdEditRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/login/callback': typeof LoginCallbackRoute
   '/groups/': typeof GroupsIndexRoute
-  '/flashcards/$setId/edit': typeof FlashcardsSetIdEditRoute
   '/invitations/$token/accept': typeof InvitationsTokenAcceptRoute
 }
 export interface FileRouteTypes {
@@ -197,7 +197,6 @@ export interface FileRouteTypes {
     | '/guide'
     | '/canva-connected'
     | '/dashboard'
-    | '/flashcards'
     | '/invitations'
     | '/login'
     | '/notifications'
@@ -205,11 +204,12 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tasks'
     | '/terms'
+    | '/flashcards/'
     | '/flashcards/new'
+    | '/flashcards/$setId/edit'
     | '/groups/$groupId'
     | '/login/callback'
     | '/groups/'
-    | '/flashcards/$setId/edit'
     | '/invitations/$token/accept'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -218,7 +218,6 @@ export interface FileRouteTypes {
     | '/guide'
     | '/canva-connected'
     | '/dashboard'
-    | '/flashcards'
     | '/invitations'
     | '/login'
     | '/notifications'
@@ -226,11 +225,12 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tasks'
     | '/terms'
+    | '/flashcards'
     | '/flashcards/new'
+    | '/flashcards/$setId/edit'
     | '/groups/$groupId'
     | '/login/callback'
     | '/groups'
-    | '/flashcards/$setId/edit'
     | '/invitations/$token/accept'
   id:
     | '__root__'
@@ -239,7 +239,6 @@ export interface FileRouteTypes {
     | '/guide'
     | '/canva-connected'
     | '/dashboard'
-    | '/flashcards'
     | '/invitations'
     | '/login'
     | '/notifications'
@@ -247,11 +246,12 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tasks'
     | '/terms'
+    | '/flashcards/'
     | '/flashcards/new'
+    | '/flashcards/$setId/edit'
     | '/groups/$groupId'
     | '/login/callback'
     | '/groups/'
-    | '/flashcards/$setId/edit'
     | '/invitations/$token/accept'
   fileRoutesById: FileRoutesById
 }
@@ -261,7 +261,9 @@ export interface RootRouteChildren {
   GuideRoute: typeof GuideRoute
   CanvaConnectedRoute: typeof CanvaConnectedRoute
   DashboardRoute: typeof DashboardRoute
-  FlashcardsRoute: typeof FlashcardsRouteWithChildren
+  FlashcardsIndexRoute: typeof FlashcardsIndexRoute
+  FlashcardsNewRoute: typeof FlashcardsNewRoute
+  FlashcardsSetIdEditRoute: typeof FlashcardsSetIdEditRoute
   InvitationsRoute: typeof InvitationsRouteWithChildren
   LoginRoute: typeof LoginRouteWithChildren
   NotificationsRoute: typeof NotificationsRoute
@@ -324,13 +326,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvitationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/flashcards': {
-      id: '/flashcards'
-      path: '/flashcards'
-      fullPath: '/flashcards'
-      preLoaderRoute: typeof FlashcardsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -373,6 +368,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GroupsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/flashcards/': {
+      id: '/flashcards/'
+      path: '/flashcards'
+      fullPath: '/flashcards/'
+      preLoaderRoute: typeof FlashcardsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login/callback': {
       id: '/login/callback'
       path: '/callback'
@@ -389,10 +391,10 @@ declare module '@tanstack/react-router' {
     }
     '/flashcards/new': {
       id: '/flashcards/new'
-      path: '/new'
+      path: '/flashcards/new'
       fullPath: '/flashcards/new'
       preLoaderRoute: typeof FlashcardsNewRouteImport
-      parentRoute: typeof FlashcardsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/invitations/$token/accept': {
       id: '/invitations/$token/accept'
@@ -403,27 +405,13 @@ declare module '@tanstack/react-router' {
     }
     '/flashcards/$setId/edit': {
       id: '/flashcards/$setId/edit'
-      path: '/$setId/edit'
+      path: '/flashcards/$setId/edit'
       fullPath: '/flashcards/$setId/edit'
       preLoaderRoute: typeof FlashcardsSetIdEditRouteImport
-      parentRoute: typeof FlashcardsRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface FlashcardsRouteChildren {
-  FlashcardsNewRoute: typeof FlashcardsNewRoute
-  FlashcardsSetIdEditRoute: typeof FlashcardsSetIdEditRoute
-}
-
-const FlashcardsRouteChildren: FlashcardsRouteChildren = {
-  FlashcardsNewRoute: FlashcardsNewRoute,
-  FlashcardsSetIdEditRoute: FlashcardsSetIdEditRoute,
-}
-
-const FlashcardsRouteWithChildren = FlashcardsRoute._addFileChildren(
-  FlashcardsRouteChildren,
-)
 
 interface InvitationsRouteChildren {
   InvitationsTokenAcceptRoute: typeof InvitationsTokenAcceptRoute
@@ -453,7 +441,9 @@ const rootRouteChildren: RootRouteChildren = {
   GuideRoute: GuideRoute,
   CanvaConnectedRoute: CanvaConnectedRoute,
   DashboardRoute: DashboardRoute,
-  FlashcardsRoute: FlashcardsRouteWithChildren,
+  FlashcardsIndexRoute: FlashcardsIndexRoute,
+  FlashcardsNewRoute: FlashcardsNewRoute,
+  FlashcardsSetIdEditRoute: FlashcardsSetIdEditRoute,
   InvitationsRoute: InvitationsRouteWithChildren,
   LoginRoute: LoginRouteWithChildren,
   NotificationsRoute: NotificationsRoute,

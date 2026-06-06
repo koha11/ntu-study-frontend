@@ -8,7 +8,7 @@ const flashcardsSearchSchema = z.object({
   studySet: z.string().optional(),
 });
 
-export const Route = createFileRoute("/flashcards")({
+export const Route = createFileRoute("/flashcards/")({
   beforeLoad: requireSession,
   validateSearch: (search) => flashcardsSearchSchema.parse(search ?? {}),
   component: FlashcardsRoutePage,
@@ -29,4 +29,3 @@ function FlashcardsRoutePage() {
     <FlashcardsPage studySetParam={studySet} clearStudyParam={clearStudyParam} />
   );
 }
-
