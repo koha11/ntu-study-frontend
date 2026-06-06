@@ -11,6 +11,7 @@ import {
   Shield,
   Activity,
   FolderKanban,
+  BookOpen,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
@@ -28,6 +29,7 @@ const NAV_ITEMS: { key: string; to: string; icon: typeof LayoutDashboard; exact?
   { key: "sidebar.flashcards", to: "/flashcards", icon: Sparkles },
   { key: "sidebar.notifications", to: "/notifications", icon: Bell },
   { key: "sidebar.settings", to: "/settings", icon: Settings },
+  { key: "sidebar.guide", to: "/guide", icon: BookOpen, exact: true },
 ];
 
 const ADMIN_SECTIONS: { labelKey: string; hash: string; icon: typeof Activity }[] = [

@@ -30,6 +30,7 @@
     "flashcards": "Thẻ học",
     "notifications": "Thông báo",
     "settings": "Cài đặt",
+    "guide": "Hướng dẫn",
     "tagline": "Cộng tác nhóm học"
   },
   "adminSidebar": {
@@ -71,6 +72,7 @@
       "features": "Tính năng",
       "howItWorks": "Cách hoạt động",
       "faq": "FAQ",
+      "guide": "Hướng dẫn",
       "signIn": "Đăng nhập",
       "getStarted": "Bắt đầu"
     },
@@ -780,5 +782,205 @@
     "s10Content": "Chúng tôi có thể cập nhật Chính sách Quyền riêng tư này định kỳ. Chúng tôi sẽ thông báo cho bạn về những thay đổi quan trọng bằng cách đăng chính sách mới trên nền tảng và cập nhật ngày \"Cập nhật lần cuối\". Việc bạn tiếp tục sử dụng dịch vụ sau các thay đổi đồng nghĩa với việc chấp nhận chính sách đã cập nhật.",
     "s11Title": "11. Liên hệ Chúng tôi",
     "s11Content": "Nếu có câu hỏi về quyền riêng tư hoặc muốn thực hiện quyền dữ liệu của bạn, vui lòng liên hệ: support@ntu-study.app"
+  },
+  "guide": {
+    "metaTitle": "Hướng dẫn sử dụng — NTU Study",
+    "metaDesc": "Hướng dẫn sử dụng NTU Study: làm việc nhóm, todo list cá nhân và flashcard.",
+    "backToDashboard": "Về Dashboard",
+    "nav": {
+      "groups": "Làm việc nhóm",
+      "tasks": "Todo List",
+      "flashcards": "Flashcard"
+    },
+    "hero": {
+      "badge": "Hướng dẫn sử dụng",
+      "title1": "Bắt đầu với",
+      "title2": "NTU Study",
+      "subtitle": "NTU Study là nền tảng cộng tác nhóm dành riêng cho sinh viên Đại học Nha Trang — tích hợp Google Drive, Canva, lịch nhóm, quản lý task và flashcard trong một ứng dụng duy nhất.",
+      "readBtn": "Bắt đầu đọc",
+      "loginBtn": "Đăng nhập ngay"
+    },
+    "groupWorkflow": {
+      "badge": "Tính năng 01",
+      "title": "Làm việc nhóm",
+      "subtitle": "Hướng dẫn đầy đủ từ lúc tạo nhóm đến khi hoàn thành và chấm điểm dự án",
+      "intro": "Quy trình làm việc nhóm trên NTU Study gồm 8 bước nối tiếp nhau. Hãy làm theo thứ tự dưới đây để tận dụng toàn bộ tính năng của nền tảng — từ khởi tạo nhóm, phân công task, duyệt kết quả cho đến chấm điểm đóng góp và khoá dự án."
+    },
+    "stepLabel": "Bước {{step}}",
+    "tipsLabel": "Lưu ý",
+    "imagePlaceholder": "[Thêm ảnh tĩnh vào đây]",
+    "phases": {
+      "createGroup": {
+        "title": "Tạo nhóm",
+        "subtitle": "Khởi tạo nhóm và cấp phát tài nguyên tự động",
+        "description": "Khi bạn tạo nhóm, hệ thống tự động tạo folder Google Drive, file Canva trình bày và tài liệu nhóm — giúp cả nhóm sẵn sàng làm việc ngay mà không cần cài đặt thủ công.",
+        "steps": [
+          "Đăng nhập bằng tài khoản Google (.edu) → vào Dashboard → nhấn nút \"Tạo nhóm mới\".",
+          "Điền tên nhóm và mô tả. Đặt ngày báo cáo và tags để dễ lọc về sau (tùy chọn).",
+          "Thêm danh sách email thành viên ngay tại bước này nếu đã có sẵn (tùy chọn — có thể mời sau).",
+          "Nhấn \"Tạo nhóm\" — hệ thống tự động tạo folder nhóm trên Google Drive, file Canva và Google Doc đi kèm.",
+          "Sau khi tạo xong, bạn được chuyển thẳng vào trang nhóm. Các link tài nguyên hiển thị ngay trên giao diện."
+        ],
+        "tips": [
+          "Dung lượng Drive của Leader được dùng để lưu tài nguyên nhóm — kiểm tra trước khi tạo nếu nhóm có nhiều file lớn."
+        ],
+        "imageAlt": "Màn hình tạo nhóm mới"
+      },
+      "inviteMembers": {
+        "title": "Mời thành viên",
+        "subtitle": "Gửi lời mời qua email hoặc chia sẻ liên kết",
+        "description": "Leader có hai cách mời thành viên: gửi email trực tiếp hoặc tạo liên kết mời để chia sẻ. Khi thành viên mới nhấn vào liên kết, hệ thống tự động tạo tài khoản và gửi email xác nhận.",
+        "steps": [
+          "Vào trang nhóm → chọn tab \"Thành viên\".",
+          "Nhấn \"Mời thành viên\" → nhập địa chỉ email (có thể nhập nhiều địa chỉ, mỗi dòng một email).",
+          "Hoặc nhấn \"Tạo liên kết mời\" → sao chép liên kết → chia sẻ qua Zalo, Messenger, v.v.",
+          "Thành viên nhận email hoặc liên kết → nhấn \"Tham gia nhóm\" → đăng nhập Google → tài khoản tự động được tạo và liên kết vào nhóm.",
+          "Leader thấy thành viên mới xuất hiện trong danh sách ngay sau khi họ chấp nhận lời mời."
+        ],
+        "tips": [
+          "Liên kết mời có thể hết hạn — nếu thành viên báo không vào được, hãy tạo liên kết mới.",
+          "Email phải đúng định dạng; hệ thống sẽ báo lỗi nếu nhập sai."
+        ],
+        "imageAlt": "Màn hình mời thành viên vào nhóm"
+      },
+      "setupResources": {
+        "title": "Thiết lập tài nguyên",
+        "subtitle": "Quản lý file, folder và tài liệu nhóm ngay trong ứng dụng",
+        "description": "Tab Assets cho phép cả nhóm quản lý cây thư mục Google Drive mà không cần rời khỏi ứng dụng — tạo folder con, upload file, xem trước tài liệu và theo dõi lịch sử chỉnh sửa.",
+        "steps": [
+          "Vào trang nhóm → chọn tab \"Assets\".",
+          "Nhấn \"Tạo folder\" để tạo thư mục con bên trong folder nhóm trên Drive (tên folder không được chứa ký tự đặc biệt).",
+          "Nhấn \"Upload file\" để tải tài liệu lên — file được lưu thẳng vào Drive và hiển thị trong danh sách.",
+          "Nhấn vào bất kỳ file nào để xem trước trực tiếp (hỗ trợ Office, PDF và Canva) mà không cần tải về máy.",
+          "Chuyển sang tab \"Lịch sử\" để xem nhật ký thay đổi và bình luận từ Google Drive.",
+          "Nhấn vào liên kết Canva để chỉnh sửa slide thuyết trình của nhóm trực tiếp trên Canva."
+        ],
+        "tips": [
+          "Tên folder chứa ký tự như / \\ : * ? < > | sẽ bị từ chối — dùng dấu gạch ngang hoặc gạch dưới thay thế."
+        ],
+        "imageAlt": "Màn hình quản lý file và folder nhóm"
+      },
+      "assignTasks": {
+        "title": "Tạo & Giao task",
+        "subtitle": "Phân công công việc và theo dõi tiến độ từng thành viên",
+        "description": "Leader và thành viên đều có thể tạo task nhóm. Task nhóm cần Leader duyệt trước khi được xem là hoàn thành. Hệ thống gửi email thông báo tự động cho người được giao và cho Leader khi cần duyệt.",
+        "steps": [
+          "Vào trang nhóm → chọn tab \"Công việc\" → nhấn \"Tạo task\".",
+          "Điền nội dung công việc, chọn người thực hiện từ danh sách thành viên, đặt ngày hết hạn.",
+          "Nhấn \"Lưu\" — hệ thống gửi email thông báo đến người được giao ngay lập tức.",
+          "(Tùy chọn) Mở task vừa tạo → nhấn \"Thêm sub-task\" để chia nhỏ thành các bước con. Sub-task có đầy đủ chức năng giống task cha.",
+          "Theo dõi bảng trạng thái: Đang làm / Chờ duyệt / Hoàn thành để nắm tiến độ toàn nhóm."
+        ],
+        "tips": [
+          "Cron-job hàng ngày sẽ gửi email nhắc nhở cho các task quá hạn — đảm bảo thành viên không bỏ sót."
+        ],
+        "imageAlt": "Màn hình tạo và giao task nhóm"
+      },
+      "calendarEvents": {
+        "title": "Tạo sự kiện lịch nhóm",
+        "subtitle": "Lên lịch họp, báo cáo và đồng bộ Google Calendar",
+        "description": "Tab Lịch cho phép nhóm lên lịch các buổi họp, thuyết trình và deadline quan trọng. Sự kiện được đồng bộ tự động lên Google Calendar của tất cả thành viên trong nhóm.",
+        "steps": [
+          "Vào trang nhóm → chọn tab \"Lịch\".",
+          "Nhấn vào ngày muốn thêm sự kiện → chọn \"Tạo sự kiện\".",
+          "Điền tiêu đề, mô tả chi tiết, giờ bắt đầu và kết thúc.",
+          "Nhấn \"Lưu\" — sự kiện xuất hiện trên lịch nhóm và tự động đồng bộ lên Google Calendar của tất cả thành viên.",
+          "Hệ thống gửi email nhắc nhở trước mỗi sự kiện để không ai bỏ lỡ."
+        ],
+        "tips": [],
+        "imageAlt": "Màn hình lịch nhóm và tạo sự kiện"
+      },
+      "reviewTasks": {
+        "title": "Submit & Duyệt task",
+        "subtitle": "Quy trình submit → review → pass/fail rõ ràng",
+        "description": "Khi thành viên hoàn thành công việc, họ submit task để chờ Leader duyệt. Leader có thể Pass (chuyển sang hoàn thành) hoặc Fail (trả về đang làm để sửa lại). Toàn bộ vòng lặp được thông báo qua email.",
+        "steps": [
+          "Thành viên mở task đang làm → nhấn \"Submit\" — trạng thái chuyển sang \"Chờ duyệt\".",
+          "Hệ thống gửi email thông báo đến Leader, kèm theo thông tin task và người thực hiện.",
+          "Leader vào tab \"Công việc\" → lọc theo \"Chờ duyệt\" → mở task cần xem xét.",
+          "Nhấn \"Pass\" → task chuyển sang \"Hoàn thành\", thành viên nhận email xác nhận.",
+          "Hoặc nhấn \"Fail\" kèm ghi chú lý do → task trở về \"Đang làm\", thành viên nhận email và tiếp tục chỉnh sửa.",
+          "Lặp lại bước 1–4 cho đến khi task được Pass."
+        ],
+        "tips": [
+          "Leader nên ghi rõ lý do khi Fail để thành viên biết cần sửa gì — tránh vòng lặp submit nhiều lần."
+        ],
+        "imageAlt": "Màn hình duyệt task của Leader"
+      },
+      "peerEvaluation": {
+        "title": "Chấm điểm đóng góp",
+        "subtitle": "Đánh giá ẩn danh mức độ đóng góp của từng thành viên",
+        "description": "Sau khi dự án gần kết thúc, Leader mở vòng đánh giá. Mỗi thành viên chấm điểm (0–10) cho tất cả thành viên còn lại một cách ẩn danh. Kết quả chỉ hiển thị sau khi hết thời hạn.",
+        "steps": [
+          "Leader vào tab \"Đánh giá\" → nhấn \"Mở đánh giá\" → đặt thời hạn chấm điểm.",
+          "Hệ thống tạo phiếu đánh giá ẩn cho từng thành viên trong nhóm.",
+          "Mỗi thành viên (kể cả Leader) đăng nhập → vào tab \"Đánh giá\" → chấm điểm 0–10 cho từng người.",
+          "(Tùy chọn) Thêm nhận xét bằng văn bản để giải thích điểm số.",
+          "Nhấn \"Xác nhận\" để ghi nhận — lưu ý chỉ được submit một lần.",
+          "Sau khi hết thời hạn, hệ thống khoá chức năng chấm điểm. Leader xem tổng hợp kết quả của toàn nhóm."
+        ],
+        "tips": [
+          "Nếu một thành viên không tham gia làm việc, Leader có thể đánh dấu \"Không tham gia\" trước khi mở vòng đánh giá để loại họ khỏi danh sách.",
+          "Điểm số là ẩn danh hoàn toàn — các thành viên không biết ai chấm mình bao nhiêu."
+        ],
+        "imageAlt": "Màn hình đánh giá đóng góp thành viên"
+      },
+      "closeProject": {
+        "title": "Kết thúc & Khoá dự án",
+        "subtitle": "Lưu trữ toàn bộ dữ liệu nhóm ở chế độ chỉ đọc",
+        "description": "Khi dự án hoàn thành, Leader khoá nhóm lại. Toàn bộ task, tài liệu và kết quả đánh giá được giữ nguyên nhưng không ai có thể chỉnh sửa thêm — đảm bảo tính toàn vẹn của dữ liệu.",
+        "steps": [
+          "Leader vào trang nhóm → chọn \"Cài đặt nhóm\" → nhấn \"Kết thúc dự án\".",
+          "Xác nhận hành động — trạng thái nhóm chuyển sang \"Đã khoá\".",
+          "Tất cả thành viên vẫn có thể xem toàn bộ nội dung nhóm nhưng không thể tạo, sửa hay xoá bất cứ thứ gì.",
+          "Dữ liệu được lưu trữ vĩnh viễn trên hệ thống để tham khảo về sau."
+        ],
+        "tips": [
+          "Hành động khoá không thể hoàn tác — hãy chắc chắn tất cả task đã được duyệt và điểm đánh giá đã được chốt trước khi khoá."
+        ],
+        "imageAlt": "Màn hình kết thúc và khoá dự án"
+      }
+    },
+    "features": {
+      "tasks": {
+        "badge": "Tính năng 02",
+        "title": "Todo List cá nhân",
+        "subtitle": "Quản lý công việc riêng, độc lập với nhóm",
+        "description": "Bên cạnh task nhóm, mỗi người dùng có không gian task cá nhân riêng. Tạo task, đặt deadline, thêm sub-task và đánh dấu hoàn thành — tất cả chỉ mình bạn thấy và quản lý.",
+        "steps": [
+          "Vào Dashboard → chọn \"Todo cá nhân\" → nhấn \"Tạo task mới\".",
+          "Điền nội dung và ngày hết hạn → nhấn \"Lưu\".",
+          "Mở task để thêm sub-task nếu cần chia nhỏ công việc.",
+          "Đánh dấu hoàn thành bằng cách nhấn vào ô checkbox — trạng thái lưu ngay lập tức.",
+          "Cron-job tự động gửi email nhắc nhở các task sắp hoặc đã quá hạn."
+        ],
+        "imageAlt": "Màn hình todo list cá nhân"
+      },
+      "flashcards": {
+        "badge": "Tính năng 03",
+        "title": "Flashcard",
+        "subtitle": "Học và ghi nhớ theo phương pháp spaced repetition",
+        "description": "Tạo bộ thẻ học cá nhân hoặc chia sẻ cho cả nhóm. Hệ thống dùng thuật toán spaced repetition để lên lịch ôn tập tối ưu, giúp bạn ghi nhớ lâu hơn với ít thời gian hơn.",
+        "steps": [
+          "Vào mục \"Flashcard\" → nhấn \"Tạo bộ thẻ mới\" → điền tên và mô tả bộ thẻ.",
+          "Thêm thẻ: nhập mặt trước (câu hỏi) và mặt sau (đáp án) → nhấn \"Thêm thẻ\". Có thể import hàng loạt bằng file CSV/Excel.",
+          "Nhấn \"Bắt đầu học\" → hệ thống bật chế độ Quiz trắc nghiệm dựa trên các thẻ chưa thuộc.",
+          "Sau mỗi câu, chọn mức độ nhớ (Dễ / Trung bình / Khó) — hệ thống tự tính ngày ôn tiếp theo.",
+          "Leader có thể chia sẻ bộ thẻ lên nhóm để tất cả thành viên cùng học."
+        ],
+        "imageAlt": "Màn hình học flashcard"
+      }
+    },
+    "cta": {
+      "title": "Sẵn sàng bắt đầu?",
+      "subtitle": "Đăng nhập bằng tài khoản Google (.edu) và tạo nhóm đầu tiên của bạn chỉ trong vài phút.",
+      "startBtn": "Bắt đầu miễn phí",
+      "homeBtn": "Về trang chủ"
+    },
+    "footer": {
+      "copyright": "© 2025 NTU Study",
+      "privacy": "Chính sách bảo mật",
+      "terms": "Điều khoản"
+    }
   }
 }

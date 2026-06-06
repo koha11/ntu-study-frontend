@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as GuideRouteImport } from './routes/guide'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -28,6 +29,11 @@ import { Route as FlashcardsNewRouteImport } from './routes/flashcards.new'
 import { Route as InvitationsTokenAcceptRouteImport } from './routes/invitations.$token.accept'
 import { Route as FlashcardsSetIdEditRouteImport } from './routes/flashcards.$setId.edit'
 
+const GuideRoute = GuideRouteImport.update({
+  id: '/guide',
+  path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -122,6 +128,7 @@ const FlashcardsSetIdEditRoute = FlashcardsSetIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/guide': typeof GuideRoute
   '/canva-connected': typeof CanvaConnectedRoute
   '/dashboard': typeof DashboardRoute
   '/flashcards': typeof FlashcardsRouteWithChildren
@@ -142,6 +149,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/guide': typeof GuideRoute
   '/canva-connected': typeof CanvaConnectedRoute
   '/dashboard': typeof DashboardRoute
   '/flashcards': typeof FlashcardsRouteWithChildren
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/guide': typeof GuideRoute
   '/canva-connected': typeof CanvaConnectedRoute
   '/dashboard': typeof DashboardRoute
   '/flashcards': typeof FlashcardsRouteWithChildren
@@ -185,6 +194,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/guide'
     | '/canva-connected'
     | '/dashboard'
     | '/flashcards'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/guide'
     | '/canva-connected'
     | '/dashboard'
     | '/flashcards'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/guide'
     | '/canva-connected'
     | '/dashboard'
     | '/flashcards'
@@ -246,6 +258,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  GuideRoute: typeof GuideRoute
   CanvaConnectedRoute: typeof CanvaConnectedRoute
   DashboardRoute: typeof DashboardRoute
   FlashcardsRoute: typeof FlashcardsRouteWithChildren
@@ -339,6 +352,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guide': {
+      id: '/guide'
+      path: '/guide'
+      fullPath: '/guide'
+      preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -430,6 +450,7 @@ const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  GuideRoute: GuideRoute,
   CanvaConnectedRoute: CanvaConnectedRoute,
   DashboardRoute: DashboardRoute,
   FlashcardsRoute: FlashcardsRouteWithChildren,

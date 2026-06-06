@@ -117,6 +117,7 @@ function LandingPage() {
             <a href="#features" className="hover:text-foreground">{t("landing.nav.features")}</a>
             <a href="#how" className="hover:text-foreground">{t("landing.nav.howItWorks")}</a>
             <a href="#faq" className="hover:text-foreground">{t("landing.nav.faq")}</a>
+            <Link to="/guide" className="hover:text-foreground transition-colors">{t("landing.nav.guide")}</Link>
           </nav>
 
           <div className="ml-auto flex items-center gap-2">
