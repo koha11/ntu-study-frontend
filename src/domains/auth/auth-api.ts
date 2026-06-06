@@ -82,6 +82,7 @@ export function buildGoogleAuthorizeUrl(params: {
       "https://www.googleapis.com/auth/calendar.calendars",
       "https://www.googleapis.com/auth/contacts.readonly",
       "https://www.googleapis.com/auth/contacts.other.readonly",
+      "https://www.googleapis.com/auth/directory.readonly",
     ].join(" "),
     code_challenge: params.codeChallenge,
     code_challenge_method: "S256",
