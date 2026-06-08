@@ -50,13 +50,18 @@ export function AcceptInvitationPage() {
       },
       {
         onSuccess: (data) => {
-          setTokens(data.access_token, data.refresh_token);
-          void queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] });
           const gid = validation?.invitation?.group_id;
-          if (gid) {
-            navigate({ to: "/groups/$groupId", params: { groupId: gid } });
+          const redirectPath = gid ? `/groups/${gid}` : "/groups";
+          if (data.access_token && data.refresh_token) {
+            setTokens(data.access_token, data.refresh_token);
+            void queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] });
+            if (gid) {
+              navigate({ to: "/groups/$groupId", params: { groupId: gid } });
+            } else {
+              navigate({ to: "/groups" });
+            }
           } else {
-            navigate({ to: "/groups" });
+            navigate({ to: "/login", search: { redirect: redirectPath } });
           }
         },
       },
