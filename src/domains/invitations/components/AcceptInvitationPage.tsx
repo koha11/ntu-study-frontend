@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link, useNavigate, useParams } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Mail, AlertCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/AppShell";
@@ -11,6 +11,7 @@ import {
   useAcceptInvitationMutation,
 } from "@/domains/invitations/queries";
 import { useCurrentUser } from "@/domains/auth";
+import { setTokens } from "@/domains/auth/token-storage";
 
 export function AcceptInvitationPage() {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ export function AcceptInvitationPage() {
   );
 
   const { mutate: acceptMutate, isPending: accepting } = useAcceptInvitationMutation();
+  const queryClient = useQueryClient();
 
   const [fullName, setFullName] = React.useState("");
 
@@ -47,7 +49,9 @@ export function AcceptInvitationPage() {
         ...(fullName.trim() ? { full_name: fullName.trim() } : {}),
       },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
+          setTokens(data.access_token, data.refresh_token);
+          void queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] });
           const gid = validation?.invitation?.group_id;
           if (gid) {
             navigate({ to: "/groups/$groupId", params: { groupId: gid } });
