@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
   Users,
@@ -14,9 +16,24 @@ import {
   Lock,
   UserPlus,
   PlayCircle,
+  X,
+  ZoomIn,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import ntuLogo from "@/assets/ntu_logo.png";
+import groupStep1 from "@/assets/group-step1.png";
+import groupStep2 from "@/assets/group-step2.png";
+import groupStep3 from "@/assets/group-step3.png";
+import groupStep4_1 from "@/assets/group-step4_1.png";
+import groupStep4_2 from "@/assets/group-step4_2.png";
+import groupStep5 from "@/assets/group-step5.png";
+import groupStep6_1 from "@/assets/group-step6_1.png";
+import groupStep6_2 from "@/assets/group-step6_2.png";
+import groupStep6_3 from "@/assets/group-step6_3.png";
+import groupStep7_1 from "@/assets/group-step7_1.png";
+import groupStep7_2 from "@/assets/group-step7_2.png";
+import todoList from "@/assets/todo-list.png";
+import flashcard from "@/assets/flashcard.png";
 
 export const Route = createFileRoute("/guide")({
   head: () => ({
@@ -31,20 +48,20 @@ export const Route = createFileRoute("/guide")({
 /* ─── Static phase metadata (icon, id, step, reverse — language-neutral) ── */
 
 const PHASE_META = [
-  { id: "create-group", key: "createGroup", icon: Users, step: 1, reverse: false },
-  { id: "invite-members", key: "inviteMembers", icon: UserPlus, step: 2, reverse: true },
-  { id: "setup-resources", key: "setupResources", icon: FolderOpen, step: 3, reverse: false },
-  { id: "assign-tasks", key: "assignTasks", icon: ClipboardList, step: 4, reverse: true },
-  { id: "calendar-events", key: "calendarEvents", icon: CalendarDays, step: 5, reverse: false },
-  { id: "review-tasks", key: "reviewTasks", icon: GitPullRequest, step: 6, reverse: true },
-  { id: "peer-evaluation", key: "peerEvaluation", icon: Star, step: 7, reverse: false },
-  { id: "close-project", key: "closeProject", icon: Lock, step: 8, reverse: true },
-] as const;
+  { id: "create-group", key: "createGroup", icon: Users, step: 1, reverse: false, images: [groupStep1] },
+  { id: "invite-members", key: "inviteMembers", icon: UserPlus, step: 2, reverse: true, images: [groupStep2] },
+  { id: "setup-resources", key: "setupResources", icon: FolderOpen, step: 3, reverse: false, images: [groupStep3] },
+  { id: "assign-tasks", key: "assignTasks", icon: ClipboardList, step: 4, reverse: true, images: [groupStep4_1, groupStep4_2] },
+  { id: "calendar-events", key: "calendarEvents", icon: CalendarDays, step: 5, reverse: false, images: [groupStep5] },
+  { id: "review-tasks", key: "reviewTasks", icon: GitPullRequest, step: 6, reverse: true, images: [groupStep6_1, groupStep6_2, groupStep6_3] },
+  { id: "peer-evaluation", key: "peerEvaluation", icon: Star, step: 7, reverse: false, images: [groupStep7_1, groupStep7_2] },
+  { id: "close-project", key: "closeProject", icon: Lock, step: 8, reverse: true, images: [] },
+];
 
 const FEATURE_META = [
-  { id: "tasks", key: "tasks", icon: CheckSquare, reverse: false },
-  { id: "flashcards", key: "flashcards", icon: Sparkles, reverse: true },
-] as const;
+  { id: "tasks", key: "tasks", icon: CheckSquare, reverse: false, image: todoList },
+  { id: "flashcards", key: "flashcards", icon: Sparkles, reverse: true, image: flashcard },
+];
 
 /* ─── Components ─────────────────────────────────────────────────────────── */
 
@@ -61,6 +78,57 @@ function ImagePlaceholder({ alt }: { alt: string }) {
   );
 }
 
+function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <button
+        className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+        onClick={onClose}
+        aria-label="Close"
+      >
+        <X className="h-5 w-5" />
+      </button>
+      <img
+        src={src}
+        alt={alt}
+        className="max-h-[90vh] max-w-[90vw] rounded-xl object-contain shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      />
+    </div>,
+    document.body,
+  );
+}
+
+function ZoomableImage({ src, alt }: { src: string; alt: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <div className="group relative cursor-zoom-in" onClick={() => setOpen(true)}>
+        <img
+          src={src}
+          alt={alt}
+          className="w-full rounded-2xl border border-border object-contain shadow-sm transition-opacity group-hover:opacity-90"
+        />
+        <div className="absolute inset-0 flex items-center justify-center rounded-2xl opacity-0 transition-opacity group-hover:opacity-100">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm">
+            <ZoomIn className="h-5 w-5" />
+          </div>
+        </div>
+      </div>
+      {open && <Lightbox src={src} alt={alt} onClose={() => setOpen(false)} />}
+    </>
+  );
+}
+
 function PhaseCard({
   meta,
   isLast,
@@ -73,6 +141,7 @@ function PhaseCard({
   const base = `guide.phases.${meta.key}` as const;
   const steps = t(`${base}.steps`, { returnObjects: true }) as string[];
   const tips = t(`${base}.tips`, { returnObjects: true }) as string[];
+  const hasImages = meta.images.length > 0;
 
   return (
     <section
@@ -143,7 +212,15 @@ function PhaseCard({
 
       {/* Image */}
       <div className="flex-1 lg:sticky lg:top-24">
-        <ImagePlaceholder alt={t(`${base}.imageAlt`)} />
+        {hasImages ? (
+          <div className="flex flex-col gap-4">
+            {meta.images.map((src, i) => (
+              <ZoomableImage key={i} src={src} alt={t(`${base}.imageAlt`)} />
+            ))}
+          </div>
+        ) : (
+          <ImagePlaceholder alt={t(`${base}.imageAlt`)} />
+        )}
       </div>
     </section>
   );
@@ -205,7 +282,7 @@ function FeatureSection({
         </ol>
       </div>
       <div className="flex-1">
-        <ImagePlaceholder alt={t(`${base}.imageAlt`)} />
+        <ZoomableImage src={meta.image} alt={t(`${base}.imageAlt`)} />
       </div>
     </section>
   );
