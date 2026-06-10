@@ -1,6 +1,7 @@
 import { HttpError, normalizeApiBase } from "@/domains/auth/auth-api";
 import type {
   CreateGroupInput,
+  CreateGroupResult,
   CreateGroupCalendarEventInput,
   CreateGroupCalendarEventResult,
   CreateGroupMeetEventInput,
@@ -67,7 +68,7 @@ export async function fetchGroupDetails(
 export async function createGroup(
   input: CreateGroupInput,
   token: string,
-): Promise<GroupDetail> {
+): Promise<CreateGroupResult> {
   const body: Record<string, unknown> = { name: input.name };
   if (input.description !== undefined) {
     body.description = input.description;
@@ -77,6 +78,9 @@ export async function createGroup(
   }
   if (input.report_date !== undefined && input.report_date.trim() !== "") {
     body.report_date = input.report_date.trim();
+  }
+  if (input.initial_member_emails?.length) {
+    body.initial_member_emails = input.initial_member_emails;
   }
   const res = await fetch(`${getApiBase()}/groups`, {
     method: "POST",

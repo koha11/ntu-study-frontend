@@ -22,6 +22,7 @@ import {
 import type {
   CreateGroupCalendarEventInput,
   CreateGroupInput,
+  CreateGroupResult,
   CreateGroupMeetEventInput,
   GroupCalendarEventRow,
   UpdateGroupInput,
@@ -86,13 +87,13 @@ export const useCreateGroupMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (input: CreateGroupInput) => {
+    mutationFn: async (input: CreateGroupInput): Promise<CreateGroupResult> => {
       const token = requireAccessToken();
       return createGroup(input, token);
     },
-    onSuccess: (newGroup) => {
+    onSuccess: (data: CreateGroupResult) => {
       queryClient.invalidateQueries({ queryKey: groupKeys.lists() });
-      queryClient.setQueryData(groupKeys.detail(newGroup.id), newGroup);
+      queryClient.setQueryData(groupKeys.detail(data.id), data);
     },
   });
 };

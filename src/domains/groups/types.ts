@@ -88,6 +88,13 @@ export interface CreateGroupInput {
   tags?: string[];
   /** YYYY-MM-DD — deliverable / report due date */
   report_date?: string;
+  /** Emails to invite immediately after group creation (optional). */
+  initial_member_emails?: string[];
+}
+
+/** POST /groups response — extends GroupDetail with best-effort invite results */
+export interface CreateGroupResult extends GroupDetail {
+  failed_invitations: { email: string; reason: string }[];
 }
 
 /** POST /groups/:id/calendar/meet-event */
