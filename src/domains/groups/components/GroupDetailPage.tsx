@@ -311,7 +311,7 @@ export function GroupDetailPage() {
         </TabsContent>
 
         <TabsContent value="drive" className="mt-6">
-          <DriveTab groupId={id} driveFolderId={group.drive_folder_id} />
+          <DriveTab groupId={id} driveFolderId={group.drive_folder_id} groupLocked={isLocked} />
         </TabsContent>
 
         {/* <TabsContent value="canva" className="mt-6">
@@ -349,7 +349,7 @@ export function GroupDetailPage() {
         </TabsContent>
 
         <TabsContent value="flashcards" className="mt-6">
-          <SharedFlashcardsTab groupId={id} currentUserId={currentUserId} />
+          <SharedFlashcardsTab groupId={id} currentUserId={currentUserId} groupLocked={isLocked} />
         </TabsContent>
       </Tabs>
     </AppShell>

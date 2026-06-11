@@ -22,9 +22,10 @@ import { StudyMode } from "@/domains/flashcards/components/StudyMode";
 interface SharedFlashcardsTabProps {
   groupId: string;
   currentUserId: string;
+  groupLocked?: boolean;
 }
 
-export function SharedFlashcardsTab({ groupId, currentUserId }: SharedFlashcardsTabProps) {
+export function SharedFlashcardsTab({ groupId, currentUserId, groupLocked = false }: SharedFlashcardsTabProps) {
   const { t } = useTranslation();
   const [shareDialogOpen, setShareDialogOpen] = React.useState(false);
   const [studyingSetId, setStudyingSetId] = React.useState<string | null>(null);
@@ -81,6 +82,7 @@ export function SharedFlashcardsTab({ groupId, currentUserId }: SharedFlashcards
           type="button"
           size="sm"
           className="bg-gradient-primary shrink-0"
+          disabled={groupLocked}
           onClick={() => setShareDialogOpen(true)}
         >
           <Share2 className="mr-1.5 h-3.5 w-3.5" />
@@ -128,7 +130,7 @@ export function SharedFlashcardsTab({ groupId, currentUserId }: SharedFlashcards
                       size="sm"
                       variant="ghost"
                       className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      disabled={unsharePending}
+                      disabled={unsharePending || groupLocked}
                       onClick={() => handleUnshare(entry.setId)}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
