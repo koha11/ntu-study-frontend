@@ -149,9 +149,9 @@ export function DashboardPage() {
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         {/* Recent Activity */}
-        <div className="lg:col-span-2 rounded-2xl border border-border bg-card p-6">
+        <div className="lg:col-span-2 rounded-2xl border border-border bg-card p-4 sm:p-6">
           <h2 className="text-lg font-semibold">{t("dashboard.recentActivity")}</h2>
-          <div className="mt-4 space-y-2">
+          <div className="mt-4 max-h-72 space-y-2 overflow-y-auto sm:max-h-none">
             {recentActivity.length === 0 ? (
               <p className="py-4 text-center text-sm text-muted-foreground">
                 {t("dashboard.noActivity", "No recent activity")}
@@ -170,7 +170,7 @@ export function DashboardPage() {
                       <Bell className="h-3.5 w-3.5" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="truncate text-sm font-medium">
                           {notificationTypeLabel(item.notification?.type ?? "", t)}
                         </span>
@@ -178,7 +178,7 @@ export function DashboardPage() {
                           {new Date(item.occurredAt).toLocaleDateString()}
                         </span>
                       </div>
-                      <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                      <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
                         {item.notification?.message}
                       </p>
                     </div>
@@ -203,7 +203,7 @@ export function DashboardPage() {
                       <HardDrive className="h-3.5 w-3.5 text-blue-500" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="truncate text-sm font-medium">
                           {item.driveActivity?.fileName}
                         </span>
@@ -211,7 +211,7 @@ export function DashboardPage() {
                           {new Date(item.occurredAt).toLocaleDateString()}
                         </span>
                       </div>
-                      <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                      <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
                         {item.driveActivity?.actorDisplayName ?? item.driveActivity?.actorLabel} ·{" "}
                         {item.driveActivity?.action} · {item.driveActivity?.groupName}
                       </p>
@@ -224,7 +224,7 @@ export function DashboardPage() {
         </div>
 
         {/* Upcoming */}
-        <div className="rounded-2xl border border-border bg-card p-6">
+        <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">{t("dashboard.upcoming")}</h2>
             <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -249,7 +249,7 @@ export function DashboardPage() {
                     }
                     className="w-full cursor-pointer rounded-xl border border-border/60 bg-background/40 p-3 text-left transition-colors hover:bg-accent"
                   >
-                    <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
                       <div className="flex min-w-0 items-center gap-1.5">
                         <CheckSquare className="h-3 w-3 shrink-0 text-primary" />
                         <span className="truncate text-sm font-medium">{item.task?.title}</span>
@@ -276,7 +276,7 @@ export function DashboardPage() {
                     }
                     className="w-full cursor-pointer rounded-xl border border-border/60 bg-background/40 p-3 text-left transition-colors hover:bg-accent"
                   >
-                    <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
                       <div className="flex min-w-0 items-center gap-1.5">
                         <Calendar className="h-3 w-3 shrink-0 text-blue-500" />
                         <span className="truncate text-sm font-medium">
