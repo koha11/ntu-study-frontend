@@ -10,6 +10,13 @@ import { useCurrentUser } from "@/domains/auth";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -68,8 +75,13 @@ export function GroupDetailPage() {
   const { mutate: lockGroupMutate, isPending: lockPending } = useLockGroup();
   const { mutate: unlockGroupMutate, isPending: unlockPending } = useUnlockGroup();
 
+  const [activeTab, setActiveTab] = React.useState<GroupTab>(initialTab);
   const [createTaskOpen, setCreateTaskOpen] = React.useState(false);
   const [unlockDialogOpen, setUnlockDialogOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
 
   if (groupLoading || tasksLoading || userLoading) {
     return (
@@ -219,7 +231,26 @@ export function GroupDetailPage() {
         onConfirm={handleUnlock}
       />
 
-      <Tabs key={initialTab} defaultValue={initialTab} className="mt-6">
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as GroupTab)} className="mt-6">
+        {/* Mobile: select dropdown */}
+        <Select value={activeTab} onValueChange={(v) => setActiveTab(v as GroupTab)}>
+          <SelectTrigger className="sm:hidden w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="overview">{t("groups.tabs.overview")}</SelectItem>
+            <SelectItem value="tasks">{t("groups.tabs.tasks")}</SelectItem>
+            <SelectItem value="drive">{t("groups.tabs.drive")}</SelectItem>
+            <SelectItem value="calendar">{t("groups.tabs.calendar")}</SelectItem>
+            <SelectItem value="members">
+              {t("groups.tabs.members")} ({membersLoading ? "…" : members.length})
+            </SelectItem>
+            <SelectItem value="contribution">{t("groups.tabs.contribution")}</SelectItem>
+            <SelectItem value="flashcards">{t("groups.tabs.flashcards")}</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Desktop: tab bar */}
         <div className="hidden sm:block">
           <TabsList className="flex w-full justify-start">
             <TabsTrigger value="overview">{t("groups.tabs.overview")}</TabsTrigger>
