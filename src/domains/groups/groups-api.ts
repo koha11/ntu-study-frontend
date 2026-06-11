@@ -208,6 +208,37 @@ export async function fetchGroupCalendarEvents(
   return handleJson(res);
 }
 
+export async function lockGroup(
+  groupId: string,
+  token: string,
+): Promise<GroupDetail> {
+  const res = await fetch(
+    `${getApiBase()}/groups/${encodeURIComponent(groupId)}/lock`,
+    {
+      method: "POST",
+      headers: bearerHeaders(token, { "Content-Type": "application/json" }),
+      body: JSON.stringify({}),
+    },
+  );
+  return handleJson(res);
+}
+
+export async function unlockGroup(
+  groupId: string,
+  reason: string,
+  token: string,
+): Promise<GroupDetail> {
+  const res = await fetch(
+    `${getApiBase()}/groups/${encodeURIComponent(groupId)}/unlock`,
+    {
+      method: "POST",
+      headers: bearerHeaders(token, { "Content-Type": "application/json" }),
+      body: JSON.stringify({ reason }),
+    },
+  );
+  return handleJson(res);
+}
+
 export interface CanvaPreview {
   editUrl: string | null;
   pages: { index: number; thumbnailUrl: string }[];

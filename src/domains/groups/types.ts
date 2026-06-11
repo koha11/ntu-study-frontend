@@ -37,6 +37,8 @@ export interface GroupDetail {
   meet_link?: string | null;
   /** Google Calendar ID for shared group calendar */
   google_calendar_id?: string | null;
+  /** ISO timestamp when the group was locked; null when active */
+  locked_at?: string | null;
   created_at: string;
   updated_at?: string;
 }

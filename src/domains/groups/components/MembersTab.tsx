@@ -71,6 +71,7 @@ export interface MembersTabProps {
   groupId: string;
   leaderId: string;
   isLeader: boolean;
+  groupLocked?: boolean;
   members: MemberRow[];
   membersLoading: boolean;
 }
@@ -79,6 +80,7 @@ export function MembersTab({
   groupId,
   leaderId,
   isLeader,
+  groupLocked = false,
   members,
   membersLoading,
 }: MembersTabProps) {
@@ -159,7 +161,7 @@ export function MembersTab({
         )}
       </div>
 
-      {isLeader && (
+      {isLeader && !groupLocked && (
         <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-end">
           <div className="flex-1">
             <label className="text-xs font-medium text-muted-foreground">{t("groups.members.email")}</label>
@@ -294,7 +296,7 @@ export function MembersTab({
                     {!m.is_active && ` · ${t("groups.members.inactive")}`}
                   </div>
                 </div>
-                {canManage && (
+                {canManage && !groupLocked && (
                   <div className="flex gap-2">
                     <Button
                       type="button"

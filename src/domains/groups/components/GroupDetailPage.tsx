@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Link, notFound, useParams, useSearch } from "@tanstack/react-router";
-import { ArrowLeft, Lock } from "lucide-react";
+import { ArrowLeft, Lock, LockOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
-import { useGroupDetails, useGroupMembers, useUpdateGroup } from "@/domains/groups";
+import { useGroupDetails, useGroupMembers, useUpdateGroup, useLockGroup, useUnlockGroup } from "@/domains/groups";
 import { useGroupTasks, useCreateTaskMutation, GroupKanbanBoard, TaskForm } from "@/domains/tasks";
 import { useCurrentUser } from "@/domains/auth";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { ContributionTab } from "./ContributionTab";
 import { DriveTab } from "./DriveTab";
@@ -23,6 +29,7 @@ import { CalendarTab } from "./CalendarTab";
 import { GroupOverviewTab } from "./GroupOverviewTab";
 import { MembersTab } from "./MembersTab";
 import { SharedFlashcardsTab } from "./SharedFlashcardsTab";
+import { UnlockGroupDialog } from "./UnlockGroupDialog";
 
 const GROUP_TABS = [
   "overview",
@@ -57,8 +64,11 @@ export function GroupDetailPage() {
   const { data: groupTasks = [], isLoading: tasksLoading } = useGroupTasks(id);
   const { mutate: createTask, isPending: createTaskPending } = useCreateTaskMutation();
   const { mutate: patchGroup, isPending: overviewSavePending } = useUpdateGroup();
+  const { mutate: lockGroupMutate, isPending: lockPending } = useLockGroup();
+  const { mutate: unlockGroupMutate, isPending: unlockPending } = useUnlockGroup();
 
   const [createTaskOpen, setCreateTaskOpen] = React.useState(false);
+  const [unlockDialogOpen, setUnlockDialogOpen] = React.useState(false);
 
   if (groupLoading || tasksLoading || userLoading) {
     return (
@@ -74,6 +84,37 @@ export function GroupDetailPage() {
 
   const currentUserId = currentUser?.id ?? "";
   const isLeader = Boolean(currentUserId && group.leader_id === currentUserId);
+  const isLocked = group.status === "locked";
+
+  // Lock button state
+  const hasReportDate = Boolean(group.report_date);
+  const reportDatePassed =
+    hasReportDate && new Date(group.report_date!).setHours(0, 0, 0, 0) < Date.now();
+  const lockDisabledReason = !hasReportDate
+    ? t("groups.lockGroupDisabledNoDate")
+    : !reportDatePassed
+      ? t("groups.lockGroupDisabledFuture")
+      : null;
+
+  function handleLock() {
+    lockGroupMutate(id, {
+      onSuccess: () => toast.success(t("groups.lockGroup")),
+      onError: (err) => toast.error(err instanceof Error ? err.message : String(err)),
+    });
+  }
+
+  function handleUnlock(reason: string) {
+    unlockGroupMutate(
+      { groupId: id, reason },
+      {
+        onSuccess: () => {
+          setUnlockDialogOpen(false);
+          toast.success(t("groups.unlockGroup"));
+        },
+        onError: (err) => toast.error(err instanceof Error ? err.message : String(err)),
+      },
+    );
+  }
 
   return (
     <AppShell>
@@ -120,8 +161,60 @@ export function GroupDetailPage() {
               {group.description ?? ""}
             </p>
           </div>
+
+          {isLeader && (
+            <div className="flex shrink-0 items-center">
+              {isLocked ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setUnlockDialogOpen(true)}
+                  disabled={unlockPending}
+                >
+                  <LockOpen className="mr-1.5 h-3.5 w-3.5" />
+                  {t("groups.unlockGroup")}
+                </Button>
+              ) : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleLock}
+                        disabled={Boolean(lockDisabledReason) || lockPending}
+                      >
+                        <Lock className="mr-1.5 h-3.5 w-3.5" />
+                        {lockPending ? t("groups.lockGroupConfirming") : t("groups.lockGroup")}
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  {lockDisabledReason && (
+                    <TooltipContent>{lockDisabledReason}</TooltipContent>
+                  )}
+                </Tooltip>
+              )}
+            </div>
+          )}
         </div>
       </div>
+
+      {isLocked && (
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-border bg-muted/50 px-4 py-3">
+          <Lock className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+          <div>
+            <p className="text-sm font-medium">{t("groups.lockedBannerTitle")}</p>
+            <p className="text-xs text-muted-foreground">{t("groups.lockedBannerDesc")}</p>
+          </div>
+        </div>
+      )}
+
+      <UnlockGroupDialog
+        open={unlockDialogOpen}
+        isPending={unlockPending}
+        onOpenChange={setUnlockDialogOpen}
+        onConfirm={handleUnlock}
+      />
 
       <Tabs key={initialTab} defaultValue={initialTab} className="mt-6">
         <TabsList>
@@ -164,7 +257,12 @@ export function GroupDetailPage() {
             </p>
             <Dialog open={createTaskOpen} onOpenChange={setCreateTaskOpen}>
               <DialogTrigger asChild>
-                <Button type="button" size="sm" className="bg-gradient-primary">
+                <Button
+                  type="button"
+                  size="sm"
+                  className="bg-gradient-primary"
+                  disabled={isLocked}
+                >
                   {t("groups.tasksTab.newTask")}
                 </Button>
               </DialogTrigger>
@@ -224,6 +322,7 @@ export function GroupDetailPage() {
             google_calendar_id={group.google_calendar_id}
             meet_link={group.meet_link}
             isLeader={isLeader}
+            groupLocked={isLocked}
           />
         </TabsContent>
 
@@ -232,6 +331,7 @@ export function GroupDetailPage() {
             groupId={id}
             leaderId={group.leader_id}
             isLeader={isLeader}
+            groupLocked={isLocked}
             members={members}
             membersLoading={membersLoading}
           />

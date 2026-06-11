@@ -79,7 +79,9 @@ export function MobileNav({ isAdmin }: { isAdmin: boolean }) {
                 </div>
               </div>
             ) : (
-              <img src={ntuLongLogo} alt="NTU Study" className="h-10 w-auto object-contain" />
+              <Link to="/dashboard">
+                <img src={ntuLongLogo} alt="NTU Study" className="h-10 w-auto object-contain" />
+              </Link>
             )}
           </div>
 

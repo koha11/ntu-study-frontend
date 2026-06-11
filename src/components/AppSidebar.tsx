@@ -31,7 +31,9 @@ export function AppSidebar() {
   return (
     <aside className="hidden md:flex h-screen w-60 shrink-0 sticky top-0 flex-col border-r border-sidebar-border bg-sidebar/80 backdrop-blur-xl">
       <div className="flex items-center px-4 h-16 border-b border-sidebar-border">
-        <img src={ntuLongLogo} alt="NTU Study" className="h-10 w-auto object-contain" />
+        <Link to="/dashboard">
+          <img src={ntuLongLogo} alt="NTU Study" className="h-10 w-auto object-contain" />
+        </Link>
       </div>
 
       <nav className="flex-1 space-y-1 p-3">

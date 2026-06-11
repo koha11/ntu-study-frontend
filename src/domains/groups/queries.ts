@@ -18,6 +18,8 @@ import {
   fetchGroupCalendarEvents,
   createGroupCalendarEvent,
   fetchCanvaPreview,
+  lockGroup,
+  unlockGroup,
 } from "./groups-api";
 import type {
   CreateGroupCalendarEventInput,
@@ -222,6 +224,42 @@ export const groupCalendarEventsQueryOptions = (
     enabled: Boolean(groupId && range),
     staleTime: 30_000,
   });
+
+/**
+ * Mutation: Lock group (POST /groups/:id/lock)
+ */
+export const useLockGroupMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (groupId: string) => {
+      const token = requireAccessToken();
+      return lockGroup(groupId, token);
+    },
+    onSuccess: (updatedGroup) => {
+      queryClient.setQueryData(groupKeys.detail(updatedGroup.id), updatedGroup);
+      queryClient.invalidateQueries({ queryKey: groupKeys.lists() });
+    },
+  });
+};
+
+/**
+ * Mutation: Unlock group (POST /groups/:id/unlock)
+ */
+export const useUnlockGroupMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { groupId: string; reason: string }) => {
+      const token = requireAccessToken();
+      return unlockGroup(params.groupId, params.reason, token);
+    },
+    onSuccess: (updatedGroup) => {
+      queryClient.setQueryData(groupKeys.detail(updatedGroup.id), updatedGroup);
+      queryClient.invalidateQueries({ queryKey: groupKeys.lists() });
+    },
+  });
+};
 
 /**
  * Mutation: Create event on shared group calendar (POST .../calendar/events)

@@ -12,3 +12,5 @@ export { useToggleMemberStatus } from "./useToggleMemberStatus";
 export { useRemoveMember } from "./useRemoveMember";
 export { useCreateGroupMeetEvent } from "./useCreateGroupMeetEvent";
 export { useCanvaPreview } from "./useCanvaPreview";
+export { useLockGroup } from "./useLockGroup";
+export { useUnlockGroup } from "./useUnlockGroup";

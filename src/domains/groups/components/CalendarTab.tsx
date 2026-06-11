@@ -35,6 +35,7 @@ export interface CalendarTabProps {
   google_calendar_id: string | null | undefined;
   meet_link: string | null | undefined;
   isLeader: boolean;
+  groupLocked?: boolean;
 }
 
 type RBCEvent = RBCEventModel & {
@@ -81,6 +82,7 @@ export function CalendarTab({
   google_calendar_id,
   meet_link,
   isLeader,
+  groupLocked = false,
 }: CalendarTabProps) {
   const [view, setView] = React.useState<View>("week");
   const [date, setDate] = React.useState(() => new Date());
@@ -140,7 +142,7 @@ export function CalendarTab({
   };
 
   const handleSelectSlot = (slot: SlotInfo) => {
-    if (!isLeader) return;
+    if (!isLeader || groupLocked) return;
     setSlotDraft({ start: slot.start, end: slot.end });
   };
 
@@ -230,7 +232,7 @@ export function CalendarTab({
               max={calendarMax}
               onNavigate={(d: Date) => setDate(d)}
               onView={(v: View) => setView(v)}
-              selectable={isLeader}
+              selectable={isLeader && !groupLocked}
               onSelectSlot={handleSelectSlot}
               onSelectEvent={(ev: RBCEvent) => handleSelectEvent(ev)}
               step={60}
