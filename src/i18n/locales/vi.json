@@ -595,6 +595,22 @@
       "errorNoCards": "Thêm ít nhất một thẻ với thuật ngữ và định nghĩa.",
       "somethingWentWrong": "Có lỗi xảy ra."
     },
+    "importModal": {
+      "title": "Nhập dữ liệu của bạn",
+      "subtitle": "Sao chép và dán dữ liệu vào đây (từ Word, Excel, Google Docs, v.v.)",
+      "textareaPlaceholder": "Từ 1\tĐịnh nghĩa 1\nTừ 2\tĐịnh nghĩa 2",
+      "betweenTermDef": "Giữa thuật ngữ và định nghĩa",
+      "betweenCards": "Giữa các thẻ",
+      "tab": "Tab",
+      "comma": "Dấu phẩy",
+      "newLine": "Xuống dòng",
+      "semicolon": "Dấu chấm phẩy",
+      "custom": "Tùy chỉnh",
+      "previewCards": "Xem trước {{count}} thẻ",
+      "nothingToPreview": "Chưa có gì để xem trước.",
+      "cancelImport": "Hủy nhập",
+      "import": "Nhập"
+    },
     "studyMode": {
       "loadingCards": "Đang tải thẻ…",
       "noCards": "Bộ thẻ này chưa có thẻ nào.",

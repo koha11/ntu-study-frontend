@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,7 @@ function toCardDelimiter(choice: CardSepChoice, custom: string): CardDelimiter {
 }
 
 export function ImportFlashcardsModal({ open, onOpenChange, onAppend }: ImportFlashcardsModalProps) {
+  const { t } = useTranslation();
   const [paste, setPaste] = React.useState("");
   const [termDefChoice, setTermDefChoice] = React.useState<TermDefChoice>("tab");
   const [termDefCustom, setTermDefCustom] = React.useState("");
@@ -70,22 +72,35 @@ export function ImportFlashcardsModal({ open, onOpenChange, onAppend }: ImportFl
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader className="space-y-1">
-          <DialogTitle>Import your data</DialogTitle>
+          <DialogTitle>{t("flashcards.importModal.title")}</DialogTitle>
           <p className="text-sm text-muted-foreground">
-            Copy and paste your data here (from Word, Excel, Google Docs, etc.)
+            {t("flashcards.importModal.subtitle")}
           </p>
         </DialogHeader>
 
         <Textarea
           className="min-h-[140px] font-mono text-sm"
-          placeholder={"Word 1\tDefinition 1\nWord 2\tDefinition 2"}
+          placeholder={t("flashcards.importModal.textareaPlaceholder")}
           value={paste}
           onChange={(e) => setPaste(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Tab") {
+              e.preventDefault();
+              const el = e.currentTarget;
+              const start = el.selectionStart;
+              const end = el.selectionEnd;
+              const next = paste.slice(0, start) + "\t" + paste.slice(end);
+              setPaste(next);
+              requestAnimationFrame(() => {
+                el.selectionStart = el.selectionEnd = start + 1;
+              });
+            }
+          }}
         />
 
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label className="text-xs font-semibold">Between term and definition</Label>
+            <Label className="text-xs font-semibold">{t("flashcards.importModal.betweenTermDef")}</Label>
             <RadioGroup
               value={termDefChoice}
               onValueChange={(v) => setTermDefChoice(v as TermDefChoice)}
@@ -94,19 +109,19 @@ export function ImportFlashcardsModal({ open, onOpenChange, onAppend }: ImportFl
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="tab" id="td-tab" />
                 <Label htmlFor="td-tab" className="font-normal">
-                  Tab
+                  {t("flashcards.importModal.tab")}
                 </Label>
               </div>
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="comma" id="td-comma" />
                 <Label htmlFor="td-comma" className="font-normal">
-                  Comma
+                  {t("flashcards.importModal.comma")}
                 </Label>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <RadioGroupItem value="custom" id="td-custom" />
                 <Label htmlFor="td-custom" className="font-normal">
-                  Custom
+                  {t("flashcards.importModal.custom")}
                 </Label>
                 {termDefChoice === "custom" && (
                   <Input
@@ -121,7 +136,7 @@ export function ImportFlashcardsModal({ open, onOpenChange, onAppend }: ImportFl
           </div>
 
           <div className="space-y-2">
-            <Label className="text-xs font-semibold">Between cards</Label>
+            <Label className="text-xs font-semibold">{t("flashcards.importModal.betweenCards")}</Label>
             <RadioGroup
               value={cardSepChoice}
               onValueChange={(v) => setCardSepChoice(v as CardSepChoice)}
@@ -130,19 +145,19 @@ export function ImportFlashcardsModal({ open, onOpenChange, onAppend }: ImportFl
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="newline" id="cs-nl" />
                 <Label htmlFor="cs-nl" className="font-normal">
-                  New line
+                  {t("flashcards.importModal.newLine")}
                 </Label>
               </div>
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="semicolon" id="cs-semi" />
                 <Label htmlFor="cs-semi" className="font-normal">
-                  Semicolon
+                  {t("flashcards.importModal.semicolon")}
                 </Label>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <RadioGroupItem value="custom" id="cs-custom" />
                 <Label htmlFor="cs-custom" className="font-normal">
-                  Custom
+                  {t("flashcards.importModal.custom")}
                 </Label>
                 {cardSepChoice === "custom" && (
                   <Input
@@ -158,9 +173,9 @@ export function ImportFlashcardsModal({ open, onOpenChange, onAppend }: ImportFl
         </div>
 
         <div className="rounded-lg border border-border bg-muted/30 p-3">
-          <div className="text-sm font-semibold">Preview {preview.length} cards</div>
+          <div className="text-sm font-semibold">{t("flashcards.importModal.previewCards", { count: preview.length })}</div>
           {preview.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">Nothing to preview yet.</p>
+            <p className="mt-2 text-sm text-muted-foreground">{t("flashcards.importModal.nothingToPreview")}</p>
           ) : (
             <ul className="mt-2 max-h-36 space-y-1 overflow-y-auto text-sm">
               {preview.map((row, i) => (
@@ -176,7 +191,7 @@ export function ImportFlashcardsModal({ open, onOpenChange, onAppend }: ImportFl
 
         <DialogFooter className="gap-2 sm:justify-end">
           <Button type="button" variant="secondary" onClick={handleCancel}>
-            Cancel Import
+            {t("flashcards.importModal.cancelImport")}
           </Button>
           <Button
             type="button"
@@ -184,7 +199,7 @@ export function ImportFlashcardsModal({ open, onOpenChange, onAppend }: ImportFl
             disabled={preview.length === 0}
             onClick={handleImport}
           >
-            Import
+            {t("flashcards.importModal.import")}
           </Button>
         </DialogFooter>
       </DialogContent>

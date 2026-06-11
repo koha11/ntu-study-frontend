@@ -595,6 +595,22 @@
       "errorNoCards": "Add at least one card with a term and definition.",
       "somethingWentWrong": "Something went wrong."
     },
+    "importModal": {
+      "title": "Import your data",
+      "subtitle": "Copy and paste your data here (from Word, Excel, Google Docs, etc.)",
+      "textareaPlaceholder": "Word 1\tDefinition 1\nWord 2\tDefinition 2",
+      "betweenTermDef": "Between term and definition",
+      "betweenCards": "Between cards",
+      "tab": "Tab",
+      "comma": "Comma",
+      "newLine": "New line",
+      "semicolon": "Semicolon",
+      "custom": "Custom",
+      "previewCards": "Preview {{count}} cards",
+      "nothingToPreview": "Nothing to preview yet.",
+      "cancelImport": "Cancel Import",
+      "import": "Import"
+    },
     "studyMode": {
       "loadingCards": "Loading cards…",
       "noCards": "This set has no cards yet.",
