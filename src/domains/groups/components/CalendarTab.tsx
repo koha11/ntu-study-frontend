@@ -86,6 +86,12 @@ export function CalendarTab({
 }: CalendarTabProps) {
   const [view, setView] = React.useState<View>("week");
   const [date, setDate] = React.useState(() => new Date());
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 640) {
+      setView("day");
+    }
+  }, []);
   const [slotDraft, setSlotDraft] = React.useState<{ start: Date; end: Date } | null>(null);
   const [calInput, setCalInput] = React.useState(google_calendar_id ?? "");
 
@@ -220,13 +226,14 @@ export function CalendarTab({
             {(error as Error)?.message ?? t("groups.calendar.couldNotLoad")}
           </div>
         ) : (
-          <div className="gcal-skin w-full min-w-0">
+          <div className="overflow-x-auto">
+          <div className="gcal-skin min-w-[600px]">
             <Calendar<RBCEvent>
               localizer={calendarLocalizer}
               events={events}
               startAccessor="start"
               endAccessor="end"
-              style={{ minHeight: 560, width: "100%" }}
+              style={{ minHeight: 480, width: "100%" }}
               view={view}
               views={["week", "day"]}
               date={date}
@@ -251,6 +258,7 @@ export function CalendarTab({
               }}
             />
           </div>
+        </div>
         )}
       </div>
 

@@ -126,7 +126,7 @@ export function GroupDetailPage() {
         <ArrowLeft className="h-3 w-3" /> {t("groups.allGroups")}
       </Link>
 
-      <div className="rounded-2xl border border-border bg-gradient-surface p-6">
+      <div className="rounded-2xl border border-border bg-gradient-surface p-4 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -157,7 +157,7 @@ export function GroupDetailPage() {
                 </span>
               ))}
             </div>
-            <h1 className="mt-3 text-3xl font-bold tracking-tight">{group.name}</h1>
+            <h1 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">{group.name}</h1>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
               {group.description ?? ""}
             </p>
@@ -220,18 +220,20 @@ export function GroupDetailPage() {
       />
 
       <Tabs key={initialTab} defaultValue={initialTab} className="mt-6">
-        <TabsList>
-          <TabsTrigger value="overview">{t("groups.tabs.overview")}</TabsTrigger>
-          <TabsTrigger value="tasks">{t("groups.tabs.tasks")}</TabsTrigger>
-          <TabsTrigger value="drive">{t("groups.tabs.drive")}</TabsTrigger>
-          {/* <TabsTrigger value="canva">{t("groups.tabs.canva")}</TabsTrigger> */}
-          <TabsTrigger value="calendar">{t("groups.tabs.calendar")}</TabsTrigger>
-          <TabsTrigger value="members">
-            {t("groups.tabs.members")} ({membersLoading ? "…" : members.length})
-          </TabsTrigger>
-          <TabsTrigger value="contribution">{t("groups.tabs.contribution")}</TabsTrigger>
-          <TabsTrigger value="flashcards">{t("groups.tabs.flashcards")}</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto">
+          <TabsList className="flex w-max min-w-full">
+            <TabsTrigger value="overview">{t("groups.tabs.overview")}</TabsTrigger>
+            <TabsTrigger value="tasks">{t("groups.tabs.tasks")}</TabsTrigger>
+            <TabsTrigger value="drive">{t("groups.tabs.drive")}</TabsTrigger>
+            {/* <TabsTrigger value="canva">{t("groups.tabs.canva")}</TabsTrigger> */}
+            <TabsTrigger value="calendar">{t("groups.tabs.calendar")}</TabsTrigger>
+            <TabsTrigger value="members">
+              {t("groups.tabs.members")} ({membersLoading ? "…" : members.length})
+            </TabsTrigger>
+            <TabsTrigger value="contribution">{t("groups.tabs.contribution")}</TabsTrigger>
+            <TabsTrigger value="flashcards">{t("groups.tabs.flashcards")}</TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="overview" className="mt-6">
           <GroupOverviewTab

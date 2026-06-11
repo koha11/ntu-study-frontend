@@ -188,7 +188,7 @@ export function ScheduleGroupCalendarEventDialog({
             <Input id="cal-event-title" {...form.register("summary")} />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="cal-start">{t("groups.scheduleEvent.start")}</Label>
               <Input id="cal-start" type="datetime-local" {...form.register("startLocal")} />
