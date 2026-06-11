@@ -220,8 +220,8 @@ export function GroupDetailPage() {
       />
 
       <Tabs key={initialTab} defaultValue={initialTab} className="mt-6">
-        <div className="overflow-x-auto">
-          <TabsList className="flex w-max min-w-full">
+        <div className="hidden sm:block">
+          <TabsList className="flex w-full justify-start">
             <TabsTrigger value="overview">{t("groups.tabs.overview")}</TabsTrigger>
             <TabsTrigger value="tasks">{t("groups.tabs.tasks")}</TabsTrigger>
             <TabsTrigger value="drive">{t("groups.tabs.drive")}</TabsTrigger>
