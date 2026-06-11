@@ -19,6 +19,7 @@ import {
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -175,24 +176,26 @@ export function GroupDetailPage() {
                   {t("groups.unlockGroup")}
                 </Button>
               ) : (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleLock}
-                        disabled={Boolean(lockDisabledReason) || lockPending}
-                      >
-                        <Lock className="mr-1.5 h-3.5 w-3.5" />
-                        {lockPending ? t("groups.lockGroupConfirming") : t("groups.lockGroup")}
-                      </Button>
-                    </span>
-                  </TooltipTrigger>
-                  {lockDisabledReason && (
-                    <TooltipContent>{lockDisabledReason}</TooltipContent>
-                  )}
-                </Tooltip>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleLock}
+                          disabled={Boolean(lockDisabledReason) || lockPending}
+                        >
+                          <Lock className="mr-1.5 h-3.5 w-3.5" />
+                          {lockPending ? t("groups.lockGroupConfirming") : t("groups.lockGroup")}
+                        </Button>
+                      </span>
+                    </TooltipTrigger>
+                    {lockDisabledReason && (
+                      <TooltipContent>{lockDisabledReason}</TooltipContent>
+                    )}
+                  </Tooltip>
+                </TooltipProvider>
               )}
             </div>
           )}
