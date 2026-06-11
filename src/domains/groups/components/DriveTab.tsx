@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { ExternalLink, Folder, FolderPlus, Upload } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { getAccessToken } from "@/domains/auth/token-storage";
 import {
   createGroupFolder,
@@ -41,6 +42,7 @@ export interface DriveTabProps {
   groupId: string;
   /** When missing, Drive assets are not fetched and a "no folder" message is shown. */
   driveFolderId?: string | null;
+  groupLocked?: boolean;
 }
 
 function readAccessToken(): string | null {
@@ -52,9 +54,10 @@ function collectFolderOptions(
   rootFolderId: string,
   rootItems: DriveAsset[] | undefined,
   childrenMap: Record<string, DriveAsset[]>,
+  rootLabel: string,
 ): { id: string; label: string }[] {
   const options: { id: string; label: string }[] = [
-    { id: rootFolderId, label: "Group folder" },
+    { id: rootFolderId, label: rootLabel },
   ];
   const seen = new Set<string>([rootFolderId]);
 
@@ -75,7 +78,8 @@ function collectFolderOptions(
   return options;
 }
 
-export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
+export function DriveTab({ groupId, driveFolderId, groupLocked = false }: DriveTabProps) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const hasFolder = Boolean(driveFolderId?.trim());
   const rootFolderId = driveFolderId?.trim() ?? "";
@@ -99,9 +103,9 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
   React.useEffect(() => {
     if (rootFolderId) {
       setSelectedFolderId(rootFolderId);
-      setSelectedFolderName("Group folder");
+      setSelectedFolderName(t("groups.drive.groupFolder"));
     }
-  }, [rootFolderId]);
+  }, [rootFolderId, t]);
 
   const token = readAccessToken();
   const canQuery = Boolean(groupId && hasFolder && token);
@@ -142,8 +146,8 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
   }, [expandedFolders, folderQueries]);
 
   const folderOptions = React.useMemo(
-    () => collectFolderOptions(rootFolderId, rootQuery.data, childrenMap),
-    [rootFolderId, rootQuery.data, childrenMap],
+    () => collectFolderOptions(rootFolderId, rootQuery.data, childrenMap, t("groups.drive.groupFolder")),
+    [rootFolderId, rootQuery.data, childrenMap, t],
   );
 
   const folderSelectOptions = React.useMemo(() => {
@@ -189,13 +193,13 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
       });
     },
     onSuccess: () => {
-      toast.success("Folder created");
+      toast.success(t("groups.drive.folderCreated"));
       setNewFolderOpen(false);
       setNewFolderName("");
       invalidateDriveQueries();
     },
     onError: () => {
-      toast.error("Could not create folder");
+      toast.error(t("groups.drive.folderCreateError"));
     },
   });
 
@@ -212,10 +216,10 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
       const opt = folderSelectOptions.find((o) => o.id === value);
       setSelectedFolderId(value);
       setSelectedFolderName(
-        opt?.label ?? (value === rootFolderId ? "Group folder" : value),
+        opt?.label ?? (value === rootFolderId ? t("groups.drive.groupFolder") : value),
       );
     },
-    [folderSelectOptions, rootFolderId],
+    [folderSelectOptions, rootFolderId, t],
   );
 
   const handlePreviewFile = React.useCallback((item: DriveAsset) => {
@@ -238,15 +242,15 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
           );
           n += 1;
         }
-        toast.success(n === 1 ? "Upload complete" : `Uploaded ${n} files`);
+        toast.success(n === 1 ? t("groups.drive.uploadComplete") : t("groups.drive.uploadedN", { count: n }));
         invalidateDriveQueries();
       } catch {
-        toast.error("Upload failed");
+        toast.error(t("groups.drive.uploadError"));
       } finally {
         e.target.value = "";
       }
     },
-    [groupId, token, selectedFolderId, invalidateDriveQueries],
+    [groupId, token, selectedFolderId, invalidateDriveQueries, t],
   );
 
   if (!hasFolder) {
@@ -255,11 +259,11 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
         <div className="flex items-start gap-3">
           <Folder className="mt-0.5 h-5 w-5 text-muted-foreground" />
           <div>
-            <h3 className="font-semibold">Shared Drive folder</h3>
+            <h3 className="font-semibold">{t("groups.drive.title")}</h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Files for this group are stored in Google Drive when the leader has Drive access.
+              {t("groups.drive.desc")}
             </p>
-            <p className="mt-2 text-xs text-muted-foreground">No folder linked yet.</p>
+            <p className="mt-2 text-xs text-muted-foreground">{t("groups.drive.noFolder")}</p>
           </div>
         </div>
       </div>
@@ -272,8 +276,8 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
         <div className="flex items-start gap-3">
           <Folder className="mt-0.5 h-5 w-5 text-muted-foreground" />
           <div>
-            <h3 className="font-semibold">Shared Drive folder</h3>
-            <p className="mt-2 text-sm text-muted-foreground">Sign in again to browse Drive files.</p>
+            <h3 className="font-semibold">{t("groups.drive.title")}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">{t("groups.drive.signInAgain")}</p>
           </div>
         </div>
       </div>
@@ -285,9 +289,9 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
       <div className="flex items-start gap-3">
         <Folder className="mt-0.5 h-5 w-5 text-muted-foreground" />
         <div className="min-w-0 flex-1">
-          <h3 className="font-semibold">Shared Drive folder</h3>
+          <h3 className="font-semibold">{t("groups.drive.title")}</h3>
           <p className="mt-1 text-xs text-muted-foreground">
-            Files for this group are stored in Google Drive when the leader has Drive access.
+            {t("groups.drive.desc")}
           </p>
           {driveFolderUrl ? (
             <a
@@ -296,7 +300,7 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
               rel="noopener noreferrer"
               className="mt-3 inline-flex items-center gap-1 text-sm text-primary hover:underline"
             >
-              Open in Drive <ExternalLink className="h-3 w-3" />
+              {t("groups.drive.openInDrive")} <ExternalLink className="h-3 w-3" />
             </a>
           ) : null}
 
@@ -308,18 +312,19 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
                 data-testid="drive-upload-target"
               >
                 <span className="shrink-0 text-xs text-muted-foreground">
-                  Upload / new folder in:
+                  {t("groups.drive.uploadIn")}
                 </span>
                 <Select
                   value={selectedFolderId ?? rootFolderId}
                   onValueChange={handleFolderDropdownChange}
+                  disabled={groupLocked}
                 >
                   <SelectTrigger
                     data-testid="drive-folder-dropdown"
                     className="h-9 w-full max-w-md"
-                    aria-label="Folder for upload and new folder"
+                    aria-label={t("groups.drive.folderForUpload")}
                   >
-                    <SelectValue placeholder="Select folder" />
+                    <SelectValue placeholder={t("groups.drive.selectFolder")} />
                   </SelectTrigger>
                   <SelectContent position="popper">
                     {folderSelectOptions.map((o) => (
@@ -337,23 +342,24 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
                   size="sm"
                   className="gap-1"
                   data-testid="drive-new-folder-trigger"
+                  disabled={groupLocked}
                   onClick={() => setNewFolderOpen(true)}
                 >
                   <FolderPlus className="h-4 w-4" aria-hidden />
-                  New folder
+                  {t("groups.drive.newFolder")}
                 </Button>
                 <Dialog open={newFolderOpen} onOpenChange={setNewFolderOpen}>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>New folder</DialogTitle>
+                      <DialogTitle>{t("groups.drive.newFolder")}</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-2 py-2">
-                      <Label htmlFor="drive-new-folder-name">Name</Label>
+                      <Label htmlFor="drive-new-folder-name">{t("groups.drive.newFolderName")}</Label>
                       <Input
                         id="drive-new-folder-name"
                         value={newFolderName}
                         onChange={(e) => setNewFolderName(e.target.value)}
-                        placeholder="Folder name"
+                        placeholder={t("groups.drive.newFolderPlaceholder")}
                         data-testid="drive-new-folder-name"
                       />
                     </div>
@@ -363,7 +369,7 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
                         variant="outline"
                         onClick={() => setNewFolderOpen(false)}
                       >
-                        Cancel
+                        {t("groups.drive.cancel")}
                       </Button>
                       <Button
                         type="button"
@@ -374,7 +380,7 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
                         }
                         onClick={() => createFolderMutation.mutate()}
                       >
-                        Create
+                        {t("groups.drive.create")}
                       </Button>
                     </DialogFooter>
                   </DialogContent>
@@ -386,11 +392,11 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
                   size="sm"
                   className="gap-1"
                   data-testid="drive-upload-trigger"
-                  disabled={rootQuery.isPending}
+                  disabled={rootQuery.isPending || groupLocked}
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <Upload className="h-4 w-4" aria-hidden />
-                  Upload
+                  {t("groups.drive.upload")}
                 </Button>
                 <input
                   ref={fileInputRef}
@@ -403,17 +409,20 @@ export function DriveTab({ groupId, driveFolderId }: DriveTabProps) {
               </div>
             </div>
 
+            {groupLocked && (
+              <p className="mb-3 text-xs text-muted-foreground">{t("groups.drive.lockedHint")}</p>
+            )}
             {rootQuery.isPending ? (
               <p className="text-sm text-muted-foreground" data-testid="drive-tab-loading">
-                Loading Drive…
+                {t("groups.drive.loading")}
               </p>
             ) : rootQuery.isError ? (
               <p className="text-sm text-destructive" data-testid="drive-tab-error">
-                Could not load Drive folder.
+                {t("groups.drive.couldNotLoad")}
               </p>
             ) : (rootQuery.data?.length ?? 0) === 0 ? (
               <p className="text-sm text-muted-foreground" data-testid="drive-tab-empty">
-                This folder is empty.
+                {t("groups.drive.empty")}
               </p>
             ) : (
               <FolderTree

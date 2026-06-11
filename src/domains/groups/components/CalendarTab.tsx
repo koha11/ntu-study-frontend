@@ -170,12 +170,13 @@ export function CalendarTab({
                 onChange={(e) => setCalInput(e.target.value)}
                 placeholder="xxxx@group.calendar.google.com"
                 className="font-mono text-sm"
+                readOnly={groupLocked}
               />
             </div>
             <Button
               type="button"
               className="bg-gradient-primary"
-              disabled={savingCalId}
+              disabled={savingCalId || groupLocked}
               onClick={handleSaveCalendarId}
             >
               {savingCalId ? t("groups.calendar.saving") : t("groups.calendar.save")}
@@ -203,9 +204,10 @@ export function CalendarTab({
                 value={calInput}
                 onChange={(e) => setCalInput(e.target.value)}
                 className="font-mono text-sm"
+                readOnly={groupLocked}
               />
             </div>
-            <Button type="button" variant="secondary" disabled={savingCalId} onClick={handleSaveCalendarId}>
+            <Button type="button" variant="secondary" disabled={savingCalId || groupLocked} onClick={handleSaveCalendarId}>
               {savingCalId ? t("groups.calendar.saving") : t("groups.calendar.update")}
             </Button>
           </div>
