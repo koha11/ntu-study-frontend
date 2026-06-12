@@ -905,17 +905,15 @@
       },
       "inviteMembers": {
         "title": "Invite Members",
-        "subtitle": "Send invites via email or share a link",
-        "description": "Leaders have two ways to invite members: send a direct email or generate an invite link to share. When a new member clicks the link, the system automatically creates their account and sends a confirmation email.",
+        "subtitle": "Send invites via email",
+        "description": "Leaders invite members by entering their email addresses directly. Members receive an invitation email and can accept it via the email link or via an in-app notification.",
         "steps": [
           "Go to the group page → select the \"Members\" tab.",
           "Click \"Invite member\" → enter email addresses (one per line, multiple allowed).",
-          "Or click \"Create invite link\" → copy the link → share it via any messaging app.",
-          "Members click the link → sign in with Google → account is automatically created and linked to the group.",
+          "Members receive the invitation email → click the link in the email → confirm joining the group. Or open the app directly → tap the group invitation notification → confirm.",
           "Leaders see the new member appear in the list as soon as they accept the invitation."
         ],
         "tips": [
-          "Invite links can expire — if a member reports they cannot join, generate a new link.",
           "Email addresses must be valid; the system will show an error for incorrect formats."
         ],
         "imageAlt": "Invite members to group screen"
@@ -923,14 +921,13 @@
       "setupResources": {
         "title": "Set Up Resources",
         "subtitle": "Manage files, folders, and documents without leaving the app",
-        "description": "The Assets tab lets the whole group manage the Google Drive folder tree without leaving the app — create sub-folders, upload files, preview documents, and track edit history.",
+        "description": "The Drive tab lets the whole group manage the Google Drive folder tree without leaving the app — create sub-folders, upload files, and preview documents. Recent activity is displayed alongside the file list, no tab switching needed.",
         "steps": [
-          "Go to the group page → select the \"Assets\" tab.",
+          "Go to the group page → select the \"Drive\" tab.",
           "Click \"Create folder\" to add a sub-folder inside the group Drive folder (no special characters in the name).",
           "Click \"Upload file\" to upload documents — files are saved directly to Drive and appear in the list.",
           "Click any file to preview it inline (supports Office, PDF, and Canva) without downloading.",
-          "Switch to the \"History\" tab to view change logs and comments from Google Drive.",
-          "Click the Canva link to edit the group's presentation slide directly in Canva."
+          "Change logs and comments from Google Drive are shown next to the file list — no need to switch tabs."
         ],
         "tips": [
           "Folder names containing / \\ : * ? < > | will be rejected — use hyphens or underscores instead."
@@ -942,7 +939,7 @@
         "subtitle": "Delegate work and track each member's progress",
         "description": "Both Leaders and members can create group tasks. Group tasks require Leader approval before they are considered complete. The system sends automatic email notifications to the assignee and to the Leader when approval is needed.",
         "steps": [
-          "Go to the group page → select the \"Tasks\" tab → click \"Create task\".",
+          "Go to the group page → select the \"Tasks\" tab → click \"Create new task\".",
           "Enter the task content, select the assignee from the member list, and set a due date.",
           "Click \"Save\" — the system emails the assignee immediately.",
           "(Optional) Open the task → click \"Add sub-task\" to break it into smaller steps. Sub-tasks have the same features as parent tasks.",
@@ -970,50 +967,46 @@
       "reviewTasks": {
         "title": "Submit & Review Tasks",
         "subtitle": "Clear submit → review → pass/fail workflow",
-        "description": "When a member finishes their work, they submit the task for Leader review. The Leader can Pass (mark complete) or Fail (return to in-progress for revision). The entire loop is tracked via email notifications.",
+        "description": "When a member finishes their work, they drag the task to the \"Pending Review\" column for the Leader to review. The Leader can drag it to \"Done\" or \"Failed\" with a reason. The entire loop is tracked via email notifications.",
         "steps": [
-          "Member opens an in-progress task → clicks \"Submit\" — status changes to \"Pending Review\".",
+          "Member goes to the \"Tasks\" tab → drags their completed task to the \"Pending Review\" column.",
           "The system emails the Leader with the task details and assignee information.",
-          "Leader goes to the \"Tasks\" tab → filters by \"Pending Review\" → opens the task to review.",
-          "Click \"Pass\" → task moves to \"Done\" and the member receives a confirmation email.",
-          "Or click \"Fail\" with a reason note → task returns to \"In Progress\" and the member is emailed to revise.",
-          "Repeat steps 1–4 until the task is passed."
+          "Leader goes to the \"Tasks\" tab → sees the task in the \"Pending Review\" column.",
+          "Leader drags the task to the \"Done\" column — the member receives a confirmation email.",
+          "Or Leader drags it to the \"Failed\" column → fills in the reason → member receives a failure notification email with the reason and revises accordingly."
         ],
         "tips": [
-          "Leaders should add a clear reason when failing a task so the member knows what to fix — avoiding repeated submit cycles."
+          "Leaders should add a clear reason when moving a task to Failed so the member knows what to fix — avoiding repeated submit cycles."
         ],
         "imageAlt": "Leader task review screen"
       },
       "peerEvaluation": {
         "title": "Score Contributions",
-        "subtitle": "Anonymous peer evaluation of each member's contribution",
-        "description": "Near the end of the project, the Leader opens a scoring round. Each member anonymously rates all other members from 0–10. Results are only revealed after the deadline passes.",
+        "subtitle": "Task-based peer evaluation of each member's contribution",
+        "description": "The Leader opens a scoring round and optionally sets a deadline. The system creates a scoring form for each task, showing the assigned member's name. Everyone scores tasks that aren't their own and can revise until the Leader closes the round.",
         "steps": [
-          "Leader goes to the \"Evaluation\" tab → clicks \"Open evaluation\" → sets the scoring deadline.",
-          "The system creates an anonymous evaluation form for each group member.",
-          "Each member (including the Leader) signs in → goes to \"Evaluation\" → scores every other member 0–10.",
-          "(Optional) Add a written comment to explain the score.",
-          "Click \"Confirm\" to submit — note that each member can only submit once.",
-          "After the deadline, the scoring feature is locked. The Leader can view the aggregated results for the whole group."
+          "Leader goes to the \"Contributions\" tab → clicks \"Open evaluation\" → optionally adjusts the deadline.",
+          "The system creates a scoring form for each task (showing the assigned member's name) and emails all group members.",
+          "Each member goes to the \"Contributions\" tab → rates 0–10 for each task that is not their own.",
+          "Click \"Save\" to save scores — edits are allowed as long as the Leader has not closed the round.",
+          "Once everyone has scored, the Leader clicks \"Close round\" → each member's average score is displayed on the page and the system emails each member their individual result."
         ],
         "tips": [
-          "If a member did not participate, the Leader can mark them as \"Not participating\" before opening the evaluation round to exclude them.",
-          "Scores are completely anonymous — members cannot see who gave them which score."
+          "Scores can be revised multiple times until the Leader closes the round — think carefully before closing."
         ],
         "imageAlt": "Member contribution evaluation screen"
       },
       "closeProject": {
         "title": "Close & Lock Project",
         "subtitle": "Archive all group data in read-only mode",
-        "description": "When the project is complete, the Leader locks the group. All tasks, documents, and evaluation results are preserved but no one can make further edits — ensuring data integrity.",
+        "description": "When the project is complete, the Leader locks the group. All tasks, documents, and evaluation results are preserved but no one can make further edits. If needed, the Leader can unlock the group again with a stated reason.",
         "steps": [
-          "Leader goes to the group page → selects \"Group settings\" → clicks \"End project\".",
-          "Confirm the action — the group status changes to \"Locked\".",
-          "All members can still view all group content but cannot create, edit, or delete anything.",
-          "Data is stored permanently on the system for future reference."
+          "Leader goes to the group page → clicks \"Lock group\" (the button is disabled until after the report date if the group has one set).",
+          "All members receive an email notifying them that the group has been locked.",
+          "If the group needs to be reopened, the Leader clicks \"Unlock group\" → fills in the reason → the group is unlocked and the system emails all members."
         ],
         "tips": [
-          "Locking is irreversible — make sure all tasks have been approved and evaluation scores are finalised before locking."
+          "The lock button is only available after the report date — check the report date in group settings if the button appears greyed out."
         ],
         "imageAlt": "End and lock project screen"
       }

@@ -905,17 +905,15 @@
       },
       "inviteMembers": {
         "title": "Mời thành viên",
-        "subtitle": "Gửi lời mời qua email hoặc chia sẻ liên kết",
-        "description": "Leader có hai cách mời thành viên: gửi email trực tiếp hoặc tạo liên kết mời để chia sẻ. Khi thành viên mới nhấn vào liên kết, hệ thống tự động tạo tài khoản và gửi email xác nhận.",
+        "subtitle": "Gửi lời mời qua email",
+        "description": "Leader mời thành viên bằng cách nhập địa chỉ email trực tiếp. Thành viên nhận được email mời và có thể chấp nhận qua email hoặc qua thông báo trong ứng dụng.",
         "steps": [
           "Vào trang nhóm → chọn tab \"Thành viên\".",
           "Nhấn \"Mời thành viên\" → nhập địa chỉ email (có thể nhập nhiều địa chỉ, mỗi dòng một email).",
-          "Hoặc nhấn \"Tạo liên kết mời\" → sao chép liên kết → chia sẻ qua Zalo, Messenger, v.v.",
-          "Thành viên nhận email hoặc liên kết → nhấn \"Tham gia nhóm\" → đăng nhập Google → tài khoản tự động được tạo và liên kết vào nhóm.",
+          "Thành viên nhận email mời → nhấn vào đường liên kết trong email → xác nhận tham gia nhóm. Hoặc mở thẳng ứng dụng → nhấn vào thông báo lời mời vào nhóm → xác nhận.",
           "Leader thấy thành viên mới xuất hiện trong danh sách ngay sau khi họ chấp nhận lời mời."
         ],
         "tips": [
-          "Liên kết mời có thể hết hạn — nếu thành viên báo không vào được, hãy tạo liên kết mới.",
           "Email phải đúng định dạng; hệ thống sẽ báo lỗi nếu nhập sai."
         ],
         "imageAlt": "Màn hình mời thành viên vào nhóm"
@@ -923,14 +921,13 @@
       "setupResources": {
         "title": "Thiết lập tài nguyên",
         "subtitle": "Quản lý file, folder và tài liệu nhóm ngay trong ứng dụng",
-        "description": "Tab Assets cho phép cả nhóm quản lý cây thư mục Google Drive mà không cần rời khỏi ứng dụng — tạo folder con, upload file, xem trước tài liệu và theo dõi lịch sử chỉnh sửa.",
+        "description": "Tab Drive cho phép cả nhóm quản lý cây thư mục Google Drive mà không cần rời khỏi ứng dụng — tạo folder con, upload file, xem trước tài liệu. Hoạt động gần đây hiển thị ngay bên cạnh, không cần chuyển tab.",
         "steps": [
-          "Vào trang nhóm → chọn tab \"Assets\".",
+          "Vào trang nhóm → chọn tab \"Drive\".",
           "Nhấn \"Tạo folder\" để tạo thư mục con bên trong folder nhóm trên Drive (tên folder không được chứa ký tự đặc biệt).",
           "Nhấn \"Upload file\" để tải tài liệu lên — file được lưu thẳng vào Drive và hiển thị trong danh sách.",
           "Nhấn vào bất kỳ file nào để xem trước trực tiếp (hỗ trợ Office, PDF và Canva) mà không cần tải về máy.",
-          "Chuyển sang tab \"Lịch sử\" để xem nhật ký thay đổi và bình luận từ Google Drive.",
-          "Nhấn vào liên kết Canva để chỉnh sửa slide thuyết trình của nhóm trực tiếp trên Canva."
+          "Nhật ký thay đổi và bình luận từ Google Drive hiển thị ngay bên cạnh danh sách file, không cần chuyển tab."
         ],
         "tips": [
           "Tên folder chứa ký tự như / \\ : * ? < > | sẽ bị từ chối — dùng dấu gạch ngang hoặc gạch dưới thay thế."
@@ -942,7 +939,7 @@
         "subtitle": "Phân công công việc và theo dõi tiến độ từng thành viên",
         "description": "Leader và thành viên đều có thể tạo task nhóm. Task nhóm cần Leader duyệt trước khi được xem là hoàn thành. Hệ thống gửi email thông báo tự động cho người được giao và cho Leader khi cần duyệt.",
         "steps": [
-          "Vào trang nhóm → chọn tab \"Công việc\" → nhấn \"Tạo task\".",
+          "Vào trang nhóm → chọn tab \"Nhiệm vụ\" → nhấn \"Tạo nhiệm vụ mới\".",
           "Điền nội dung công việc, chọn người thực hiện từ danh sách thành viên, đặt ngày hết hạn.",
           "Nhấn \"Lưu\" — hệ thống gửi email thông báo đến người được giao ngay lập tức.",
           "(Tùy chọn) Mở task vừa tạo → nhấn \"Thêm sub-task\" để chia nhỏ thành các bước con. Sub-task có đầy đủ chức năng giống task cha.",
@@ -970,50 +967,46 @@
       "reviewTasks": {
         "title": "Submit & Duyệt task",
         "subtitle": "Quy trình submit → review → pass/fail rõ ràng",
-        "description": "Khi thành viên hoàn thành công việc, họ submit task để chờ Leader duyệt. Leader có thể Pass (chuyển sang hoàn thành) hoặc Fail (trả về đang làm để sửa lại). Toàn bộ vòng lặp được thông báo qua email.",
+        "description": "Khi thành viên hoàn thành công việc, họ kéo nhiệm vụ sang cột \"Chờ xem xét\" để Leader duyệt. Leader có thể kéo sang \"Hoàn thành\" hoặc \"Thất bại\" kèm lý do. Toàn bộ vòng lặp được thông báo qua email.",
         "steps": [
-          "Thành viên mở task đang làm → nhấn \"Submit\" — trạng thái chuyển sang \"Chờ duyệt\".",
-          "Hệ thống gửi email thông báo đến Leader, kèm theo thông tin task và người thực hiện.",
-          "Leader vào tab \"Công việc\" → lọc theo \"Chờ duyệt\" → mở task cần xem xét.",
-          "Nhấn \"Pass\" → task chuyển sang \"Hoàn thành\", thành viên nhận email xác nhận.",
-          "Hoặc nhấn \"Fail\" kèm ghi chú lý do → task trở về \"Đang làm\", thành viên nhận email và tiếp tục chỉnh sửa.",
-          "Lặp lại bước 1–4 cho đến khi task được Pass."
+          "Thành viên vào tab \"Nhiệm vụ\" → kéo nhiệm vụ đã hoàn thành của mình sang cột \"Chờ xem xét\".",
+          "Hệ thống gửi email thông báo đến Leader, kèm theo thông tin nhiệm vụ và người thực hiện.",
+          "Leader vào tab \"Nhiệm vụ\" → thấy nhiệm vụ đang ở cột \"Chờ xem xét\".",
+          "Leader kéo nhiệm vụ sang cột \"Hoàn thành\" — thành viên nhận email xác nhận.",
+          "Hoặc Leader kéo sang cột \"Thất bại\" → điền lý do → thành viên nhận email thông báo thất bại kèm lý do và tiếp tục chỉnh sửa."
         ],
         "tips": [
-          "Leader nên ghi rõ lý do khi Fail để thành viên biết cần sửa gì — tránh vòng lặp submit nhiều lần."
+          "Leader nên ghi rõ lý do khi chuyển sang Thất bại để thành viên biết cần sửa gì — tránh vòng lặp submit nhiều lần."
         ],
         "imageAlt": "Màn hình duyệt task của Leader"
       },
       "peerEvaluation": {
         "title": "Chấm điểm đóng góp",
-        "subtitle": "Đánh giá ẩn danh mức độ đóng góp của từng thành viên",
-        "description": "Sau khi dự án gần kết thúc, Leader mở vòng đánh giá. Mỗi thành viên chấm điểm (0–10) cho tất cả thành viên còn lại một cách ẩn danh. Kết quả chỉ hiển thị sau khi hết thời hạn.",
+        "subtitle": "Đánh giá mức độ đóng góp theo từng nhiệm vụ",
+        "description": "Leader mở vòng đánh giá và tùy chọn ngày hết hạn. Hệ thống tạo phiếu chấm điểm cho từng nhiệm vụ, hiển thị tên thành viên được gán. Mỗi người chấm điểm các nhiệm vụ không phải của mình và có thể chỉnh sửa cho đến khi Leader đóng vòng.",
         "steps": [
-          "Leader vào tab \"Đánh giá\" → nhấn \"Mở đánh giá\" → đặt thời hạn chấm điểm.",
-          "Hệ thống tạo phiếu đánh giá ẩn cho từng thành viên trong nhóm.",
-          "Mỗi thành viên (kể cả Leader) đăng nhập → vào tab \"Đánh giá\" → chấm điểm 0–10 cho từng người.",
-          "(Tùy chọn) Thêm nhận xét bằng văn bản để giải thích điểm số.",
-          "Nhấn \"Xác nhận\" để ghi nhận — lưu ý chỉ được submit một lần.",
-          "Sau khi hết thời hạn, hệ thống khoá chức năng chấm điểm. Leader xem tổng hợp kết quả của toàn nhóm."
+          "Leader vào tab \"Đóng góp\" → nhấn \"Mở đánh giá\" → tùy chọn chỉnh ngày hết hạn.",
+          "Hệ thống tạo phiếu chấm điểm cho từng nhiệm vụ (tên thành viên được gán sẽ hiển thị) và gửi email thông báo đến toàn bộ thành viên.",
+          "Mỗi thành viên vào tab \"Đóng góp\" → đánh giá 0–10 cho từng nhiệm vụ không phải của mình.",
+          "Nhấn \"Lưu\" để lưu đánh giá — có thể chỉnh sửa và lưu lại nếu Leader chưa đóng vòng.",
+          "Sau khi mọi người đã chấm, Leader nhấn nút \"Đóng vòng\" → điểm trung bình của từng thành viên hiển thị trên web và hệ thống gửi email thông báo điểm cá nhân đến từng thành viên."
         ],
         "tips": [
-          "Nếu một thành viên không tham gia làm việc, Leader có thể đánh dấu \"Không tham gia\" trước khi mở vòng đánh giá để loại họ khỏi danh sách.",
-          "Điểm số là ẩn danh hoàn toàn — các thành viên không biết ai chấm mình bao nhiêu."
+          "Điểm có thể chỉnh sửa nhiều lần cho đến khi Leader đóng vòng — hãy cân nhắc kỹ trước khi Leader nhấn Đóng."
         ],
         "imageAlt": "Màn hình đánh giá đóng góp thành viên"
       },
       "closeProject": {
         "title": "Kết thúc & Khoá dự án",
         "subtitle": "Lưu trữ toàn bộ dữ liệu nhóm ở chế độ chỉ đọc",
-        "description": "Khi dự án hoàn thành, Leader khoá nhóm lại. Toàn bộ task, tài liệu và kết quả đánh giá được giữ nguyên nhưng không ai có thể chỉnh sửa thêm — đảm bảo tính toàn vẹn của dữ liệu.",
+        "description": "Khi dự án hoàn thành, Leader khoá nhóm lại. Toàn bộ nhiệm vụ, tài liệu và kết quả đánh giá được giữ nguyên nhưng không ai có thể chỉnh sửa thêm. Nếu cần, Leader có thể mở khoá lại với lý do rõ ràng.",
         "steps": [
-          "Leader vào trang nhóm → chọn \"Cài đặt nhóm\" → nhấn \"Kết thúc dự án\".",
-          "Xác nhận hành động — trạng thái nhóm chuyển sang \"Đã khoá\".",
-          "Tất cả thành viên vẫn có thể xem toàn bộ nội dung nhóm nhưng không thể tạo, sửa hay xoá bất cứ thứ gì.",
-          "Dữ liệu được lưu trữ vĩnh viễn trên hệ thống để tham khảo về sau."
+          "Leader vào trang nhóm → nhấn \"Khoá nhóm\" (nút sẽ bị vô hiệu hoá cho đến sau ngày báo cáo nếu nhóm có đặt ngày báo cáo).",
+          "Toàn bộ thành viên nhận email thông báo nhóm đã bị khoá.",
+          "Nếu cần mở lại, Leader nhấn \"Mở khoá nhóm\" → điền lý do → nhóm được mở trở lại và hệ thống gửi email thông báo đến toàn bộ thành viên."
         ],
         "tips": [
-          "Hành động khoá không thể hoàn tác — hãy chắc chắn tất cả task đã được duyệt và điểm đánh giá đã được chốt trước khi khoá."
+          "Nút khoá chỉ khả dụng sau ngày báo cáo — hãy kiểm tra lại ngày này trong cài đặt nhóm nếu nút bị mờ."
         ],
         "imageAlt": "Màn hình kết thúc và khoá dự án"
       }
