@@ -8,9 +8,10 @@ import { useCanvaPreview } from "@/domains/groups";
 export interface CanvaTabProps {
   groupId: string;
   hasDesign: boolean;
+  canvaFileUrl?: string | null;
 }
 
-export function CanvaTab({ groupId, hasDesign }: CanvaTabProps) {
+export function CanvaTab({ groupId, hasDesign, canvaFileUrl }: CanvaTabProps) {
   const { data, isLoading, isError } = useCanvaPreview(groupId);
   const [current, setCurrent] = React.useState(0);
 
@@ -86,6 +87,18 @@ export function CanvaTab({ groupId, hasDesign }: CanvaTabProps) {
       {data && total === 0 && (
         <div className="flex min-h-64 items-center justify-center rounded-lg border border-border bg-muted/30 text-sm text-muted-foreground">
           No slides found.
+        </div>
+      )}
+
+      {/* Embedded presentation */}
+      {canvaFileUrl && (
+        <div className="mt-4 overflow-hidden rounded-lg border border-border">
+          <iframe
+            src={canvaFileUrl.includes("?") ? `${canvaFileUrl}&embed` : `${canvaFileUrl}?embed`}
+            className="h-120 w-full"
+            allowFullScreen
+            title="Canva presentation"
+          />
         </div>
       )}
 
