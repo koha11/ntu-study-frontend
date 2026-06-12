@@ -70,18 +70,6 @@ export function CanvaTab({ groupId, hasDesign, canvaFileUrl }: CanvaTabProps) {
         )}
       </div>
 
-      {/* Embedded presentation */}
-      {canvaFileUrl && (
-        <div className="mt-4 overflow-hidden rounded-lg border border-border">
-          <iframe
-            src={canvaFileUrl.includes("?") ? `${canvaFileUrl}&embed` : `${canvaFileUrl}?embed`}
-            className="h-120 w-full"
-            allowFullScreen
-            title={t("groups.canvaTab.iframeTitle")}
-          />
-        </div>
-      )}
-
       {/* Loading */}
       {isLoading && (
         <div className="flex min-h-64 items-center justify-center gap-2 rounded-lg border border-border bg-muted/30 text-sm text-muted-foreground">

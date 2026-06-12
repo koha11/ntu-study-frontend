@@ -365,8 +365,7 @@
       "prevSlide": "Slide trước",
       "nextSlide": "Slide tiếp theo",
       "goToSlide": "Đến slide {{n}}",
-      "slideAlt": "Slide {{n}} trong {{total}}",
-      "iframeTitle": "Bản trình bày Canva"
+      "slideAlt": "Slide {{n}} trong {{total}}"
     },
     "members": {
       "title": "Thành viên",

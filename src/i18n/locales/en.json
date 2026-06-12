@@ -365,8 +365,7 @@
       "prevSlide": "Previous slide",
       "nextSlide": "Next slide",
       "goToSlide": "Go to slide {{n}}",
-      "slideAlt": "Slide {{n}} of {{total}}",
-      "iframeTitle": "Canva presentation"
+      "slideAlt": "Slide {{n}} of {{total}}"
     },
     "members": {
       "title": "Members",
