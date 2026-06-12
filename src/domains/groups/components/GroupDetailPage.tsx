@@ -255,7 +255,7 @@ export function GroupDetailPage() {
             <TabsTrigger value="overview">{t("groups.tabs.overview")}</TabsTrigger>
             <TabsTrigger value="tasks">{t("groups.tabs.tasks")}</TabsTrigger>
             <TabsTrigger value="drive">{t("groups.tabs.drive")}</TabsTrigger>
-            {/* <TabsTrigger value="canva">{t("groups.tabs.canva")}</TabsTrigger> */}
+            <TabsTrigger value="canva">{t("groups.tabs.canva")}</TabsTrigger>
             <TabsTrigger value="calendar">{t("groups.tabs.calendar")}</TabsTrigger>
             <TabsTrigger value="members">
               {t("groups.tabs.members")} ({membersLoading ? "…" : members.length})
