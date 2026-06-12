@@ -5,13 +5,7 @@ import { startCanvaOAuth } from "@/domains/auth/auth-api";
 import { getAccessToken } from "@/domains/auth/token-storage";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -139,25 +133,18 @@ export function SettingsPage() {
   }
 
   if (isError || !user) {
-    return (
-      <div className="py-12 text-destructive">
-        {t("settings.couldNotLoad")}
-      </div>
-    );
+    return <div className="py-12 text-destructive">{t("settings.couldNotLoad")}</div>;
   }
 
   const profileBusy = isPatching || isSyncingGoogle;
   const nameUnchanged = nameDraft.trim() === user.name.trim();
-  const canSaveName =
-    nameDraft.trim().length > 0 && !nameUnchanged && !profileBusy;
+  const canSaveName = nameDraft.trim().length > 0 && !nameUnchanged && !profileBusy;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t("settings.pageTitle")}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {t("settings.pageSubtitle")}
-        </p>
+        <p className="mt-1 text-sm text-muted-foreground">{t("settings.pageSubtitle")}</p>
       </div>
 
       <Card>
@@ -168,9 +155,7 @@ export function SettingsPage() {
         <CardContent className="flex flex-col gap-4">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
             <Avatar className="h-14 w-14 shrink-0">
-              {user.avatar ? (
-                <AvatarImage src={user.avatar} alt="" />
-              ) : null}
+              {user.avatar ? <AvatarImage src={user.avatar} alt="" /> : null}
               <AvatarFallback className="text-lg">{initials(user.name)}</AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1 space-y-3">
@@ -212,8 +197,12 @@ export function SettingsPage() {
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  <strong className="font-medium text-foreground">{t("settings.saveNameHint")}</strong>{" "}
-                  <strong className="font-medium text-foreground">{t("settings.syncFromGoogleHint")}</strong>{" "}
+                  <strong className="font-medium text-foreground">
+                    {t("settings.saveNameHint")}
+                  </strong>{" "}
+                  <strong className="font-medium text-foreground">
+                    {t("settings.syncFromGoogleHint")}
+                  </strong>{" "}
                   {t("settings.nameHint")}
                 </p>
               </div>
@@ -225,9 +214,7 @@ export function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>{t("settings.notifications.title")}</CardTitle>
-          <CardDescription>
-            {t("settings.notifications.desc")}
-          </CardDescription>
+          <CardDescription>{t("settings.notifications.desc")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between gap-4 rounded-lg border border-border p-4">
@@ -241,9 +228,7 @@ export function SettingsPage() {
               id="notify-email"
               checked={user.notificationEnabled}
               disabled={profileBusy}
-              onCheckedChange={(checked) =>
-                patchProfile({ notification_enabled: checked })
-              }
+              onCheckedChange={(checked) => patchProfile({ notification_enabled: checked })}
               aria-label={t("settings.notifications.emailLabel")}
             />
           </div>
@@ -253,9 +238,7 @@ export function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>{t("settings.driveStorage.title")}</CardTitle>
-          <CardDescription>
-            {t("settings.driveStorage.desc")}
-          </CardDescription>
+          <CardDescription>{t("settings.driveStorage.desc")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="space-y-2">
@@ -272,11 +255,7 @@ export function SettingsPage() {
             />
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button
-              type="button"
-              disabled={profileBusy}
-              onClick={() => handleSaveDriveLimit()}
-            >
+            <Button type="button" disabled={profileBusy} onClick={() => handleSaveDriveLimit()}>
               {t("settings.driveStorage.saveLimit")}
             </Button>
             <Button
@@ -291,13 +270,10 @@ export function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Canva card temporarily hidden
       <Card>
         <CardHeader>
           <CardTitle>{t("settings.canva.title")}</CardTitle>
-          <CardDescription>
-            {t("settings.canva.desc")}
-          </CardDescription>
+          <CardDescription>{t("settings.canva.desc")}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           {user.canvaConnected ? (
@@ -306,9 +282,7 @@ export function SettingsPage() {
             </p>
           ) : (
             <>
-              <p className="text-sm text-muted-foreground">
-                {t("settings.canva.notConnected")}
-              </p>
+              <p className="text-sm text-muted-foreground">{t("settings.canva.notConnected")}</p>
               <Button
                 type="button"
                 onClick={() => void handleCanvaConnect()}
@@ -328,7 +302,6 @@ export function SettingsPage() {
           )}
         </CardContent>
       </Card>
-      */}
 
       <Card>
         <CardHeader>

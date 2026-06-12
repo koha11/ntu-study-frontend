@@ -4,7 +4,13 @@ import { ArrowLeft, Lock, LockOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
-import { useGroupDetails, useGroupMembers, useUpdateGroup, useLockGroup, useUnlockGroup } from "@/domains/groups";
+import {
+  useGroupDetails,
+  useGroupMembers,
+  useUpdateGroup,
+  useLockGroup,
+  useUnlockGroup,
+} from "@/domains/groups";
 import { useGroupTasks, useCreateTaskMutation, GroupKanbanBoard, TaskForm } from "@/domains/tasks";
 import { useCurrentUser } from "@/domains/auth";
 import { Button } from "@/components/ui/button";
@@ -23,12 +29,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { ContributionTab } from "./ContributionTab";
 import { DriveTab } from "./DriveTab";
@@ -203,9 +204,7 @@ export function GroupDetailPage() {
                         </Button>
                       </span>
                     </TooltipTrigger>
-                    {lockDisabledReason && (
-                      <TooltipContent>{lockDisabledReason}</TooltipContent>
-                    )}
+                    {lockDisabledReason && <TooltipContent>{lockDisabledReason}</TooltipContent>}
                   </Tooltip>
                 </TooltipProvider>
               )}
@@ -293,12 +292,7 @@ export function GroupDetailPage() {
             </p>
             <Dialog open={createTaskOpen} onOpenChange={setCreateTaskOpen}>
               <DialogTrigger asChild>
-                <Button
-                  type="button"
-                  size="sm"
-                  className="bg-gradient-primary"
-                  disabled={isLocked}
-                >
+                <Button type="button" size="sm" className="bg-gradient-primary" disabled={isLocked}>
                   {t("groups.tasksTab.newTask")}
                 </Button>
               </DialogTrigger>
@@ -347,9 +341,9 @@ export function GroupDetailPage() {
           <DriveTab groupId={id} driveFolderId={group.drive_folder_id} groupLocked={isLocked} />
         </TabsContent>
 
-        {/* <TabsContent value="canva" className="mt-6">
+        <TabsContent value="canva" className="mt-6">
           <CanvaTab groupId={groupId} hasDesign={Boolean(group.canva_design_id)} />
-        </TabsContent> */}
+        </TabsContent>
 
         <TabsContent value="calendar" className="mt-6">
           <CalendarTab
