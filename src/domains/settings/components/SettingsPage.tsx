@@ -270,38 +270,40 @@ export function SettingsPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("settings.canva.title")}</CardTitle>
-          <CardDescription>{t("settings.canva.desc")}</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          {user.canvaConnected ? (
-            <p className="text-sm font-medium text-muted-foreground">
-              {t("settings.canva.connected")}
-            </p>
-          ) : (
-            <>
-              <p className="text-sm text-muted-foreground">{t("settings.canva.notConnected")}</p>
-              <Button
-                type="button"
-                onClick={() => void handleCanvaConnect()}
-                disabled={canvaBusy}
-                className="shrink-0"
-              >
-                {canvaBusy ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t("settings.canva.connecting")}
-                  </>
-                ) : (
-                  t("settings.canva.connect")
-                )}
-              </Button>
-            </>
-          )}
-        </CardContent>
-      </Card>
+      {import.meta.env.VITE_CANVA_ENABLED === "true" && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("settings.canva.title")}</CardTitle>
+            <CardDescription>{t("settings.canva.desc")}</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {user.canvaConnected ? (
+              <p className="text-sm font-medium text-muted-foreground">
+                {t("settings.canva.connected")}
+              </p>
+            ) : (
+              <>
+                <p className="text-sm text-muted-foreground">{t("settings.canva.notConnected")}</p>
+                <Button
+                  type="button"
+                  onClick={() => void handleCanvaConnect()}
+                  disabled={canvaBusy}
+                  className="shrink-0"
+                >
+                  {canvaBusy ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {t("settings.canva.connecting")}
+                    </>
+                  ) : (
+                    t("settings.canva.connect")
+                  )}
+                </Button>
+              </>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>

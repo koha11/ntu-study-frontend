@@ -60,6 +60,8 @@ function tabFromSearch(tab: string | undefined): GroupTab {
   return "overview";
 }
 
+const canvaEnabled = import.meta.env.VITE_CANVA_ENABLED === "true";
+
 export function GroupDetailPage() {
   const { t } = useTranslation();
   const { groupId } = useParams({ from: "/groups/$groupId" });
@@ -240,6 +242,7 @@ export function GroupDetailPage() {
             <SelectItem value="overview">{t("groups.tabs.overview")}</SelectItem>
             <SelectItem value="tasks">{t("groups.tabs.tasks")}</SelectItem>
             <SelectItem value="drive">{t("groups.tabs.drive")}</SelectItem>
+            {canvaEnabled && <SelectItem value="canva">{t("groups.tabs.canva")}</SelectItem>}
             <SelectItem value="calendar">{t("groups.tabs.calendar")}</SelectItem>
             <SelectItem value="members">
               {t("groups.tabs.members")} ({membersLoading ? "…" : members.length})
@@ -255,7 +258,7 @@ export function GroupDetailPage() {
             <TabsTrigger value="overview">{t("groups.tabs.overview")}</TabsTrigger>
             <TabsTrigger value="tasks">{t("groups.tabs.tasks")}</TabsTrigger>
             <TabsTrigger value="drive">{t("groups.tabs.drive")}</TabsTrigger>
-            <TabsTrigger value="canva">{t("groups.tabs.canva")}</TabsTrigger>
+            {canvaEnabled && <TabsTrigger value="canva">{t("groups.tabs.canva")}</TabsTrigger>}
             <TabsTrigger value="calendar">{t("groups.tabs.calendar")}</TabsTrigger>
             <TabsTrigger value="members">
               {t("groups.tabs.members")} ({membersLoading ? "…" : members.length})
@@ -341,9 +344,11 @@ export function GroupDetailPage() {
           <DriveTab groupId={id} driveFolderId={group.drive_folder_id} groupLocked={isLocked} />
         </TabsContent>
 
-        <TabsContent value="canva" className="mt-6">
-          <CanvaTab groupId={groupId} hasDesign={Boolean(group.canva_design_id)} canvaFileUrl={group.canva_file_url} />
-        </TabsContent>
+        {canvaEnabled && (
+          <TabsContent value="canva" className="mt-6">
+            <CanvaTab groupId={groupId} hasDesign={Boolean(group.canva_design_id)} canvaFileUrl={group.canva_file_url} />
+          </TabsContent>
+        )}
 
         <TabsContent value="calendar" className="mt-6">
           <CalendarTab
