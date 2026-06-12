@@ -32,6 +32,7 @@ import groupStep6_2 from "@/assets/group-step6_2.png";
 import groupStep6_3 from "@/assets/group-step6_3.png";
 import groupStep7_1 from "@/assets/group-step7_1.png";
 import groupStep7_2 from "@/assets/group-step7_2.png";
+import groupStep8 from "@/assets/group-step8.png";
 import todoList from "@/assets/todo-list.png";
 import flashcard from "@/assets/flashcard.png";
 
@@ -55,7 +56,7 @@ const PHASE_META = [
   { id: "calendar-events", key: "calendarEvents", icon: CalendarDays, step: 5, reverse: false, images: [groupStep5] },
   { id: "review-tasks", key: "reviewTasks", icon: GitPullRequest, step: 6, reverse: true, images: [groupStep6_1, groupStep6_2, groupStep6_3] },
   { id: "peer-evaluation", key: "peerEvaluation", icon: Star, step: 7, reverse: false, images: [groupStep7_1, groupStep7_2] },
-  { id: "close-project", key: "closeProject", icon: Lock, step: 8, reverse: true, images: [] },
+  { id: "close-project", key: "closeProject", icon: Lock, step: 8, reverse: true, images: [groupStep8] },
 ];
 
 const FEATURE_META = [
