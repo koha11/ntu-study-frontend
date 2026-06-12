@@ -352,6 +352,22 @@
       "projectDueDesc": "Target date for the group deliverable or report.",
       "noDueDate": "No project due date set."
     },
+    "canvaTab": {
+      "title": "Canva slide",
+      "noDesignDesc": "Preview your group presentation here when it is linked from Canva.",
+      "noDesignLinked": "No Canva presentation linked yet.",
+      "editInCanva": "Edit in Canva",
+      "loading": "Loading slides…",
+      "error": "Could not load slides.",
+      "noSlides": "No slides found.",
+      "slideCount_one": "· {{count}} slide",
+      "slideCount_other": "· {{count}} slides",
+      "prevSlide": "Previous slide",
+      "nextSlide": "Next slide",
+      "goToSlide": "Go to slide {{n}}",
+      "slideAlt": "Slide {{n}} of {{total}}",
+      "iframeTitle": "Canva presentation"
+    },
     "members": {
       "title": "Members",
       "subtitle": "View members and invite people by email (leader only).",

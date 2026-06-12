@@ -352,6 +352,22 @@
       "projectDueDesc": "Ngày mục tiêu cho sản phẩm bàn giao hoặc báo cáo nhóm.",
       "noDueDate": "Chưa đặt ngày hạn dự án."
     },
+    "canvaTab": {
+      "title": "Slide Canva",
+      "noDesignDesc": "Xem trước bản trình bày nhóm tại đây khi được liên kết từ Canva.",
+      "noDesignLinked": "Chưa liên kết bản trình bày Canva.",
+      "editInCanva": "Chỉnh sửa trong Canva",
+      "loading": "Đang tải slide…",
+      "error": "Không thể tải slide.",
+      "noSlides": "Không tìm thấy slide nào.",
+      "slideCount_one": "· {{count}} slide",
+      "slideCount_other": "· {{count}} slide",
+      "prevSlide": "Slide trước",
+      "nextSlide": "Slide tiếp theo",
+      "goToSlide": "Đến slide {{n}}",
+      "slideAlt": "Slide {{n}} trong {{total}}",
+      "iframeTitle": "Bản trình bày Canva"
+    },
     "members": {
       "title": "Thành viên",
       "subtitle": "Xem thành viên và mời người qua email (chỉ trưởng nhóm).",
