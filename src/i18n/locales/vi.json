@@ -1030,13 +1030,12 @@
         "badge": "Tính năng 03",
         "title": "Flashcard",
         "subtitle": "Học và ghi nhớ theo phương pháp spaced repetition",
-        "description": "Tạo bộ thẻ học cá nhân hoặc chia sẻ cho cả nhóm. Hệ thống dùng thuật toán spaced repetition để lên lịch ôn tập tối ưu, giúp bạn ghi nhớ lâu hơn với ít thời gian hơn.",
+        "description": "Tạo bộ thẻ học cá nhân hoặc chia sẻ cho cả nhóm. Hệ thống lưu lại lịch sử học và gửi email nhắc nhở khi đến lịch ôn tiếp theo.",
         "steps": [
-          "Vào mục \"Flashcard\" → nhấn \"Tạo bộ thẻ mới\" → điền tên và mô tả bộ thẻ.",
-          "Thêm thẻ: nhập mặt trước (câu hỏi) và mặt sau (đáp án) → nhấn \"Thêm thẻ\". Có thể import hàng loạt bằng file CSV/Excel.",
-          "Nhấn \"Bắt đầu học\" → hệ thống bật chế độ Quiz trắc nghiệm dựa trên các thẻ chưa thuộc.",
-          "Sau mỗi câu, chọn mức độ nhớ (Dễ / Trung bình / Khó) — hệ thống tự tính ngày ôn tiếp theo.",
-          "Leader có thể chia sẻ bộ thẻ lên nhóm để tất cả thành viên cùng học."
+          "Vào mục \"Thẻ học\" → nhấn \"Bộ mới\" → điền tên và mô tả bộ thẻ.",
+          "Thêm thẻ thủ công (nhập mặt trước + mặt sau) hoặc mở modal import để nhập hàng loạt với cấu trúc tự định nghĩa.",
+          "Nhấn \"Học\" → từng flashcard hiển thị lên, nhấn vào thẻ để lật xem mặt sau.",
+          "Sau mỗi lần hoàn thành, hệ thống lưu lại thời điểm học và gửi email nhắc nhở khi đến lịch ôn tiếp theo."
         ],
         "imageAlt": "Màn hình học flashcard"
       }

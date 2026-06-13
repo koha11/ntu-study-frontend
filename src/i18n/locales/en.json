@@ -1030,13 +1030,12 @@
         "badge": "Feature 03",
         "title": "Flashcards",
         "subtitle": "Study and memorise with spaced repetition",
-        "description": "Create personal flashcard decks or share them with your group. The system uses a spaced repetition algorithm to schedule reviews optimally, helping you remember more with less time.",
+        "description": "Create personal flashcard decks or share them with your group. The system records each study session and sends reminder emails when the next review is due.",
         "steps": [
-          "Go to \"Flashcards\" → click \"Create new deck\" → enter the deck name and description.",
-          "Add cards: enter the front (question) and back (answer) → click \"Add card\". You can also bulk-import via CSV/Excel.",
-          "Click \"Start studying\" → the system launches a multiple-choice quiz based on cards you haven't mastered yet.",
-          "After each question, rate how well you remembered (Easy / Medium / Hard) — the system schedules the next review date automatically.",
-          "Leaders can share a deck with the group so all members can study together."
+          "Go to \"Flashcards\" → click \"New set\" → enter the deck name and description.",
+          "Add cards manually (front + back) or open the import modal to bulk-import with a custom structure.",
+          "Click \"Study\" → each flashcard appears one at a time; tap the card to flip and see the back.",
+          "After each completed session, the system saves the last study time and sends a reminder email when the next review is due."
         ],
         "imageAlt": "Flashcard study screen"
       }
