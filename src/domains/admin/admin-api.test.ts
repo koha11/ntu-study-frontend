@@ -3,8 +3,10 @@ import { HttpError } from "@/domains/auth/auth-api";
 import {
   deleteAdminGroup,
   fetchAdminDashboard,
+  fetchAdminGroups,
   fetchAdminUsers,
   runAdminCronJob,
+  unlockAdminUser,
 } from "./admin-api";
 
 describe("admin-api", () => {
@@ -79,6 +81,42 @@ describe("admin-api", () => {
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
     expect(url).toContain("/admin/cron-jobs/overdue-task-reminders/run");
     expect(init.method).toBe("POST");
+  });
+
+  it("unlockAdminUser posts to /admin/users/:id/unlock", async () => {
+    const user = { id: "u1", email: "a@b.com", full_name: "A", role: "user", is_active: true, locked: false };
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(JSON.stringify(user)),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await unlockAdminUser("tok", "u1");
+
+    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(url).toContain("/admin/users/u1/unlock");
+    expect(init.method).toBe("POST");
+    expect((init.headers as Record<string, string>).Authorization).toBe("Bearer tok");
+    expect(result.locked).toBe(false);
+  });
+
+  it("fetchAdminGroups builds query string and returns groups", async () => {
+    const payload = { groups: [], total: 0 };
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(JSON.stringify(payload)),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchAdminGroups("tok", { skip: 10, take: 5 });
+
+    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(url).toContain("/admin/groups?");
+    expect(url).toContain("skip=10");
+    expect(url).toContain("take=5");
+    expect(init.method).toBe("GET");
+    expect((init.headers as Record<string, string>).Authorization).toBe("Bearer tok");
+    expect(result.total).toBe(0);
   });
 
   it("throws HttpError on failed JSON response", async () => {

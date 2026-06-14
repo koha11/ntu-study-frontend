@@ -2,6 +2,31 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@/test/test-utils";
 import { CanvaTab } from "./CanvaTab";
 
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string, opts?: Record<string, unknown>) => {
+      if (key === "groups.canvaTab.slideAlt") return `Slide ${opts?.n} of ${opts?.total}`;
+      if (key === "groups.canvaTab.goToSlide") return `Go to slide ${opts?.n}`;
+      if (key === "groups.canvaTab.slideCount") {
+        const count = opts?.count as number;
+        return `· ${count} ${count === 1 ? "slide" : "slides"}`;
+      }
+      const map: Record<string, string> = {
+        "groups.canvaTab.title": "Canva slide",
+        "groups.canvaTab.noDesignDesc": "Preview your group presentation here when it is linked from Canva.",
+        "groups.canvaTab.noDesignLinked": "No Canva presentation linked yet.",
+        "groups.canvaTab.editInCanva": "Edit in Canva",
+        "groups.canvaTab.loading": "Loading slides…",
+        "groups.canvaTab.error": "Could not load slides.",
+        "groups.canvaTab.noSlides": "No slides found.",
+        "groups.canvaTab.prevSlide": "Previous slide",
+        "groups.canvaTab.nextSlide": "Next slide",
+      };
+      return map[key] ?? key;
+    },
+  }),
+}));
+
 vi.mock("@/domains/groups", () => ({
   useCanvaPreview: vi.fn(),
 }));
@@ -73,7 +98,8 @@ describe("CanvaTab", () => {
 
     render(<CanvaTab groupId="g1" hasDesign={true} />);
 
-    expect(screen.getByAltText(/Slide 1 of 2/i)).toHaveAttribute("src", twoPages[0].thumbnailUrl);
+    const slide1Images = screen.getAllByAltText(/Slide 1 of 2/i);
+    expect(slide1Images[0]).toHaveAttribute("src", twoPages[0].thumbnailUrl);
     expect(screen.getByText(/2 slides/i)).toBeInTheDocument();
   });
 
@@ -128,7 +154,7 @@ describe("CanvaTab", () => {
 
     fireEvent.click(screen.getByLabelText(/Next slide/i));
 
-    expect(screen.getByAltText(/Slide 2 of 2/i)).toBeInTheDocument();
+    expect(screen.getAllByAltText(/Slide 2 of 2/i)[0]).toBeInTheDocument();
   });
 
   it("goes back to previous slide when prev button is clicked", () => {
@@ -143,6 +169,6 @@ describe("CanvaTab", () => {
     fireEvent.click(screen.getByLabelText(/Next slide/i));
     fireEvent.click(screen.getByLabelText(/Previous slide/i));
 
-    expect(screen.getByAltText(/Slide 1 of 2/i)).toBeInTheDocument();
+    expect(screen.getAllByAltText(/Slide 1 of 2/i)[0]).toBeInTheDocument();
   });
 });

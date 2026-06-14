@@ -3,6 +3,30 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@/test/test-utils";
 import { ImportFlashcardsModal } from "./ImportFlashcardsModal";
 
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string, opts?: Record<string, unknown>) => {
+      if (key === "flashcards.importModal.previewCards") return `Preview ${opts?.count} cards`;
+      const map: Record<string, string> = {
+        "flashcards.importModal.title": "Import your data",
+        "flashcards.importModal.subtitle": "Copy and paste your data here (from Word, Excel, Google Docs, etc.)",
+        "flashcards.importModal.textareaPlaceholder": "Word 1\tDefinition 1\nWord 2\tDefinition 2",
+        "flashcards.importModal.betweenTermDef": "Between term and definition",
+        "flashcards.importModal.betweenCards": "Between cards",
+        "flashcards.importModal.tab": "Tab",
+        "flashcards.importModal.comma": "Comma",
+        "flashcards.importModal.newLine": "New line",
+        "flashcards.importModal.semicolon": "Semicolon",
+        "flashcards.importModal.custom": "Custom",
+        "flashcards.importModal.nothingToPreview": "Nothing to preview yet.",
+        "flashcards.importModal.cancelImport": "Cancel Import",
+        "flashcards.importModal.import": "Import",
+      };
+      return map[key] ?? key;
+    },
+  }),
+}));
+
 const defaultProps = {
   open: true,
   onOpenChange: vi.fn(),
@@ -112,5 +136,15 @@ describe("ImportFlashcardsModal", () => {
     fireEvent.change(textarea, { target: { value: "Term\tDef" } });
     fireEvent.click(screen.getByRole("button", { name: "Import" }));
     expect((textarea as HTMLTextAreaElement).value).toBe("");
+  });
+
+  it("inserts a tab character when Tab key is pressed in textarea", () => {
+    render(<ImportFlashcardsModal {...defaultProps} />);
+    const textarea = screen.getByPlaceholderText(/Word 1/) as HTMLTextAreaElement;
+    fireEvent.change(textarea, { target: { value: "hello" } });
+    Object.defineProperty(textarea, "selectionStart", { value: 5, writable: true });
+    Object.defineProperty(textarea, "selectionEnd", { value: 5, writable: true });
+    fireEvent.keyDown(textarea, { key: "Tab" });
+    expect(textarea.value).toContain("\t");
   });
 });

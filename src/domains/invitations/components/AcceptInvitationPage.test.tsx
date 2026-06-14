@@ -107,6 +107,7 @@ describe("AcceptInvitationPage", () => {
     vi.mocked(useParams).mockReturnValue({ token: "invite-abc" });
     mockUseCurrentUser.mockReturnValue({ data: null });
     mockUseQuery.mockReturnValue({ data: null, isLoading: true, isError: false });
+    vi.mocked(localStorage.getItem).mockReturnValue("test-token");
   });
 
   it("shows loading state while validating", () => {

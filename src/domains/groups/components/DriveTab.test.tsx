@@ -3,6 +3,39 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@/test/test-utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DriveTab } from "./DriveTab";
+
+vi.mock("react-i18next", () => {
+  const driveMap: Record<string, string> = {
+    "groups.drive.title": "Shared Drive folder",
+    "groups.drive.desc": "Files for this group are stored in Google Drive when the leader has Drive access.",
+    "groups.drive.noFolder": "No folder linked yet.",
+    "groups.drive.signInAgain": "Sign in again to browse Drive files.",
+    "groups.drive.openInDrive": "Open in Drive",
+    "groups.drive.uploadIn": "Upload / new folder in:",
+    "groups.drive.selectFolder": "Select folder",
+    "groups.drive.folderForUpload": "Folder for upload and new folder",
+    "groups.drive.groupFolder": "Group folder",
+    "groups.drive.newFolder": "New folder",
+    "groups.drive.newFolderName": "Name",
+    "groups.drive.newFolderPlaceholder": "Folder name",
+    "groups.drive.cancel": "Cancel",
+    "groups.drive.create": "Create",
+    "groups.drive.upload": "Upload",
+    "groups.drive.loading": "Loading Drive…",
+    "groups.drive.couldNotLoad": "Could not load Drive folder.",
+    "groups.drive.empty": "This folder is empty.",
+    "groups.drive.folderCreated": "Folder created",
+    "groups.drive.folderCreateError": "Could not create folder",
+    "groups.drive.uploadComplete": "Upload complete",
+    "groups.drive.uploadError": "Upload failed",
+    "groups.drive.lockedHint": "The group is locked — uploads and new folders are disabled.",
+  };
+  function t(key: string, opts?: Record<string, unknown>) {
+    if (key === "groups.drive.uploadedN") return `Uploaded ${opts?.count} files`;
+    return driveMap[key] ?? key;
+  }
+  return { useTranslation: () => ({ t }) };
+});
 import {
   createGroupFolder,
   fetchGroupAssets,
