@@ -299,7 +299,7 @@ export function GroupDetailPage() {
                   {t("groups.tasksTab.newTask")}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
+              <DialogContent className="sm:max-w-5xl">
                 <DialogHeader>
                   <DialogTitle>{t("groups.tasksTab.newGroupTask")}</DialogTitle>
                 </DialogHeader>
@@ -346,7 +346,11 @@ export function GroupDetailPage() {
 
         {canvaEnabled && (
           <TabsContent value="canva" className="mt-6">
-            <CanvaTab groupId={groupId} hasDesign={Boolean(group.canva_design_id)} canvaFileUrl={group.canva_file_url} />
+            <CanvaTab
+              groupId={groupId}
+              hasDesign={Boolean(group.canva_design_id)}
+              canvaFileUrl={group.canva_file_url}
+            />
           </TabsContent>
         )}
 

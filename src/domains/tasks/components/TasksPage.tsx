@@ -16,12 +16,7 @@ import { useGroupsList } from "@/domains/groups";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { TaskStatus } from "../types";
 
 function toDateOnlyString(d: Date): string {
@@ -138,9 +133,7 @@ export function TasksPage() {
     <AppShell>
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">{t("tasks.pageTitle")}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {t("tasks.pageSubtitle")}
-        </p>
+        <p className="mt-1 text-sm text-muted-foreground">{t("tasks.pageSubtitle")}</p>
       </div>
 
       <section className="mb-8 rounded-2xl border border-border bg-card p-5">
@@ -315,61 +308,61 @@ export function TasksPage() {
                 </div>
 
                 <div className="mt-2 ml-7 space-y-1 border-l border-border pl-3">
-                    {subtasks.map((st) => {
-                      const stDone = st.status === "done";
-                      return (
-                        <div
-                          key={st.id}
-                          className="group/sub flex items-center gap-2 rounded-md py-1 pr-1 hover:bg-accent/30"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={stDone}
-                            onChange={() => togglePersonalDone(st)}
-                            className="h-3.5 w-3.5 shrink-0 accent-primary"
-                          />
-                          <span
-                            className={cn(
-                              "flex-1 text-xs",
-                              stDone ? "text-muted-foreground line-through" : "text-foreground",
-                            )}
-                          >
-                            {st.title}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => removeTask(st.id)}
-                            className="rounded p-0.5 text-muted-foreground opacity-0 hover:text-destructive group-hover/sub:opacity-100"
-                            aria-label={t("tasks.deleteSubtask")}
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
-                        </div>
-                      );
-                    })}
-                    <form
-                      className="flex gap-1 pt-1"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        addSubtask(task.id);
-                      }}
-                    >
-                      <input
-                        value={subtaskDrafts[task.id] ?? ""}
-                        onChange={(e) =>
-                          setSubtaskDrafts((prev) => ({ ...prev, [task.id]: e.target.value }))
-                        }
-                        placeholder={t("tasks.addSubtask")}
-                        className="min-w-0 flex-1 rounded border border-dashed border-border bg-transparent px-2 py-1 text-xs outline-none focus:border-primary"
-                      />
-                      <button
-                        type="submit"
-                        className="shrink-0 rounded border border-border px-2 py-1 text-[10px] font-medium hover:bg-accent"
+                  {subtasks.map((st) => {
+                    const stDone = st.status === "done";
+                    return (
+                      <div
+                        key={st.id}
+                        className="group/sub flex items-center gap-2 rounded-md py-1 pr-1 hover:bg-accent/30"
                       >
-                        {t("tasks.add")}
-                      </button>
-                    </form>
-                  </div>
+                        <input
+                          type="checkbox"
+                          checked={stDone}
+                          onChange={() => togglePersonalDone(st)}
+                          className="h-3.5 w-3.5 shrink-0 accent-primary"
+                        />
+                        <span
+                          className={cn(
+                            "flex-1 text-xs",
+                            stDone ? "text-muted-foreground line-through" : "text-foreground",
+                          )}
+                        >
+                          {st.title}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeTask(st.id)}
+                          className="rounded p-0.5 text-muted-foreground opacity-0 hover:text-destructive group-hover/sub:opacity-100"
+                          aria-label={t("tasks.deleteSubtask")}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                  <form
+                    className="flex gap-1 pt-1"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      addSubtask(task.id);
+                    }}
+                  >
+                    <input
+                      value={subtaskDrafts[task.id] ?? ""}
+                      onChange={(e) =>
+                        setSubtaskDrafts((prev) => ({ ...prev, [task.id]: e.target.value }))
+                      }
+                      placeholder={t("tasks.addSubtask")}
+                      className="min-w-0 flex-1 rounded border border-dashed border-border bg-transparent px-2 py-1 text-xs outline-none focus:border-primary"
+                    />
+                    <button
+                      type="submit"
+                      className="shrink-0 rounded border border-border px-2 py-1 text-[10px] font-medium hover:bg-accent"
+                    >
+                      {t("tasks.add")}
+                    </button>
+                  </form>
+                </div>
               </li>
             );
           })}
@@ -422,7 +415,9 @@ export function TasksPage() {
                         {g?.name}
                       </Link>
                     ) : null}
-                    {task.groupId ? <ChevronRight className="h-3 w-3 text-muted-foreground" /> : null}
+                    {task.groupId ? (
+                      <ChevronRight className="h-3 w-3 text-muted-foreground" />
+                    ) : null}
                     <span
                       className={cn(
                         "rounded-md px-1.5 py-0.5 text-[9px] font-bold uppercase",
@@ -502,10 +497,7 @@ export function TasksPage() {
                 (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
               );
               return (
-                <li
-                  key={task.id}
-                  className="rounded-md border border-border bg-background/40 p-2"
-                >
+                <li key={task.id} className="rounded-md border border-border bg-background/40 p-2">
                   <div className="group flex items-center gap-2 hover:bg-accent/30 rounded-md p-1">
                     <input
                       type="checkbox"

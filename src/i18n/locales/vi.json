@@ -265,7 +265,8 @@
       "assignee": "Người được giao",
       "status": "Trạng thái",
       "saving": "Đang lưu…",
-      "updateTask": "Cập nhật nhiệm vụ"
+      "updateTask": "Cập nhật nhiệm vụ",
+      "dueDateError": "Hạn chót phải là hôm nay hoặc trong tương lai"
     }
   },
   "groups": {

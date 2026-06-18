@@ -309,7 +309,7 @@ function KanbanCard({
       </div>
 
       <Dialog open={subtaskOpen} onOpenChange={setSubtaskOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-5xl">
           <DialogHeader>
             <DialogTitle>{t("tasks.kanban.newSubtask")}</DialogTitle>
           </DialogHeader>
@@ -331,7 +331,7 @@ function KanbanCard({
       </Dialog>
 
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-5xl">
           <DialogHeader>
             <DialogTitle>{t("tasks.kanban.editTaskTitle")}</DialogTitle>
           </DialogHeader>

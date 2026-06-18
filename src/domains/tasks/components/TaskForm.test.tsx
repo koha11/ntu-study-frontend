@@ -66,9 +66,9 @@ describe("TaskForm – create mode", () => {
     const onSubmit = vi.fn();
     render(<TaskForm onSubmit={onSubmit} />);
 
-    // title input is the only text input initially
-    const titleInput = screen.getAllByRole("textbox")[0];
+    const [titleInput, descInput] = screen.getAllByRole("textbox");
     fireEvent.change(titleInput, { target: { value: "My New Task" } });
+    fireEvent.change(descInput, { target: { value: "Some description" } });
     fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
@@ -80,8 +80,9 @@ describe("TaskForm – create mode", () => {
     const onSubmit = vi.fn();
     render(<TaskForm defaultGroupId="grp-99" onSubmit={onSubmit} />);
 
-    const titleInput = screen.getAllByRole("textbox")[0];
+    const [titleInput, descInput] = screen.getAllByRole("textbox");
     fireEvent.change(titleInput, { target: { value: "Group Task" } });
+    fireEvent.change(descInput, { target: { value: "Some description" } });
     fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
@@ -102,8 +103,9 @@ describe("TaskForm – create mode", () => {
     expect(screen.getByText("tasks.form.subtaskOf")).toBeInTheDocument();
     expect(screen.getByText("Parent Task")).toBeInTheDocument();
 
-    const titleInput = screen.getAllByRole("textbox")[0];
+    const [titleInput, descInput] = screen.getAllByRole("textbox");
     fireEvent.change(titleInput, { target: { value: "Child Task" } });
+    fireEvent.change(descInput, { target: { value: "Some description" } });
     fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
@@ -141,8 +143,9 @@ describe("TaskForm – create mode", () => {
       />,
     );
 
-    const titleInput = screen.getAllByRole("textbox")[0];
+    const [titleInput, descInput] = screen.getAllByRole("textbox");
     fireEvent.change(titleInput, { target: { value: "Assigned Task" } });
+    fireEvent.change(descInput, { target: { value: "Some description" } });
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "u2" } });
     fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
@@ -155,8 +158,9 @@ describe("TaskForm – create mode", () => {
     const onSubmit = vi.fn();
     render(<TaskForm onSubmit={onSubmit} />);
 
-    const titleInput = screen.getAllByRole("textbox")[0];
+    const [titleInput, descInput] = screen.getAllByRole("textbox");
     fireEvent.change(titleInput, { target: { value: "Personal Task" } });
+    fireEvent.change(descInput, { target: { value: "Some description" } });
     fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     const call = onSubmit.mock.calls[0][0] as Record<string, unknown>;
@@ -169,12 +173,49 @@ describe("TaskForm – create mode", () => {
   });
 });
 
+describe("TaskForm – create mode – dueDate validation", () => {
+  it("blocks submit and shows error when dueDate is in the past", () => {
+    const onSubmit = vi.fn();
+    render(<TaskForm onSubmit={onSubmit} />);
+
+    const [titleInput, descInput] = screen.getAllByRole("textbox");
+    fireEvent.change(titleInput, { target: { value: "Past Task" } });
+    fireEvent.change(descInput, { target: { value: "Some description" } });
+    fireEvent.change(screen.getByTestId("date-picker"), {
+      target: { value: "2020-01-01" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(screen.getByText("tasks.form.dueDateError")).toBeInTheDocument();
+  });
+
+  it("clears dueDate error when date is changed", () => {
+    const onSubmit = vi.fn();
+    render(<TaskForm onSubmit={onSubmit} />);
+
+    const [titleInput, descInput] = screen.getAllByRole("textbox");
+    fireEvent.change(titleInput, { target: { value: "Task" } });
+    fireEvent.change(descInput, { target: { value: "Some description" } });
+    fireEvent.change(screen.getByTestId("date-picker"), {
+      target: { value: "2020-01-01" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
+    expect(screen.getByText("tasks.form.dueDateError")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId("date-picker"), {
+      target: { value: "2099-12-31" },
+    });
+    expect(screen.queryByText("tasks.form.dueDateError")).not.toBeInTheDocument();
+  });
+});
+
 describe("TaskForm – edit mode", () => {
   const existing = {
     id: "task-99",
     title: "Existing Task",
     description: "Existing description",
-    dueDate: "2026-06-01T00:00:00.000Z",
+    dueDate: "2099-12-31T00:00:00.000Z",
     status: "in_progress",
     assigneeId: "u1",
   };

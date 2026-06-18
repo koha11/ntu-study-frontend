@@ -16,6 +16,11 @@ import { useTranslation } from "react-i18next";
 import type { CreateTaskInput, UpdateTaskInput } from "../types";
 import { DatePicker } from "@/components/ui/date-picker";
 
+function todayDateString(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 function toDateInputValue(iso?: string): string {
   if (!iso?.trim()) return "";
   const d = new Date(iso);
@@ -82,9 +87,15 @@ export function TaskForm({
     status: initialData?.status || "todo",
     assigneeId: initialAssignee,
   });
+  const [dueDateError, setDueDateError] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.dueDate && formData.dueDate < todayDateString()) {
+      setDueDateError(true);
+      return;
+    }
+    setDueDateError(false);
     if (isEdit && onUpdate) {
       onUpdate({
         title: formData.title.trim(),
@@ -142,14 +153,21 @@ export function TaskForm({
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           className="mt-1 w-full rounded-md border border-border px-3 py-2"
           rows={3}
+          required
         />
       </div>
       <div>
         <label className="text-sm font-medium text-foreground">{t("tasks.form.dueDate")}</label>
         <DatePicker
           value={formData.dueDate}
-          onChange={(value) => setFormData({ ...formData, dueDate: value })}
+          onChange={(value) => {
+            setFormData({ ...formData, dueDate: value });
+            setDueDateError(false);
+          }}
         />
+        {dueDateError && (
+          <p className="mt-1 text-xs text-destructive">{t("tasks.form.dueDateError")}</p>
+        )}
       </div>
       {defaultGroupId && memberOptions && memberOptions.length > 0 && (
         <div>

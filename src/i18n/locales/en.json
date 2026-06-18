@@ -265,7 +265,8 @@
       "assignee": "Assignee",
       "status": "Status",
       "saving": "Saving…",
-      "updateTask": "Update task"
+      "updateTask": "Update task",
+      "dueDateError": "Due date must be today or in the future"
     }
   },
   "groups": {
