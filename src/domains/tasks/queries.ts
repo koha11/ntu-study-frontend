@@ -9,6 +9,7 @@ import {
   fetchUserTasks,
   fetchGroupTasks,
   fetchTaskById,
+  fetchPendingReviewTasksForLeader,
   createTask,
   updateTask,
   submitTask,
@@ -43,6 +44,17 @@ export const tasksListQueryOptions = (filters?: {
       return fetchUserTasks(token, {
         status: filters?.status as TaskStatus | undefined,
       });
+    },
+    staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 30,
+  });
+
+export const pendingReviewAsLeaderQueryOptions = () =>
+  queryOptions({
+    queryKey: taskKeys.list({ pendingReviewAsLeader: true }),
+    queryFn: async () => {
+      const token = requireAccessToken();
+      return fetchPendingReviewTasksForLeader(token);
     },
     staleTime: 1000 * 60 * 2,
     gcTime: 1000 * 60 * 30,

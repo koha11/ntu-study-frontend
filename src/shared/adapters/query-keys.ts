@@ -43,6 +43,7 @@ export const taskKeys = {
     groupId?: string;
     assignee?: string;
     assignedInGroups?: boolean;
+    pendingReviewAsLeader?: boolean;
   }) => [...taskKeys.lists(), { filters }] as const,
   details: () => [...taskKeys.all, "detail"] as const,
   detail: (id: string) => [...taskKeys.details(), id] as const,

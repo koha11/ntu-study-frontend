@@ -208,7 +208,10 @@
     "seeAll": "Xem tất cả",
     "active": "Đang hoạt động",
     "members": "thành viên",
-    "loading": "Đang tải bảng điều khiển..."
+    "loading": "Đang tải bảng điều khiển...",
+    "pendingReview": "Cần duyệt của bạn",
+    "pendingReviewDesc": "Các nhiệm vụ đã nộp để duyệt trong nhóm bạn dẫn dắt",
+    "noPendingReview": "Không có nhiệm vụ nào đang chờ duyệt"
   },
   "tasks": {
     "pageTitle": "Nhiệm vụ của tôi",

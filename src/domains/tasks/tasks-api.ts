@@ -204,6 +204,15 @@ export async function approveTask(
   return mapTaskFromApi(row);
 }
 
+export async function fetchPendingReviewTasksForLeader(token: string): Promise<Task[]> {
+  const res = await fetch(`${getApiBase()}/tasks?pendingReviewAsLeader=true`, {
+    method: "GET",
+    headers: bearerHeaders(token),
+  });
+  const data = await handleJson<Record<string, unknown>[]>(res);
+  return data.map((row) => mapTaskFromApi(row));
+}
+
 export async function deleteTask(id: string, token: string): Promise<void> {
   const res = await fetch(`${getApiBase()}/tasks/${encodeURIComponent(id)}`, {
     method: "DELETE",

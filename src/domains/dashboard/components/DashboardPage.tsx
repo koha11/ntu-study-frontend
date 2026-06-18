@@ -9,6 +9,7 @@ import {
   Calendar,
   HardDrive,
   Bell,
+  ClipboardCheck,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
@@ -23,6 +24,7 @@ import { navigateFromNotification } from "@/domains/notifications/navigate-from-
 import { notificationTypeLabel } from "@/domains/notifications/notification-labels";
 import { Button } from "@/components/ui/button";
 import { getAccessToken } from "@/domains/auth/token-storage";
+import { pendingReviewAsLeaderQueryOptions } from "@/domains/tasks/queries";
 import { fetchDashboard } from "../dashboard-api";
 import type { RecentActivityItem, UpcomingItem } from "../dashboard-api";
 
@@ -50,10 +52,13 @@ export function DashboardPage() {
     refetchInterval: 60_000,
   });
 
+  const { data: pendingReviewTasks = [] } = useQuery(pendingReviewAsLeaderQueryOptions());
+
   const currentUserId = currentUser?.id || "user1";
   const role = currentUser?.role || "student";
 
   const myGroups = groups;
+  const groupNameById = Object.fromEntries(myGroups.map((g) => [g.id, g.name]));
   const myTasks = tasks.filter(
     (task) =>
       (task.assigneeId === currentUserId || task.createdById === currentUserId) &&
@@ -146,6 +151,61 @@ export function DashboardPage() {
           accent="warning"
         />
       </div>
+
+      {pendingReviewTasks.length > 0 && (
+        <div className="mt-8 rounded-2xl border border-border bg-card p-4 sm:p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold">{t("dashboard.pendingReview")}</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                {t("dashboard.pendingReviewDesc")}
+              </p>
+            </div>
+            <ClipboardCheck className="h-5 w-5 text-warning shrink-0" />
+          </div>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {pendingReviewTasks.map((task) => (
+              <button
+                key={task.id}
+                type="button"
+                onClick={() =>
+                  navTo({
+                    to: "/groups/$groupId",
+                    params: { groupId: task.groupId ?? "" },
+                    search: { tab: "tasks" },
+                  })
+                }
+                className="flex items-start gap-3 rounded-xl border border-border/60 bg-background/40 p-3 text-left transition-colors hover:bg-accent hover:border-warning/40"
+              >
+                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-warning/15">
+                  <ClipboardCheck className="h-3.5 w-3.5 text-warning" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{task.title}</p>
+                  <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
+                    {task.groupId && groupNameById[task.groupId] && (
+                      <span className="text-[11px] text-muted-foreground">
+                        {groupNameById[task.groupId]}
+                      </span>
+                    )}
+                    {task.assigneeName && (
+                      <>
+                        <span className="text-[10px] text-muted-foreground">·</span>
+                        <span className="text-[11px] text-muted-foreground">{task.assigneeName}</span>
+                      </>
+                    )}
+                  </div>
+                  {task.submittedAt && (
+                    <p className="mt-0.5 text-[10px] text-muted-foreground">
+                      {new Date(task.submittedAt).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         {/* Recent Activity */}

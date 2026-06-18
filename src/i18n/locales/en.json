@@ -208,7 +208,10 @@
     "seeAll": "See all",
     "active": "Active",
     "members": "members",
-    "loading": "Loading dashboard..."
+    "loading": "Loading dashboard...",
+    "pendingReview": "Needs Your Review",
+    "pendingReviewDesc": "Tasks submitted for review in groups you lead",
+    "noPendingReview": "No tasks awaiting review"
   },
   "tasks": {
     "pageTitle": "My tasks",
