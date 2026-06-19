@@ -343,7 +343,9 @@ describe("TasksPage – add personal task", () => {
     const input = screen.getByPlaceholderText("tasks.addPersonalTask");
     fireEvent.change(input, { target: { value: "New Task" } });
     fireEvent.submit(input.closest("form")!);
-    expect(mockCreateTask).toHaveBeenCalledWith({ title: "New Task", dueDate: undefined });
+    expect(mockCreateTask).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "New Task", dueDate: undefined }),
+    );
   });
 
   it("does not call createTask when title is empty", () => {
@@ -380,7 +382,9 @@ describe("TasksPage – add subtask", () => {
     const subtaskInput = screen.getByPlaceholderText("tasks.addSubtask");
     fireEvent.change(subtaskInput, { target: { value: "Sub item" } });
     fireEvent.submit(subtaskInput.closest("form")!);
-    expect(mockCreateTask).toHaveBeenCalledWith({ title: "Sub item", parentTaskId: "task-1" });
+    expect(mockCreateTask).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Sub item", parentTaskId: "task-1" }),
+    );
   });
 
   it("does not call createTask when subtask title is empty", () => {

@@ -299,25 +299,27 @@ export function GroupDetailPage() {
                   {t("groups.tasksTab.newTask")}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-5xl">
-                <DialogHeader>
+              <DialogContent className="flex max-h-[90vh] flex-col sm:max-w-5xl">
+                <DialogHeader className="shrink-0">
                   <DialogTitle>{t("groups.tasksTab.newGroupTask")}</DialogTitle>
                 </DialogHeader>
-                <TaskForm
-                  defaultGroupId={id}
-                  memberOptions={members.map((m) => ({
-                    userId: m.user_id,
-                    label: m.full_name?.trim() || m.user_id,
-                  }))}
-                  defaultAssigneeId={currentUserId || undefined}
-                  isLoading={createTaskPending}
-                  onCancel={() => setCreateTaskOpen(false)}
-                  onSubmit={(data) => {
-                    createTask(data, {
-                      onSuccess: () => setCreateTaskOpen(false),
-                    });
-                  }}
-                />
+                <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+                  <TaskForm
+                    defaultGroupId={id}
+                    memberOptions={members.map((m) => ({
+                      userId: m.user_id,
+                      label: m.full_name?.trim() || m.user_id,
+                    }))}
+                    defaultAssigneeId={currentUserId || undefined}
+                    isLoading={createTaskPending}
+                    onCancel={() => setCreateTaskOpen(false)}
+                    onSubmit={(data) => {
+                      createTask(data, {
+                        onSuccess: () => setCreateTaskOpen(false),
+                      });
+                    }}
+                  />
+                </div>
               </DialogContent>
             </Dialog>
           </div>

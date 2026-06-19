@@ -48,6 +48,8 @@ export const taskKeys = {
   details: () => [...taskKeys.all, "detail"] as const,
   detail: (id: string) => [...taskKeys.details(), id] as const,
   subtasks: (id: string) => [...taskKeys.detail(id), "subtasks"] as const,
+  outcomeLinks: (taskId: string) => [...taskKeys.detail(taskId), "outcome-links"] as const,
+  outcomeFiles: (taskId: string) => [...taskKeys.detail(taskId), "outcome-files"] as const,
 };
 
 /**

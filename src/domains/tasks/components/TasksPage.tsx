@@ -76,6 +76,7 @@ export function TasksPage() {
     createTask({
       title: v,
       dueDate: newTaskDate ? toDateOnlyString(newTaskDate) : undefined,
+      expectedOutcomeType: "none",
     });
     setNewTaskTitle("");
     setNewTaskDate(undefined);
@@ -96,7 +97,7 @@ export function TasksPage() {
   const addSubtask = (parentId: string) => {
     const title = (subtaskDrafts[parentId] ?? "").trim();
     if (!title) return;
-    createTask({ title, parentTaskId: parentId });
+    createTask({ title, parentTaskId: parentId, expectedOutcomeType: "none" });
     setSubtaskDrafts((prev) => ({ ...prev, [parentId]: "" }));
   };
 

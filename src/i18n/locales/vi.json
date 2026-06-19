@@ -257,7 +257,9 @@
       "rejectionReason": "Lý do từ chối",
       "rejectReasonPlaceholder": "Nhập lý do từ chối…",
       "reject": "Từ chối",
-      "failedToUpdateStatus": "Không thể cập nhật trạng thái nhiệm vụ"
+      "failedToUpdateStatus": "Không thể cập nhật trạng thái nhiệm vụ",
+      "outcomeFiles": "Kết quả & tệp",
+      "outcomeFilesTitle": "Kết quả nhiệm vụ"
     },
     "form": {
       "statusNote": "Trạng thái được thay đổi từ bảng (kéo cột hoặc gửi để xem xét).",
@@ -269,7 +271,33 @@
       "status": "Trạng thái",
       "saving": "Đang lưu…",
       "updateTask": "Cập nhật nhiệm vụ",
-      "dueDateError": "Hạn chót phải là hôm nay hoặc trong tương lai"
+      "dueDateError": "Hạn chót phải là hôm nay hoặc trong tương lai",
+      "expectedOutcomeType": "Kết quả dự kiến",
+      "expectedOutcomeDescription": "Mô tả kết quả",
+      "outcomeNote": "Nếu không có kết quả dự kiến, chọn 'Không có'.",
+      "outcomeDescriptionPlaceholder": "Mô tả sản phẩm bàn giao (tùy chọn)…",
+      "outcomeType": {
+        "none": "Không có",
+        "document": "Tài liệu",
+        "presentation": "Thuyết trình",
+        "code": "Code",
+        "other": "Khác"
+      }
+    },
+    "outcome": {
+      "linksSection": "Liên kết kết quả",
+      "filesSection": "Tệp kết quả (Google Drive)",
+      "loadingLinks": "Đang tải liên kết…",
+      "loadingFiles": "Đang tải tệp…",
+      "noLinks": "Chưa có liên kết nào.",
+      "noFiles": "Chưa có tệp nào được tải lên.",
+      "urlPlaceholder": "Dán URL…",
+      "labelPlaceholder": "Nhãn (tùy chọn)…",
+      "addLink": "Thêm liên kết",
+      "deleteLink": "Xóa liên kết",
+      "openInDrive": "Mở trong Drive",
+      "deleteFile": "Xóa tệp",
+      "uploadFile": "Tải lên tệp"
     }
   },
   "groups": {

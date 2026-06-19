@@ -9,7 +9,7 @@ import {
   useDroppable,
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { CornerDownRight, GripVertical, Layers, Pencil, Plus } from "lucide-react";
+import { CornerDownRight, GripVertical, Layers, Paperclip, Pencil, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import type { Task, TaskStatus } from "../types";
@@ -32,6 +32,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { TaskForm, type TaskFormMemberOption } from "./TaskForm";
+import { ConnectedTaskOutcomePanel } from "./ConnectedTaskOutcomePanel";
 
 
 function columnDroppableId(status: TaskStatus) {
@@ -159,6 +160,7 @@ function KanbanCard({
   const { t } = useTranslation();
   const [subtaskOpen, setSubtaskOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
+  const [outcomeOpen, setOutcomeOpen] = React.useState(false);
   const { mutate: createSubtask, isPending: subtaskPending } = useCreateTaskMutation();
   const { mutate: updateTask, isPending: updatePending } = useUpdateTaskMutation();
 
@@ -237,18 +239,30 @@ function KanbanCard({
                   </span>
                 </div>
               )}
-              {canEdit ? (
+              <div className="flex shrink-0 items-center gap-0.5">
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
-                  aria-label={t("tasks.kanban.editTask")}
-                  onClick={() => setEditOpen(true)}
+                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  aria-label={t("tasks.kanban.outcomeFiles")}
+                  onClick={() => setOutcomeOpen(true)}
                 >
-                  <Pencil className="h-3.5 w-3.5" />
+                  <Paperclip className="h-3.5 w-3.5" />
                 </Button>
-              ) : null}
+                {canEdit ? (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                    aria-label={t("tasks.kanban.editTask")}
+                    onClick={() => setEditOpen(true)}
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                ) : null}
+              </div>
             </div>
 
             <h4 className="text-base font-bold leading-snug tracking-tight text-foreground">
@@ -309,57 +323,81 @@ function KanbanCard({
       </div>
 
       <Dialog open={subtaskOpen} onOpenChange={setSubtaskOpen}>
-        <DialogContent className="sm:max-w-5xl">
-          <DialogHeader>
+        <DialogContent className="flex max-h-[90vh] flex-col sm:max-w-5xl">
+          <DialogHeader className="shrink-0">
             <DialogTitle>{t("tasks.kanban.newSubtask")}</DialogTitle>
           </DialogHeader>
-          <TaskForm
-            defaultGroupId={task.groupId}
-            parentTaskId={task.id}
-            parentTaskTitle={task.title}
-            memberOptions={memberOptions}
-            defaultAssigneeId={defaultAssigneeId}
-            isLoading={subtaskPending}
-            onCancel={() => setSubtaskOpen(false)}
-            onSubmit={(data) => {
-              createSubtask(data, {
-                onSuccess: () => setSubtaskOpen(false),
-              });
-            }}
-          />
+          <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+            <TaskForm
+              defaultGroupId={task.groupId}
+              parentTaskId={task.id}
+              parentTaskTitle={task.title}
+              memberOptions={memberOptions}
+              defaultAssigneeId={defaultAssigneeId}
+              isLoading={subtaskPending}
+              onCancel={() => setSubtaskOpen(false)}
+              onSubmit={(data) => {
+                createSubtask(data, {
+                  onSuccess: () => setSubtaskOpen(false),
+                });
+              }}
+            />
+          </div>
         </DialogContent>
       </Dialog>
 
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="sm:max-w-5xl">
-          <DialogHeader>
+        <DialogContent className="flex max-h-[90vh] flex-col sm:max-w-5xl">
+          <DialogHeader className="shrink-0">
             <DialogTitle>{t("tasks.kanban.editTaskTitle")}</DialogTitle>
           </DialogHeader>
           {editOpen ? (
-            <TaskForm
-              key={task.id}
-              isEdit
-              defaultGroupId={task.groupId}
-              memberOptions={memberOptions}
-              defaultAssigneeId={defaultAssigneeId}
-              initialData={{
-                id: task.id,
-                title: task.title,
-                description: task.description,
-                dueDate: task.dueDate,
-                assigneeId: task.assigneeId,
-              }}
-              isLoading={updatePending}
-              onCancel={() => setEditOpen(false)}
-              onUpdate={(input) => {
-                updateTask(
-                  { id: task.id, input },
-                  {
-                    onSuccess: () => setEditOpen(false),
-                  },
-                );
-              }}
-            />
+            <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+              <TaskForm
+                key={task.id}
+                isEdit
+                defaultGroupId={task.groupId}
+                memberOptions={memberOptions}
+                defaultAssigneeId={defaultAssigneeId}
+                initialData={{
+                  id: task.id,
+                  title: task.title,
+                  description: task.description,
+                  dueDate: task.dueDate,
+                  assigneeId: task.assigneeId,
+                  expectedOutcomeType: task.expectedOutcomeType,
+                  expectedOutcomeDescription: task.expectedOutcomeDescription,
+                }}
+                isLoading={updatePending}
+                onCancel={() => setEditOpen(false)}
+                onUpdate={(input) => {
+                  updateTask(
+                    { id: task.id, input },
+                    {
+                      onSuccess: () => setEditOpen(false),
+                    },
+                  );
+                }}
+              />
+            </div>
+          ) : null}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={outcomeOpen} onOpenChange={setOutcomeOpen}>
+        <DialogContent className="flex max-h-[90vh] flex-col sm:max-w-lg">
+          <DialogHeader className="shrink-0">
+            <DialogTitle>{t("tasks.kanban.outcomeFilesTitle")}</DialogTitle>
+          </DialogHeader>
+          {outcomeOpen ? (
+            <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+              <ConnectedTaskOutcomePanel
+                taskId={task.id}
+                assigneeId={task.assigneeId}
+                currentUserId={currentUserId}
+                driveFolderId={task.driveFolderId}
+              />
+            </div>
           ) : null}
         </DialogContent>
       </Dialog>

@@ -15,8 +15,20 @@ import {
   submitTask,
   approveTask,
   deleteTask,
+  fetchOutcomeLinks,
+  addOutcomeLink,
+  removeOutcomeLink,
+  fetchOutcomeFiles,
+  uploadOutcomeFile,
+  deleteOutcomeFile,
 } from "./tasks-api";
-import type { CreateTaskInput, UpdateTaskInput, TaskStatus, ApproveTaskInput } from "./types";
+import type {
+  CreateTaskInput,
+  UpdateTaskInput,
+  TaskStatus,
+  ApproveTaskInput,
+  AddOutcomeLinkInput,
+} from "./types";
 
 function requireAccessToken(): string {
   const token = getAccessToken();
@@ -158,6 +170,94 @@ export const useDeleteTaskMutation = () => {
     onSuccess: (_, taskId) => {
       queryClient.removeQueries({ queryKey: taskKeys.detail(taskId) });
       queryClient.invalidateQueries({ queryKey: taskKeys.lists() });
+    },
+  });
+};
+
+// ---------------------------------------------------------------------------
+// Outcome links
+// ---------------------------------------------------------------------------
+
+export const outcomeLinksQueryOptions = (taskId: string) =>
+  queryOptions({
+    queryKey: taskKeys.outcomeLinks(taskId),
+    queryFn: async () => {
+      const token = requireAccessToken();
+      return fetchOutcomeLinks(taskId, token);
+    },
+    staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 30,
+    enabled: Boolean(taskId),
+  });
+
+export const useAddOutcomeLinkMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { taskId: string; input: AddOutcomeLinkInput }) => {
+      const token = requireAccessToken();
+      return addOutcomeLink(params.taskId, params.input, token);
+    },
+    onSuccess: (_, { taskId }) => {
+      queryClient.invalidateQueries({ queryKey: taskKeys.outcomeLinks(taskId) });
+    },
+  });
+};
+
+export const useRemoveOutcomeLinkMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { taskId: string; linkId: string }) => {
+      const token = requireAccessToken();
+      await removeOutcomeLink(params.taskId, params.linkId, token);
+    },
+    onSuccess: (_, { taskId }) => {
+      queryClient.invalidateQueries({ queryKey: taskKeys.outcomeLinks(taskId) });
+    },
+  });
+};
+
+// ---------------------------------------------------------------------------
+// Outcome files
+// ---------------------------------------------------------------------------
+
+export const outcomeFilesQueryOptions = (taskId: string) =>
+  queryOptions({
+    queryKey: taskKeys.outcomeFiles(taskId),
+    queryFn: async () => {
+      const token = requireAccessToken();
+      return fetchOutcomeFiles(taskId, token);
+    },
+    staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 30,
+    enabled: Boolean(taskId),
+  });
+
+export const useUploadOutcomeFileMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { taskId: string; file: File }) => {
+      const token = requireAccessToken();
+      return uploadOutcomeFile(params.taskId, params.file, token);
+    },
+    onSuccess: (_, { taskId }) => {
+      queryClient.invalidateQueries({ queryKey: taskKeys.outcomeFiles(taskId) });
+    },
+  });
+};
+
+export const useDeleteOutcomeFileMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { taskId: string; fileId: string }) => {
+      const token = requireAccessToken();
+      await deleteOutcomeFile(params.taskId, params.fileId, token);
+    },
+    onSuccess: (_, { taskId }) => {
+      queryClient.invalidateQueries({ queryKey: taskKeys.outcomeFiles(taskId) });
     },
   });
 };

@@ -42,7 +42,50 @@ describe("TaskForm – create mode", () => {
 
   it("renders Status select in personal (no group) create mode", () => {
     render(<TaskForm />);
-    expect(screen.getByRole("combobox")).toBeInTheDocument();
+    expect(screen.getByText("tasks.form.status")).toBeInTheDocument();
+    expect(screen.getByTestId("status-select")).toBeInTheDocument();
+  });
+
+  it("renders expectedOutcomeType dropdown", () => {
+    render(<TaskForm />);
+    expect(screen.getByText("tasks.form.expectedOutcomeType")).toBeInTheDocument();
+    expect(screen.getByTestId("expected-outcome-type-select")).toBeInTheDocument();
+  });
+
+  it("shows outcome note", () => {
+    render(<TaskForm />);
+    expect(screen.getByText("tasks.form.outcomeNote")).toBeInTheDocument();
+  });
+
+  it("defaults expectedOutcomeType to none", () => {
+    render(<TaskForm />);
+    const select = screen.getByTestId("expected-outcome-type-select") as HTMLSelectElement;
+    expect(select.value).toBe("none");
+  });
+
+  it("submit includes expectedOutcomeType none by default", () => {
+    const onSubmit = vi.fn();
+    render(<TaskForm onSubmit={onSubmit} />);
+    const [titleInput, descInput] = screen.getAllByRole("textbox");
+    fireEvent.change(titleInput, { target: { value: "Task" } });
+    fireEvent.change(descInput, { target: { value: "Desc" } });
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ expectedOutcomeType: "none" }),
+    );
+  });
+
+  it("submit includes expectedOutcomeDescription when filled", () => {
+    const onSubmit = vi.fn();
+    render(<TaskForm onSubmit={onSubmit} />);
+    const textboxes = screen.getAllByRole("textbox");
+    fireEvent.change(textboxes[0], { target: { value: "Task" } });
+    fireEvent.change(textboxes[1], { target: { value: "Desc" } });
+    fireEvent.change(textboxes[2], { target: { value: "Final report" } });
+    fireEvent.click(screen.getByRole("button", { name: "common.save" }));
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ expectedOutcomeDescription: "Final report" }),
+    );
   });
 
   it("hides Status select in group create mode", () => {
@@ -125,7 +168,7 @@ describe("TaskForm – create mode", () => {
     );
 
     expect(screen.getByText("tasks.form.assignee")).toBeInTheDocument();
-    expect(screen.getByRole("combobox")).toBeInTheDocument();
+    expect(screen.getByTestId("assignee-select")).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Alice" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "Bob" })).toBeInTheDocument();
   });
@@ -146,7 +189,7 @@ describe("TaskForm – create mode", () => {
     const [titleInput, descInput] = screen.getAllByRole("textbox");
     fireEvent.change(titleInput, { target: { value: "Assigned Task" } });
     fireEvent.change(descInput, { target: { value: "Some description" } });
-    fireEvent.change(screen.getByRole("combobox"), { target: { value: "u2" } });
+    fireEvent.change(screen.getByTestId("assignee-select"), { target: { value: "u2" } });
     fireEvent.click(screen.getByRole("button", { name: "common.save" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
@@ -281,5 +324,31 @@ describe("TaskForm – edit mode", () => {
 
     const call = onUpdate.mock.calls[0][0] as Record<string, unknown>;
     expect(call.title).toBe("Trimmed");
+  });
+
+  it("pre-fills expectedOutcomeType from initialData", () => {
+    render(
+      <TaskForm
+        isEdit
+        initialData={{ ...existing, expectedOutcomeType: "document" }}
+      />,
+    );
+    const select = screen.getByTestId("expected-outcome-type-select") as HTMLSelectElement;
+    expect(select.value).toBe("document");
+  });
+
+  it("update includes expectedOutcomeType", () => {
+    const onUpdate = vi.fn();
+    render(
+      <TaskForm
+        isEdit
+        initialData={{ ...existing, expectedOutcomeType: "code" }}
+        onUpdate={onUpdate}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "tasks.form.updateTask" }));
+    expect(onUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({ expectedOutcomeType: "code" }),
+    );
   });
 });

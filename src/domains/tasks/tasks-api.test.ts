@@ -8,7 +8,15 @@ import {
   submitTask,
   approveTask,
   deleteTask,
+  fetchOutcomeLinks,
+  addOutcomeLink,
+  removeOutcomeLink,
+  fetchOutcomeFiles,
+  uploadOutcomeFile,
+  deleteOutcomeFile,
   mapTaskFromApi,
+  mapOutcomeLinkFromApi,
+  mapOutcomeFileFromApi,
 } from "./tasks-api";
 import { HttpError } from "@/domains/auth/auth-api";
 
@@ -41,6 +49,23 @@ describe("tasks-api", () => {
       expect(t.createdById).toBe("u1");
       expect(t.assigneeId).toBe("u2");
       expect(t.dueDate).toBe("2026-05-01T00:00:00.000Z");
+    });
+
+    it("maps expected_outcome_type and drive_folder_id", () => {
+      const t = mapTaskFromApi({
+        id: "t3",
+        title: "B",
+        status: "todo",
+        created_by_id: "u1",
+        expected_outcome_type: "document",
+        expected_outcome_description: "Submit a PDF",
+        drive_folder_id: "folder-123",
+        created_at: "",
+        updated_at: "",
+      });
+      expect(t.expectedOutcomeType).toBe("document");
+      expect(t.expectedOutcomeDescription).toBe("Submit a PDF");
+      expect(t.driveFolderId).toBe("folder-123");
     });
 
     it("maps nested assignee and parent_task", () => {
@@ -156,7 +181,7 @@ describe("tasks-api", () => {
   });
 
   describe("createTask", () => {
-    it("calls POST /tasks with snake_case body", async () => {
+    it("calls POST /tasks with snake_case body including expected_outcome_type", async () => {
       const fetchMock = vi.fn().mockResolvedValue({
         ok: true,
         status: 201,
@@ -167,19 +192,20 @@ describe("tasks-api", () => {
             status: "todo",
             created_by_id: "u1",
             group_id: "g1",
+            expected_outcome_type: "document",
             created_at: "",
             updated_at: "",
           }),
       });
       vi.stubGlobal("fetch", fetchMock);
 
-      await createTask({ title: "N", groupId: "g1" }, "tok");
+      await createTask({ title: "N", groupId: "g1", expectedOutcomeType: "document" }, "tok");
 
       expect(fetchMock).toHaveBeenCalledWith(
         "http://localhost:3000/tasks",
         expect.objectContaining({
           method: "POST",
-          body: JSON.stringify({ title: "N", group_id: "g1" }),
+          body: JSON.stringify({ title: "N", expected_outcome_type: "document", group_id: "g1" }),
         }),
       );
     });
@@ -196,6 +222,7 @@ describe("tasks-api", () => {
             created_by_id: "u1",
             group_id: "g1",
             parent_task_id: "p1",
+            expected_outcome_type: "none",
             created_at: "",
             updated_at: "",
           }),
@@ -203,7 +230,7 @@ describe("tasks-api", () => {
       vi.stubGlobal("fetch", fetchMock);
 
       await createTask(
-        { title: "Sub", groupId: "g1", parentTaskId: "p1", assigneeId: "u2" },
+        { title: "Sub", groupId: "g1", parentTaskId: "p1", assigneeId: "u2", expectedOutcomeType: "none" },
         "tok",
       );
 
@@ -213,6 +240,7 @@ describe("tasks-api", () => {
           group_id: "g1",
           parent_task_id: "p1",
           assignee_id: "u2",
+          expected_outcome_type: "none",
         }),
       );
     });
@@ -330,6 +358,155 @@ describe("tasks-api", () => {
       );
 
       await expect(deleteTask("x", "t")).rejects.toBeInstanceOf(HttpError);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // mapOutcomeLinkFromApi / mapOutcomeFileFromApi
+  // -------------------------------------------------------------------------
+
+  describe("mapOutcomeLinkFromApi", () => {
+    it("maps snake_case link fields", () => {
+      const link = mapOutcomeLinkFromApi({
+        id: "lnk1",
+        task_id: "t1",
+        url: "https://docs.google.com/x",
+        label: "Draft",
+        created_by_id: "u1",
+        created_at: "2026-01-01T00:00:00.000Z",
+        updated_at: "2026-01-01T00:00:00.000Z",
+      });
+      expect(link.id).toBe("lnk1");
+      expect(link.taskId).toBe("t1");
+      expect(link.url).toBe("https://docs.google.com/x");
+      expect(link.label).toBe("Draft");
+    });
+  });
+
+  describe("mapOutcomeFileFromApi", () => {
+    it("maps Drive file fields", () => {
+      const f = mapOutcomeFileFromApi({
+        id: "f1",
+        name: "report.pdf",
+        mimeType: "application/pdf",
+        webViewLink: "https://drive.google.com/f1",
+      });
+      expect(f.id).toBe("f1");
+      expect(f.name).toBe("report.pdf");
+      expect(f.mimeType).toBe("application/pdf");
+      expect(f.webViewLink).toBe("https://drive.google.com/f1");
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Outcome link API functions
+  // -------------------------------------------------------------------------
+
+  describe("fetchOutcomeLinks", () => {
+    it("calls GET /tasks/:id/outcome-links", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve([]),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      await fetchOutcomeLinks("t1", "tok");
+
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toBe("http://localhost:3000/tasks/t1/outcome-links");
+      expect(init.method).toBe("GET");
+    });
+  });
+
+  describe("addOutcomeLink", () => {
+    it("calls POST /tasks/:id/outcome-links with url and label", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 201,
+        json: () =>
+          Promise.resolve({
+            id: "lnk1",
+            task_id: "t1",
+            url: "https://x.com",
+            created_at: "",
+            updated_at: "",
+          }),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      await addOutcomeLink("t1", { url: "https://x.com", label: "Ref" }, "tok");
+
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toBe("http://localhost:3000/tasks/t1/outcome-links");
+      expect(init.method).toBe("POST");
+      expect(JSON.parse(init.body as string)).toEqual({ url: "https://x.com", label: "Ref" });
+    });
+  });
+
+  describe("removeOutcomeLink", () => {
+    it("calls DELETE /tasks/:id/outcome-links/:linkId", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 204 });
+      vi.stubGlobal("fetch", fetchMock);
+
+      await removeOutcomeLink("t1", "lnk1", "tok");
+
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toBe("http://localhost:3000/tasks/t1/outcome-links/lnk1");
+      expect(init.method).toBe("DELETE");
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Outcome file API functions
+  // -------------------------------------------------------------------------
+
+  describe("fetchOutcomeFiles", () => {
+    it("calls GET /tasks/:id/files", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve([]),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      await fetchOutcomeFiles("t1", "tok");
+
+      const [url] = fetchMock.mock.calls[0] as [string];
+      expect(url).toBe("http://localhost:3000/tasks/t1/files");
+    });
+  });
+
+  describe("uploadOutcomeFile", () => {
+    it("calls POST /tasks/:id/files with FormData", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        status: 201,
+        json: () =>
+          Promise.resolve({ id: "f1", name: "file.pdf", mimeType: "application/pdf" }),
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      const file = new File(["content"], "file.pdf", { type: "application/pdf" });
+      await uploadOutcomeFile("t1", file, "tok");
+
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toBe("http://localhost:3000/tasks/t1/files");
+      expect(init.method).toBe("POST");
+      expect(init.body).toBeInstanceOf(FormData);
+    });
+  });
+
+  describe("deleteOutcomeFile", () => {
+    it("calls DELETE /tasks/:id/files/:fileId", async () => {
+      const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 204 });
+      vi.stubGlobal("fetch", fetchMock);
+
+      await deleteOutcomeFile("t1", "f1", "tok");
+
+      const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(url).toBe("http://localhost:3000/tasks/t1/files/f1");
+      expect(init.method).toBe("DELETE");
     });
   });
 });

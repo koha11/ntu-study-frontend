@@ -46,7 +46,7 @@ describe("tasks/queries – mutation coverage", () => {
   it("useCreateTaskMutation fires mutationFn and onSuccess", async () => {
     const wrapper = makeWrapper();
     const { result } = renderHook(() => useCreateTaskMutation(), { wrapper });
-    act(() => { result.current.mutate({ title: "New task" }); });
+    act(() => { result.current.mutate({ title: "New task", expectedOutcomeType: "none" }); });
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data?.id).toBe("t1");
   });

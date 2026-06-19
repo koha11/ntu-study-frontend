@@ -1,19 +1,6 @@
-/**
- * TaskForm Component
- *
- * Form for creating/editing a task.
- * Uses react-hook-form and zod for validation.
- *
- * Phase 5 UI Redesign:
- * - Replace with shadcn/ui Form component
- * - Add rich text editor for description
- * - Add date picker for due date
- * - Add assignee selector
- */
-
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { CreateTaskInput, UpdateTaskInput } from "../types";
+import type { CreateTaskInput, UpdateTaskInput, ExpectedOutcomeType } from "../types";
 import { DatePicker } from "@/components/ui/date-picker";
 
 function todayDateString(): string {
@@ -41,6 +28,8 @@ interface TaskFormProps {
     dueDate?: string;
     status?: string;
     assigneeId?: string;
+    expectedOutcomeType?: ExpectedOutcomeType;
+    expectedOutcomeDescription?: string;
   };
   /** When creating a task in a group context, sets `groupId` on submit */
   defaultGroupId?: string;
@@ -58,6 +47,14 @@ interface TaskFormProps {
   onUpdate?: (data: UpdateTaskInput) => void;
   onCancel?: () => void;
 }
+
+const OUTCOME_TYPES: ExpectedOutcomeType[] = [
+  "none",
+  "document",
+  "presentation",
+  "code",
+  "other",
+];
 
 export function TaskForm({
   initialData,
@@ -86,6 +83,8 @@ export function TaskForm({
       : initialData?.dueDate || "",
     status: initialData?.status || "todo",
     assigneeId: initialAssignee,
+    expectedOutcomeType: (initialData?.expectedOutcomeType ?? "none") as ExpectedOutcomeType,
+    expectedOutcomeDescription: initialData?.expectedOutcomeDescription || "",
   });
   const [dueDateError, setDueDateError] = useState(false);
 
@@ -105,6 +104,9 @@ export function TaskForm({
           defaultGroupId && memberOptions?.length
             ? formData.assigneeId || undefined
             : undefined,
+        expectedOutcomeType: formData.expectedOutcomeType,
+        expectedOutcomeDescription:
+          formData.expectedOutcomeDescription.trim() || undefined,
       });
       return;
     }
@@ -119,6 +121,9 @@ export function TaskForm({
           defaultGroupId && memberOptions?.length
             ? formData.assigneeId || undefined
             : undefined,
+        expectedOutcomeType: formData.expectedOutcomeType,
+        expectedOutcomeDescription:
+          formData.expectedOutcomeDescription.trim() || undefined,
       });
     }
   };
@@ -173,6 +178,7 @@ export function TaskForm({
         <div>
           <label className="text-sm font-medium text-foreground">{t("tasks.form.assignee")}</label>
           <select
+            data-testid="assignee-select"
             value={formData.assigneeId}
             onChange={(e) => setFormData({ ...formData, assigneeId: e.target.value })}
             className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2"
@@ -186,10 +192,45 @@ export function TaskForm({
           </select>
         </div>
       )}
+      <div>
+        <label className="text-sm font-medium text-foreground">
+          {t("tasks.form.expectedOutcomeType")}
+        </label>
+        <select
+          data-testid="expected-outcome-type-select"
+          value={formData.expectedOutcomeType}
+          onChange={(e) =>
+            setFormData({ ...formData, expectedOutcomeType: e.target.value as ExpectedOutcomeType })
+          }
+          className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2"
+        >
+          {OUTCOME_TYPES.map((type) => (
+            <option key={type} value={type}>
+              {t(`tasks.form.outcomeType.${type}`)}
+            </option>
+          ))}
+        </select>
+        <p className="mt-1 text-xs text-muted-foreground">{t("tasks.form.outcomeNote")}</p>
+      </div>
+      <div>
+        <label className="text-sm font-medium text-foreground">
+          {t("tasks.form.expectedOutcomeDescription")}
+        </label>
+        <textarea
+          value={formData.expectedOutcomeDescription}
+          onChange={(e) =>
+            setFormData({ ...formData, expectedOutcomeDescription: e.target.value })
+          }
+          className="mt-1 w-full rounded-md border border-border px-3 py-2"
+          rows={2}
+          placeholder={t("tasks.form.outcomeDescriptionPlaceholder")}
+        />
+      </div>
       {!defaultGroupId && !isEdit && (
         <div>
           <label className="text-sm font-medium text-foreground">{t("tasks.form.status")}</label>
           <select
+            data-testid="status-select"
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
             className="mt-1 w-full rounded-md border border-border px-3 py-2"

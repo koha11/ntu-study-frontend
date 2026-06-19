@@ -257,7 +257,9 @@
       "rejectionReason": "Rejection reason",
       "rejectReasonPlaceholder": "Enter rejection reason…",
       "reject": "Reject",
-      "failedToUpdateStatus": "Failed to update task status"
+      "failedToUpdateStatus": "Failed to update task status",
+      "outcomeFiles": "Outcome & files",
+      "outcomeFilesTitle": "Task outcome"
     },
     "form": {
       "statusNote": "Status is changed from the board (drag columns or submit for review).",
@@ -269,7 +271,33 @@
       "status": "Status",
       "saving": "Saving…",
       "updateTask": "Update task",
-      "dueDateError": "Due date must be today or in the future"
+      "dueDateError": "Due date must be today or in the future",
+      "expectedOutcomeType": "Expected Outcome",
+      "expectedOutcomeDescription": "Outcome Description",
+      "outcomeNote": "If no expected outcome, select 'None'.",
+      "outcomeDescriptionPlaceholder": "Describe the expected deliverable (optional)…",
+      "outcomeType": {
+        "none": "None",
+        "document": "Document",
+        "presentation": "Presentation",
+        "code": "Code",
+        "other": "Other"
+      }
+    },
+    "outcome": {
+      "linksSection": "Outcome Links",
+      "filesSection": "Outcome Files (Google Drive)",
+      "loadingLinks": "Loading links…",
+      "loadingFiles": "Loading files…",
+      "noLinks": "No links added yet.",
+      "noFiles": "No files uploaded yet.",
+      "urlPlaceholder": "Paste a URL…",
+      "labelPlaceholder": "Label (optional)…",
+      "addLink": "Add link",
+      "deleteLink": "Delete link",
+      "openInDrive": "Open in Drive",
+      "deleteFile": "Delete file",
+      "uploadFile": "Upload file"
     }
   },
   "groups": {

@@ -9,6 +9,13 @@ export type TaskStatus =
   | "done"
   | "failed";
 
+export type ExpectedOutcomeType =
+  | "none"
+  | "document"
+  | "presentation"
+  | "code"
+  | "other";
+
 /** Legacy UI type for mock/local subtasks (not yet mapped to API subtasks) */
 export interface SubTask {
   id: string;
@@ -35,9 +42,30 @@ export interface Task {
   submittedAt?: string;
   reviewedAt?: string;
   reviewedById?: string;
+  expectedOutcomeType?: ExpectedOutcomeType;
+  expectedOutcomeDescription?: string;
+  driveFolderId?: string;
   subtasks: Task[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface TaskOutcomeLink {
+  id: string;
+  taskId: string;
+  url: string;
+  label?: string;
+  createdById?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OutcomeFile {
+  id: string;
+  name: string;
+  mimeType: string;
+  webViewLink?: string;
+  modifiedTime?: string;
 }
 
 export interface CreateTaskInput {
@@ -48,6 +76,8 @@ export interface CreateTaskInput {
   assigneeId?: string;
   /** When set, creates a subtask of this task (one level only) */
   parentTaskId?: string;
+  expectedOutcomeType: ExpectedOutcomeType;
+  expectedOutcomeDescription?: string;
 }
 
 export interface UpdateTaskInput {
@@ -56,9 +86,16 @@ export interface UpdateTaskInput {
   status?: TaskStatus;
   dueDate?: string;
   assigneeId?: string;
+  expectedOutcomeType?: ExpectedOutcomeType;
+  expectedOutcomeDescription?: string;
 }
 
 export interface ApproveTaskInput {
   status: Extract<TaskStatus, "done" | "failed">;
   comment?: string;
+}
+
+export interface AddOutcomeLinkInput {
+  url: string;
+  label?: string;
 }
